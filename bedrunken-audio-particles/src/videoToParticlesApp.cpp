@@ -170,7 +170,7 @@ void video2Particles::resetFBOs(){
 	
 	// Attachment 0 - Positions
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
-	gl::setMatricesWindow( mFBO[0].getSize(), false );
+	gl::setMatricesWindow( mFBO[0].getSize());
 	gl::setViewport( mFBO[0].getBounds() );
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -272,6 +272,9 @@ void video2Particles::setup()
 	mFBO[1] = gl::Fbo( WIDTH, HEIGHT, format );
     
     audioSetup();
+    
+    loadMovieFile( fs::path("/Users/eight/Desktop/head.mov_1.mov") );
+    doParticles = false;
 
 }
 
@@ -293,8 +296,8 @@ void video2Particles::update()
     
     if (!doParticles) return;
 
-	gl::setMatricesWindow( mFBO[0].getSize(), true ); // false to prevent vertical flipping
-	gl::setViewport(mFBO[0].getBounds() );
+//	gl::setMatricesWindow( mFBO[0].getSize()); // false to prevent vertical flipping
+//	gl::setViewport(mFBO[0].getBounds() );
 	
 	mFBO[ mCurrentFBO ].bindFramebuffer();
 	
@@ -326,19 +329,19 @@ void video2Particles::update()
 
 void video2Particles::draw()
 {
-    gl::setMatrices( mCam );
-    gl::setViewport( getWindowBounds() );
-    
     if( mSurface && !doParticles) {
 		gl::draw( gl::Texture( mSurface ),getWindowBounds() );
         return;
 	}
     
     if (!doParticles) {
-        gl::setMatricesWindow(getWindowSize(), false);
+        //gl::setMatricesWindow(getWindowSize(), false);
         return;
     }
 
+    gl::setMatrices( mCam );
+    gl::setMatricesWindow(getWindowSize());
+    gl::setViewport( getWindowBounds() );
     gl::clear(isNegative? ColorA( 0.0f, 0.0f, 0.0f, 1.0f ) : ColorA( 1.0f, 1.0f, 1.0f, 1.0f ));
 	mFBO[mCurrentFBO].bindTexture(0,0);
 
@@ -396,6 +399,10 @@ void video2Particles::keyDown( KeyEvent event ){
     
     if (event.getChar() == ' '){
         isParticleNeg = !isParticleNeg;
+    }
+    
+    if (event.getChar() == 'm'){
+        doParticles = false;
     }
     
     if (event.getChar() == 'c'){

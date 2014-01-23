@@ -23,7 +23,6 @@
 		AFED31B2158D925C00EF7961 /* img.vert in Sources */ = {isa = PBXBuildFile; fileRef = AFED31B1158D925C00EF7961 /* img.vert */; };
 		AFED31BC158D98C800EF7961 /* img.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFED31AE158D923C00EF7961 /* img.frag */; };
 		AFED31BD158D98C800EF7961 /* img.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFED31B1158D925C00EF7961 /* img.vert */; };
-		AFFCBB0D1685328B007B8F38 /* gogol.psd in Resources */ = {isa = PBXBuildFile; fileRef = AFFCBB0C16853264007B8F38 /* gogol.psd */; };
 		B05FE3C412047D4300B6333F /* pos.frag in Resources */ = {isa = PBXBuildFile; fileRef = B05FE3C212047D4300B6333F /* pos.frag */; };
 		B05FE3C512047D4300B6333F /* pos.vert in Resources */ = {isa = PBXBuildFile; fileRef = B05FE3C312047D4300B6333F /* pos.vert */; };
 		B080F7B811EBDCEF00CB9611 /* vDispl.frag in Resources */ = {isa = PBXBuildFile; fileRef = B080F7B611EBDCEF00CB9611 /* vDispl.frag */; };
@@ -63,7 +62,6 @@
 		AF7458F816202F5C00C018B9 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		AFED31AE158D923C00EF7961 /* img.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = img.frag; path = ../resources/img.frag; sourceTree = "<group>"; };
 		AFED31B1158D925C00EF7961 /* img.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = img.vert; path = ../resources/img.vert; sourceTree = "<group>"; };
-		AFFCBB0C16853264007B8F38 /* gogol.psd */ = {isa = PBXFileReference; lastKnownFileType = file; name = gogol.psd; path = ../resources/gogol.psd; sourceTree = "<group>"; };
 		B05FE3C212047D4300B6333F /* pos.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pos.frag; path = ../resources/pos.frag; sourceTree = SOURCE_ROOT; };
 		B05FE3C312047D4300B6333F /* pos.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = pos.vert; path = ../resources/pos.vert; sourceTree = SOURCE_ROOT; };
 		B080F7B611EBDCEF00CB9611 /* vDispl.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = vDispl.frag; path = ../resources/vDispl.frag; sourceTree = SOURCE_ROOT; };
@@ -158,7 +156,6 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				AFFCBB0C16853264007B8F38 /* gogol.psd */,
 				AF7458F816202F5C00C018B9 /* CinderApp.icns */,
 				B05FE3C212047D4300B6333F /* pos.frag */,
 				B05FE3C312047D4300B6333F /* pos.vert */,
@@ -238,7 +235,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AFFCBB0D1685328B007B8F38 /* gogol.psd in Resources */,
 				AFED31BC158D98C800EF7961 /* img.frag in Resources */,
 				AFED31BD158D98C800EF7961 /* img.vert in Resources */,
 				B05FE3C412047D4300B6333F /* pos.frag in Resources */,
