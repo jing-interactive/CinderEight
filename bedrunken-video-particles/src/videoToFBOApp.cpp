@@ -114,8 +114,8 @@ void video2Particles::setupTextures(){
 	mInitPos = Surface32f( WIDTH, HEIGHT, true);
 	Surface32f::Iter pixelIter = mInitPos.getIter();
     std::size_t cnt = 0;
-    float oneOverWidth = -1.0 / (float)WIDTH;
-    float oneOverHeight = 1.0 / (float)HEIGHT;
+    float oneOverWidth = 1.0 / (float)imgChannel.getWidth();
+    float oneOverHeight = 1.0 / (float)imgChannel.getHeight();
     while(cnt<HEIGHT*WIDTH){
         Channel::Iter imgIter = imgChannel.getIter();
         while( imgIter.line()) {
@@ -124,10 +124,11 @@ void video2Particles::setupTextures(){
                  float values. Alpha is used as particle mass. */
                 float x, y, z;
                 if ((isParticleNeg && (imgIter.v())<100) || (!isParticleNeg && (imgIter.v())>6)){
-                    x = ((float)imgIter.getPos().x)*oneOverWidth+0.5f;
-                    y = ((float)imgIter.getPos().y)*oneOverHeight-0.5f;
+                    x = ((float)imgIter.getPos().x)*oneOverWidth - 0.5f;
+                    y = ((float)imgIter.getPos().y)*oneOverHeight - 0.5f;
                     z = (Rand::randFloat()-0.5f)*0.001f;
                     cnt++;
+
                     mInitPos.setPixel( imgIter.getPos(), ColorAf( x, y, 0.0 , Rand::randFloat(0.2f, 1.0f) ) );
                 }
             }
@@ -237,7 +238,6 @@ void video2Particles::audioSetup()
 
 void video2Particles::setup()
 {
-
 	gl::clear();
     isCursorShown = true;
     isNegative = true;
@@ -278,7 +278,7 @@ void video2Particles::setup()
     
     audioSetup();
     
-    loadMovieFile( fs::path("/Users/eight/Desktop/head.mov_1.mov") );
+    loadMovieFile( fs::path("/Users/eight/Desktop/bedrunkene/line/line.mov") );
     mSurface = mMovie.getSurface();
     mFrameTexture = gl::Texture(mSurface);
     setupTextures();
@@ -341,15 +341,6 @@ void video2Particles::update()
 
 void video2Particles::draw()
 {
-//    if( mSurface && !doParticles) {
-//		gl::draw( gl::Texture( mSurface ),getWindowBounds() );
-//        return;
-//	}
-    
-//    if (!doParticles) {
-//        //gl::setMatricesWindow(getWindowSize(), false);
-//        return;
-//    }
 	gl::setMatrices( mCam );
 	gl::setViewport( getWindowBounds() );
 
@@ -400,8 +391,8 @@ void video2Particles::keyDown( KeyEvent event ){
 	if( event.getChar() == 'r' ) {
         mFrameTexture = gl::Texture( mSurface );
 		resetFBOs();
-        //mArcball.resetQuat();
-        //mCam.setFov(60.0f);
+        mArcball.resetQuat();
+        mCam.setFov(60.0f);
         doParticles = !doParticles;
 	}
     if (event.getChar() == 'n'){
@@ -466,10 +457,6 @@ void video2Particles::loadMovieFile( const fs::path &moviePath )
     catch( ... ) {
         console() << "Unable to load the movie." << std::endl;
         mMovie.reset();
-    }
-    
-    for (int j = 0; j < 100000; j++){
-        cout<<" "<<j<<endl;
     }
     
     mFrameTexture.reset();

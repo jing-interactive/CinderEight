@@ -116,8 +116,8 @@ void video2Particles::setupTextures(){
 	mInitPos = Surface32f( WIDTH, HEIGHT, true);
 	Surface32f::Iter pixelIter = mInitPos.getIter();
     std::size_t cnt = 0;
-    float oneOverWidth = -1.0 / (float)WIDTH;
-    float oneOverHeight = 1.0 / (float)HEIGHT;
+    float oneOverWidth = 1.0 / (float)imgChannel.getWidth();
+    float oneOverHeight = 1.0 / (float)imgChannel.getHeight();
     while(cnt<HEIGHT*WIDTH){
         Channel::Iter imgIter = imgChannel.getIter();
         while( imgIter.line()) {
@@ -125,10 +125,9 @@ void video2Particles::setupTextures(){
                 /* Initial particle positions are passed in as R,G,B 
                  float values. Alpha is used as particle mass. */
                 float x, y, z;
-                int vv = imgIter.v();
-                if ((isParticleNeg && (imgIter.v())<100) || (!isParticleNeg && (imgIter.v())>6)){
-                    x = ((float)imgIter.getPos().x)*oneOverWidth+0.5f;
-                    y = ((float)imgIter.getPos().y)*oneOverHeight-0.5f;
+                if ((isParticleNeg && (imgIter.v())<100) || (!isParticleNeg && (imgIter.v())>100)){
+                    x = ((float)imgIter.getPos().x)*oneOverWidth - 0.5f;
+                    y = ((float)imgIter.getPos().y)*oneOverHeight- 0.5f;
                     z = (Rand::randFloat()-0.5f)*0.001f;
                     cnt++;
                     mInitPos.setPixel( imgIter.getPos(), ColorAf( x, y, 0.0 , Rand::randFloat(0.2f, 1.0f) ) );
@@ -273,7 +272,7 @@ void video2Particles::setup()
     
     audioSetup();
     
-    loadMovieFile( fs::path("/Users/eight/Desktop/head.mov_1.mov") );
+    loadMovieFile( fs::path("/Users/eight/Desktop/bedrunkene/rects/rects.mov") );
     doParticles = false;
 
 }
@@ -296,8 +295,8 @@ void video2Particles::update()
     
     if (!doParticles) return;
 
-//	gl::setMatricesWindow( mFBO[0].getSize()); // false to prevent vertical flipping
-//	gl::setViewport(mFBO[0].getBounds() );
+	gl::setMatricesWindow( mFBO[0].getSize()); // false to prevent vertical flipping
+	gl::setViewport(mFBO[0].getBounds() );
 	
 	mFBO[ mCurrentFBO ].bindFramebuffer();
 	
@@ -355,7 +354,7 @@ void video2Particles::draw()
         size = (Rand::randFloat(size));
         glPointSize(size);
 
-        //gl::rotate( mArcball.getQuat() );
+        gl::rotate( mArcball.getQuat() );
         gl::draw( mVboMesh );
     gl::popModelView();
 
@@ -385,9 +384,10 @@ void video2Particles::mouseDrag( MouseEvent event )
 
 void video2Particles::keyDown( KeyEvent event ){
 	if( event.getChar() == 'r' ) {
+        setupTextures();
 		resetFBOs();
-        //mArcball.resetQuat();
-        //mCam.setFov(60.0f);
+        mArcball.resetQuat();
+        mCam.setFov(60.0f);
         doParticles = !doParticles;
 	}
     if (event.getChar() == 'n'){
