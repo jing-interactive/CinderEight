@@ -166,7 +166,7 @@ void video2Particles::resetFBOs(){
 	mCurrentFBO = 0;
 	mOtherFBO = 1;
 	mFBO[0].bindFramebuffer();
-	mFBO[1].bindFramebuffer();
+    
 	
 	// Attachment 0 - Positions
 	glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
