@@ -2,10 +2,8 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Texture.h"
-#include "cinder/Rand.h"
-#include "cinder/audio/Input.h"
 
-#include "cinder/app/AppBasic.h"
+#include "cinder/audio/Input.h"
 #include "cinder/audio/FftProcessor.h"
 
 

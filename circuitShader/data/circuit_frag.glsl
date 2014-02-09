@@ -10,6 +10,7 @@ uniform sampler2D iChannel1;          // input channel. XX = 2D/Cube
 
 #define width .005
 float zoom = .18;
+float curvtr = 1.0;
 
 float shape=0.;
 vec3 color=vec3(0.),randcol;
@@ -40,15 +41,17 @@ void main(void)
 	vec2 pos = gl_FragCoord.xy / iResolution.xy - .5;
 	pos.x*=iResolution.x/iResolution.y;
 	vec2 uv=pos;
-	float sph = length(uv); sph = sqrt(1. - sph*sph)*1.5; // curve for spheric distortion
+	float sph = length(uv); sph = sqrt(1. - sph*sph)*curvtr; // curve for spheric distortion
+
 	uv=normalize(vec3(uv,sph)).xy;
 	float a=time+mod(time,1.)*.5;
 	vec2 luv=uv;
 	float b=a*5.48535;
     //	zoom*=1.+sin(time*3.758123)*.8;
-	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));
-	uv+=vec2(sin(a),cos(a*.5))*8.;
-	uv*=zoom;
+    
+//	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //mov
+//	uv+=vec2(sin(a),cos(a*.5))*8.;           //rotate
+	uv*=zoom;                                //zoom
 	float pix=.5/iResolution.x*zoom/sph;
 	float dof=max(1.,(10.-mod(time,1.)/.01));
 	float c=1.5+mod(floor(time),6.)*.125;
