@@ -25,7 +25,7 @@
 		66F7F8A9186884490016431D /* shdrPosV.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 66F7F8A5186884490016431D /* shdrPosV.glsl */; };
 		66F7F8AA186884490016431D /* shdrVelF.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 66F7F8A6186884490016431D /* shdrVelF.glsl */; };
 		66F7F8AB186884490016431D /* shdrVelV.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 66F7F8A7186884490016431D /* shdrVelV.glsl */; };
-		711F115A380E4AC0AAE6F89E /* KinectToParticlesApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1CC7F8A94A47A4B1445968 /* KinectToParticlesApp.cpp */; };
+		711F115A380E4AC0AAE6F89E /* VideoToParticlesApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 2D1CC7F8A94A47A4B1445968 /* VideoToParticlesApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		D807F138129C45CE88DEFD8C /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 240869F66A6A4080A6FF0B7C /* CinderApp.icns */; };
 		E64B174218A61FC2005912C2 /* CinderFreenect.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E64B173218A61FC2005912C2 /* CinderFreenect.cpp */; };
@@ -76,7 +76,7 @@
 		240869F66A6A4080A6FF0B7C /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		2D1CC7F8A94A47A4B1445968 /* KinectToParticlesApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = KinectToParticlesApp.cpp; path = ../src/KinectToParticlesApp.cpp; sourceTree = "<group>"; };
+		2D1CC7F8A94A47A4B1445968 /* VideoToParticlesApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = VideoToParticlesApp.cpp; path = ../src/VideoToParticlesApp.cpp; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		6609AC881871A4AA008E8B15 /* cross2.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cross2.png; path = ../resources/cross2.png; sourceTree = "<group>"; };
@@ -90,8 +90,8 @@
 		66F7F8A5186884490016431D /* shdrPosV.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shdrPosV.glsl; path = ../resources/shdrPosV.glsl; sourceTree = "<group>"; };
 		66F7F8A6186884490016431D /* shdrVelF.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shdrVelF.glsl; path = ../resources/shdrVelF.glsl; sourceTree = "<group>"; };
 		66F7F8A7186884490016431D /* shdrVelV.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shdrVelV.glsl; path = ../resources/shdrVelV.glsl; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* KinectToParticles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = KinectToParticles.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A808F706E72D426881A46266 /* KinectToParticles_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = KinectToParticles_Prefix.pch; sourceTree = "<group>"; };
+		8D1107320486CEB800E47090 /* VideoToParticles.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoToParticles.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		A808F706E72D426881A46266 /* VideoToParticles_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = VideoToParticles_Prefix.pch; sourceTree = "<group>"; };
 		E64B173218A61FC2005912C2 /* CinderFreenect.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = CinderFreenect.cpp; sourceTree = "<group>"; };
 		E64B173318A61FC2005912C2 /* CinderFreenect.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CinderFreenect.h; sourceTree = "<group>"; };
 		E64B173518A61FC2005912C2 /* cameras.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = cameras.c; sourceTree = "<group>"; };
@@ -184,7 +184,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				2D1CC7F8A94A47A4B1445968 /* KinectToParticlesApp.cpp */,
+				2D1CC7F8A94A47A4B1445968 /* VideoToParticlesApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -216,7 +216,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* KinectToParticles.app */,
+				8D1107320486CEB800E47090 /* VideoToParticles.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -270,7 +270,7 @@
 			isa = PBXGroup;
 			children = (
 				EE4F619AE3594D308A21E2B4 /* Resources.h */,
-				A808F706E72D426881A46266 /* KinectToParticles_Prefix.pch */,
+				A808F706E72D426881A46266 /* VideoToParticles_Prefix.pch */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -417,9 +417,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* KinectToParticles */ = {
+		8D1107260486CEB800E47090 /* VideoToParticles */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "KinectToParticles" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "VideoToParticles" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -430,10 +430,10 @@
 			);
 			dependencies = (
 			);
-			name = KinectToParticles;
+			name = VideoToParticles;
 			productInstallPath = "$(HOME)/Applications";
 			productName = ShdrParts;
-			productReference = 8D1107320486CEB800E47090 /* KinectToParticles.app */;
+			productReference = 8D1107320486CEB800E47090 /* VideoToParticles.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -443,7 +443,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "KinectToParticles" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "VideoToParticles" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -457,7 +457,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* KinectToParticles */,
+				8D1107260486CEB800E47090 /* VideoToParticles */,
 			);
 		};
 /* End PBXProject section */
@@ -489,7 +489,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E64B178218A62074005912C2 /* OscTypes.cpp in Sources */,
-				711F115A380E4AC0AAE6F89E /* KinectToParticlesApp.cpp in Sources */,
+				711F115A380E4AC0AAE6F89E /* VideoToParticlesApp.cpp in Sources */,
 				E64B175018A6202D005912C2 /* syphonServer.mm in Sources */,
 				E64B174718A61FC2005912C2 /* usb_libusb10.c in Sources */,
 				E64B177C18A62074005912C2 /* UdpSocket.cpp in Sources */,
@@ -531,7 +531,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = KinectToParticles_Prefix.pch;
+				GCC_PREFIX_HEADER = VideoToParticles_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -549,7 +549,7 @@
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
 					"\"$(CINDER_PATH)/blocks/Cinder-Freenect/lib/macosx/libusb-1.0.a\"",
 				);
-				PRODUCT_NAME = KinectToParticles;
+				PRODUCT_NAME = VideoToParticles;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
 			};
@@ -571,7 +571,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = KinectToParticles_Prefix.pch;
+				GCC_PREFIX_HEADER = VideoToParticles_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				HEADER_SEARCH_PATHS = (
 					"\"$(CINDER_PATH)/boost\"",
@@ -585,7 +585,7 @@
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",
 					"\"$(CINDER_PATH)/blocks/Cinder-Freenect/lib/macosx/libusb-1.0.a\"",
 				);
-				PRODUCT_NAME = KinectToParticles;
+				PRODUCT_NAME = VideoToParticles;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -627,7 +627,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "KinectToParticles" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "VideoToParticles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -636,7 +636,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "KinectToParticles" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "VideoToParticles" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

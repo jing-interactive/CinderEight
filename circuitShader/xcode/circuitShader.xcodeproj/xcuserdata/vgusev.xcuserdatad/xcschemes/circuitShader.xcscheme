@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8D1107260486CEB800E47090"
-               BuildableName = "KinectToParticles.app"
-               BlueprintName = "KinectToParticles"
-               ReferencedContainer = "container:KinectToParticles.xcodeproj">
+               BuildableName = "shaderTest.app"
+               BlueprintName = "circuitShader"
+               ReferencedContainer = "container:circuitShader.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,18 +33,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "KinectToParticles.app"
-            BlueprintName = "KinectToParticles"
-            ReferencedContainer = "container:KinectToParticles.xcodeproj">
+            BuildableName = "shaderTest.app"
+            BlueprintName = "circuitShader"
+            ReferencedContainer = "container:circuitShader.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
-      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
+      selectedDebuggerIdentifier = ""
+      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Debug"
+      buildConfiguration = "Release"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "KinectToParticles.app"
-            BlueprintName = "KinectToParticles"
-            ReferencedContainer = "container:KinectToParticles.xcodeproj">
+            BuildableName = "shaderTest.app"
+            BlueprintName = "circuitShader"
+            ReferencedContainer = "container:circuitShader.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "KinectToParticles.app"
-            BlueprintName = "KinectToParticles"
-            ReferencedContainer = "container:KinectToParticles.xcodeproj">
+            BuildableName = "shaderTest.app"
+            BlueprintName = "circuitShader"
+            ReferencedContainer = "container:circuitShader.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
