@@ -222,7 +222,6 @@ vec3 move(inout vec3 dir) {
 	return go;
 }
 
-
 void main(void)
 {
 	pth1 = path(t+.3)+origin;

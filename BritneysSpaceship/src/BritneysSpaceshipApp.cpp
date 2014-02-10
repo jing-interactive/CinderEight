@@ -30,7 +30,7 @@ public:
     void loadMovieFile( const fs::path &path );
     void fileDrop( FileDropEvent event );
     void mouseDrag( MouseEvent event );
-    Vec3i mouse;
+    Vec3f mouse;
 
 	qtime::MovieGlRef		mMovie;
 };
@@ -85,7 +85,7 @@ void BritneysSpaceshipApp::loadMovieFile( const fs::path &moviePath )
 
 void BritneysSpaceshipApp::mouseDrag( MouseEvent event )
 {
-	mouse = Vec3i(event.getX(), event.getY(), 10 );
+	mouse = Vec3f(event.getX(), event.getY(), 10 );
 }
 
 void BritneysSpaceshipApp::keyDown( KeyEvent event )
@@ -153,6 +153,7 @@ void BritneysSpaceshipApp::update()
 	}
     
 	// store it as a 512x2 texture
+
 	soundTexture = std::make_shared<gl::Texture>( signal, GL_LUMINANCE, 512, 2 );
     
     if( mMovie )

@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8D1107260486CEB800E47090"
-               BuildableName = "circuitShader.app"
-               BlueprintName = "circuitShader"
-               ReferencedContainer = "container:circuitShader.xcodeproj">
+               BuildableName = "BritneysSpaceship.app"
+               BlueprintName = "BritneysSpaceship"
+               ReferencedContainer = "container:BritneysSpaceship.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,18 +33,18 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "circuitShader.app"
-            BlueprintName = "circuitShader"
-            ReferencedContainer = "container:circuitShader.xcodeproj">
+            BuildableName = "BritneysSpaceship.app"
+            BlueprintName = "BritneysSpaceship"
+            ReferencedContainer = "container:BritneysSpaceship.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </TestAction>
    <LaunchAction
-      selectedDebuggerIdentifier = ""
-      selectedLauncherIdentifier = "Xcode.IDEFoundation.Launcher.PosixSpawn"
+      selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
+      selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
       useCustomWorkingDirectory = "NO"
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       ignoresPersistentStateOnLaunch = "NO"
       debugDocumentVersioning = "YES"
       allowLocationSimulation = "YES">
@@ -52,9 +52,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "circuitShader.app"
-            BlueprintName = "circuitShader"
-            ReferencedContainer = "container:circuitShader.xcodeproj">
+            BuildableName = "BritneysSpaceship.app"
+            BlueprintName = "BritneysSpaceship"
+            ReferencedContainer = "container:BritneysSpaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <AdditionalOptions>
@@ -70,9 +70,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "circuitShader.app"
-            BlueprintName = "circuitShader"
-            ReferencedContainer = "container:circuitShader.xcodeproj">
+            BuildableName = "BritneysSpaceship.app"
+            BlueprintName = "BritneysSpaceship"
+            ReferencedContainer = "container:BritneysSpaceship.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>
