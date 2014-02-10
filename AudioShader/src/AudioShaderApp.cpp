@@ -2,7 +2,10 @@
 #include "cinder/gl/gl.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Texture.h"
-#include "cinder/Rand.h"
+
+#include "cinder/audio/Input.h"
+#include "cinder/audio/FftProcessor.h"
+
 
 using namespace ci;
 using namespace ci::app;
@@ -17,6 +20,9 @@ public:
 private:
 	gl::GlslProg	mShader;
 	gl::Texture		mTexture;
+    audio::Input mInput;
+    std::shared_ptr<float> mFftDataRef;
+	audio::PcmBuffer32fRef mPcmBuffer;
 };
 
 void AudioShaderApp::setup()
@@ -29,18 +35,43 @@ void AudioShaderApp::setup()
 	{
 		console() << e.what() << std::endl;
 	}
+    
+    
+    //iterate input devices and print their names to the console
+	const std::vector<audio::InputDeviceRef>& devices = audio::Input::getDevices();
+	for( std::vector<audio::InputDeviceRef>::const_iterator iter = devices.begin(); iter != devices.end(); ++iter ) {
+		console() << (*iter)->getName() << std::endl;
+	}
+    
+	//initialize the audio Input, using the default input device
+	mInput = audio::Input();
+	
+	//tell the input to start capturing audio
+	mInput.start();
 }
 
 void AudioShaderApp::update()
 {
+    
+    mPcmBuffer = mInput.getPcmBuffer();
+	if( ! mPcmBuffer ) {
+		return;
+	}
+
+	uint16_t bandCount = 512;
+	mFftDataRef = audio::calculateFft( mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_LEFT ), bandCount );
+
+    float * fftBuffer = mFftDataRef.get();
+    if (!fftBuffer) return;
+    	float ht = 1000.0f;
 	// create a random FFT signal for test purposes
 	unsigned char signal[1024];
 	for(int i=0;i<512;++i)
-		signal[i] = (unsigned char) (Rand::randUint() & 0xFF);
+		signal[i] = (unsigned char) (fftBuffer[i] / bandCount * ht);
 	
 	// add an audio signal for test purposes
 	for(int i=0;i<512;++i)
-		signal[512+i] = (unsigned char) (Rand::randUint() & 0xFF);
+		signal[512+i] = (unsigned char) (fftBuffer[i] / bandCount * ht);
     
 	// store it as a 512x2 texture
 	mTexture = gl::Texture( signal, GL_LUMINANCE, 512, 2 );
@@ -48,6 +79,7 @@ void AudioShaderApp::update()
 
 void AudioShaderApp::draw()
 {
+    if (!mTexture) return;
 	gl::clear();
     
 	// bind texture to slot 0
