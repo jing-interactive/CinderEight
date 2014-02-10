@@ -77,13 +77,16 @@ void circuitShaderApp::update()
     
     float * fftBuffer = mFftDataRef.get();
     if (!fftBuffer) return;
-    float ht = 1000.0f;
-	// create a random FFT signal for test purposes
+    float ht = 1.0f;
+	
+    //create a sound texture as 512x2
 	unsigned char signal[1024];
+    
+    //the first row is the spectrum (shadertoy)
 	for(int i=0;i<512;++i)
 		signal[i] = (unsigned char) (fftBuffer[i] / bandCount * ht);
 	
-	// add an audio signal for test purposes
+	// the second is waveform (shadertoy)
 	for(int i=0;i<512;++i)
 		signal[512+i] = (unsigned char) (fftBuffer[i] / bandCount * ht);
     
