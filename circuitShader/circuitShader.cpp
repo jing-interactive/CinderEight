@@ -74,7 +74,7 @@ void circuitShaderApp::update()
     
     /*
      shadertoy: The FFT signal, which is 512 pixels/frequencies long, gets normalized to 0..1 and mapped to 0..255.
-     The wave form, which is also 512 pixels/sampled long, gets renormalized too from -16387..16384 to 0..1.
+     The wave form, which is also 512 pixels/sampled long, gets renormalized too from -16387..16384 to 0..1. (and then to 0..255???)
      FFT goes in the first row, waveform in the second row. So this is a 512x2 gray scale 8 bit texture.
      */
     

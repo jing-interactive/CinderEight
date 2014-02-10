@@ -49,8 +49,8 @@ void main(void)
 	float b=a*5.48535;
     //	zoom*=1.+sin(time*3.758123)*.8;
     
-//	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //mov
-//	uv+=vec2(sin(a),cos(a*.5))*8.;           //rotate
+	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //mov
+	uv+=vec2(sin(a),cos(a*.5))*8.;           //rotate
 	uv*=zoom;                                //zoom
 	float pix=.5/iResolution.x*zoom/sph;
 	float dof=max(1.,(10.-mod(time,1.)/.01));
