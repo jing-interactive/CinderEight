@@ -17,8 +17,9 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8140BF1AF0FE4ED68F61DE85 /* BritneysSpaceshipApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = F8BD0FE1944B4EDCB8FEFC64 /* BritneysSpaceshipApp.cpp */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AF83AB8318A8AB9500CB55B2 /* QuickTime.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF83AB8218A8AB9500CB55B2 /* QuickTime.framework */; };
+		AF83AB8518A8B27800CB55B2 /* britney_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = AF83AB8418A8B27800CB55B2 /* britney_frag.glsl */; };
 		AFD7932218A8A3C500DC827F /* cinder_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = AFD7931F18A8A3C500DC827F /* cinder_logo.png */; };
-		AFD7932318A8A3C500DC827F /* circuit_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7932018A8A3C500DC827F /* circuit_frag.glsl */; };
 		AFD7932418A8A3C500DC827F /* passThru_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = AFD7932118A8A3C500DC827F /* passThru_vert.glsl */; };
 /* End PBXBuildFile section */
 
@@ -37,8 +38,9 @@
 		8D1107320486CEB800E47090 /* BritneysSpaceship.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BritneysSpaceship.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		94A6B0208B18422E95CAB7F8 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		A41B86B0B37D46E18CFFD9FE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		AF83AB8218A8AB9500CB55B2 /* QuickTime.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuickTime.framework; path = System/Library/Frameworks/QuickTime.framework; sourceTree = SDKROOT; };
+		AF83AB8418A8B27800CB55B2 /* britney_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = britney_frag.glsl; path = ../data/britney_frag.glsl; sourceTree = "<group>"; };
 		AFD7931F18A8A3C500DC827F /* cinder_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cinder_logo.png; path = ../../circuitShader/data/cinder_logo.png; sourceTree = "<group>"; };
-		AFD7932018A8A3C500DC827F /* circuit_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = circuit_frag.glsl; path = ../../circuitShader/data/circuit_frag.glsl; sourceTree = "<group>"; };
 		AFD7932118A8A3C500DC827F /* passThru_vert.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = passThru_vert.glsl; path = ../../circuitShader/data/passThru_vert.glsl; sourceTree = "<group>"; };
 		EAADE6281585416FAC26B464 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		F8BD0FE1944B4EDCB8FEFC64 /* BritneysSpaceshipApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = BritneysSpaceshipApp.cpp; path = ../src/BritneysSpaceshipApp.cpp; sourceTree = "<group>"; };
@@ -53,6 +55,7 @@
 				0091D8F90E81B9330029341E /* OpenGL.framework in Frameworks */,
 				5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */,
 				5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */,
+				AF83AB8318A8AB9500CB55B2 /* QuickTime.framework in Frameworks */,
 				00B784B30FF439BC000DE1D7 /* Accelerate.framework in Frameworks */,
 				00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */,
 				00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */,
@@ -135,8 +138,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AF83AB8418A8B27800CB55B2 /* britney_frag.glsl */,
 				AFD7931F18A8A3C500DC827F /* cinder_logo.png */,
-				AFD7932018A8A3C500DC827F /* circuit_frag.glsl */,
 				AFD7932118A8A3C500DC827F /* passThru_vert.glsl */,
 				EAADE6281585416FAC26B464 /* CinderApp.icns */,
 				A41B86B0B37D46E18CFFD9FE /* Info.plist */,
@@ -147,6 +150,7 @@
 		29B97323FDCFA39411CA2CEA /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				AF83AB8218A8AB9500CB55B2 /* QuickTime.framework */,
 				1058C7A0FEA54F0111CA2CBB /* Linked Frameworks */,
 				1058C7A2FEA54F0111CA2CBB /* Other Frameworks */,
 			);
@@ -208,7 +212,7 @@
 				AFD7932418A8A3C500DC827F /* passThru_vert.glsl in Resources */,
 				4FECC49C92294E219DFAB88F /* CinderApp.icns in Resources */,
 				AFD7932218A8A3C500DC827F /* cinder_logo.png in Resources */,
-				AFD7932318A8A3C500DC827F /* circuit_frag.glsl in Resources */,
+				AF83AB8518A8B27800CB55B2 /* britney_frag.glsl in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -5,7 +5,9 @@
 #include "cinder/audio/Input.h"
 #include "cinder/audio/FftProcessor.h"
 #include "Resources.h"
-
+#include "cinder/qtime/QuickTime.h"
+#include "cinder/Utilities.h"
+#include "cinder/ImageIo.h"
 using namespace ci;
 using namespace ci::app;
 
@@ -17,23 +19,26 @@ public:
 	void update();
 	void draw();
 	
-	gl::TextureRef	soundTexture, palletteTexture;
+	gl::TextureRef	soundTexture;
+    gl::Texture mFrameTexture;
 	gl::GlslProgRef	mShader;
     
     audio::Input mInput;
     std::shared_ptr<float> mFftDataRef;
 	audio::PcmBuffer32fRef mPcmBuffer;
+    
+    void loadMovieFile( const fs::path &path );
+    void fileDrop( FileDropEvent event );
+    void mouseDrag( MouseEvent event );
+    Vec3i mouse;
+
+	qtime::MovieGlRef		mMovie;
 };
+
 
 
 void BritneysSpaceshipApp::setup()
 {
-	try {
-		palletteTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE_JPG ) ) );
-	}
-	catch( ... ) {
-		std::cout << "unable to load the texture file!" << std::endl;
-	}
 	
 	try {
 		mShader = gl::GlslProg::create( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_BLUR_FRAG ) );
@@ -55,6 +60,32 @@ void BritneysSpaceshipApp::setup()
     
 	mInput.start();
     
+}
+
+void BritneysSpaceshipApp::fileDrop( FileDropEvent event )
+{
+	loadMovieFile( event.getFile( 0 ) );
+}
+
+void BritneysSpaceshipApp::loadMovieFile( const fs::path &moviePath )
+{
+	try {
+		// load up the movie, set it to loop, and begin playing
+		mMovie = qtime::MovieGl::create( moviePath );
+		mMovie->setLoop();
+		mMovie->play();
+	}
+	catch( ... ) {
+		console() << "Unable to load the movie." << std::endl;
+		mMovie->reset();
+	}
+    
+	mFrameTexture.reset();
+}
+
+void BritneysSpaceshipApp::mouseDrag( MouseEvent event )
+{
+	mouse = Vec3i(event.getX(), event.getY(), 10 );
 }
 
 void BritneysSpaceshipApp::keyDown( KeyEvent event )
@@ -124,26 +155,26 @@ void BritneysSpaceshipApp::update()
 	// store it as a 512x2 texture
 	soundTexture = std::make_shared<gl::Texture>( signal, GL_LUMINANCE, 512, 2 );
     
+    if( mMovie )
+    mFrameTexture = mMovie->getTexture();
+    
 }
 
 void BritneysSpaceshipApp::draw()
 {
 	gl::clear();
     
-    if (soundTexture) soundTexture->enableAndBind();
-    palletteTexture->enableAndBind();
+    if (mFrameTexture) mFrameTexture.enableAndBind();
     
 	mShader->bind();
-	mShader->uniform( "iChannel0", soundTexture ? 0: 1 );
-    mShader->uniform( "iChannel1", 1 );
+	mShader->uniform( "iChannel0", 0 );
     mShader->uniform( "iResolution", Vec3f( getWindowWidth(), getWindowHeight(), 0.0f ) );
     mShader->uniform( "iGlobalTime", float( getElapsedSeconds() ) );
+    mShader->uniform("iMouse", mouse);
     
 	gl::drawSolidRect( getWindowBounds() );
     
-	if (soundTexture) soundTexture->unbind();
-    
-    palletteTexture->unbind();
+    if (mFrameTexture) mFrameTexture.unbind();
 }
 
 
