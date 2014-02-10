@@ -74,6 +74,7 @@ void HelloWorldShaderToyApp::update()
 
 void HelloWorldShaderToyApp::draw()
 {
+    if (!mFrameTexture) return;
 	gl::clear();
     
     if (mFrameTexture) {
@@ -81,7 +82,7 @@ void HelloWorldShaderToyApp::draw()
     }
 	mShader->bind();
 	mShader->uniform( "iChannel0", 0 );
-    mShader->uniform( "iResolution", Vec3f( getWindowWidth(), getWindowHeight(), 0.0f ) );
+    mShader->uniform( "iResolution", Vec3f( mFrameTexture.getWidth(), mFrameTexture.getHeight(), 0.0f ) );
     
 	gl::drawSolidRect( getWindowBounds() );
     
