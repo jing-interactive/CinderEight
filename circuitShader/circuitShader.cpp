@@ -73,7 +73,9 @@ void circuitShaderApp::update()
 	}
     
     /*
-     The FFT signal, which is 512 pixels/frequencies long, gets normalized to 0..1 and mapped to 0..255. The wave form, which is also 512 pixels/sampled long, gets renormalized too from -16387..16384 to 0..1. FFT goes in the first row, waveform in the second row. So this is a 512x2 gray scale 8 bit texture.
+     shadertoy: The FFT signal, which is 512 pixels/frequencies long, gets normalized to 0..1 and mapped to 0..255.
+     The wave form, which is also 512 pixels/sampled long, gets renormalized too from -16387..16384 to 0..1.
+     FFT goes in the first row, waveform in the second row. So this is a 512x2 gray scale 8 bit texture.
      */
     
 	uint16_t bandCount = 512;
@@ -93,17 +95,32 @@ void circuitShaderApp::update()
     }
 
     float ht = 255.0/max;
-    unsigned char ax = 0;
 	for(int i=0;i<512;++i){
 		signal[i] = (unsigned char) (fftBuffer[i] * ht);
-        if (signal[i] > ax) ax = signal[i];
     }
-    std::cout<<(int)ax<<std::endl;
+
+    //waveform
+    uint32_t bufferSamples = mPcmBuffer->getSampleCount();
+	audio::Buffer32fRef leftBuffer = mPcmBuffer->getChannelData( audio::CHANNEL_FRONT_LEFT );
+
+	int endIdx = bufferSamples;
 	
-	// the second is waveform (shadertoy)
-	for(int i=0;i<512;++i)
-		signal[512+i] = (unsigned char) (fftBuffer[i] / bandCount * ht);
-    
+	//only use the last 1024 samples or less
+	int32_t startIdx = ( endIdx - 1024 );
+	startIdx = math<int32_t>::clamp( startIdx, 0, endIdx );
+
+    float mx = -FLT_MAX,mn = FLT_MAX, val;
+	for( uint32_t i = startIdx; i < endIdx; i++) {
+        val = leftBuffer->mData[i];
+        if (val > mx) mx = val;
+        if (val < mn) mn = val;
+	}
+
+    float scale = 255.0/(mx - mn);
+    for( uint32_t i = startIdx, c = 512; c < 1024; i++, c++ ) {
+        signal[c] = (unsigned char) ((leftBuffer->mData[i]-mn)*scale);
+	}
+
 	// store it as a 512x2 texture
 	soundTexture = std::make_shared<gl::Texture>( signal, GL_LUMINANCE, 512, 2 );
 
