@@ -24,7 +24,7 @@ uniform vec3      iMouse;
 
 
 #define detail .00004
-#define t iGlobalTime*.02
+#define t iGlobalTime*.0001
 
 
 vec3 lightdir=normalize(vec3(0.1,-0.15,-1.));
@@ -42,7 +42,7 @@ mat2 rot(float a) {
 vec4 formula(vec4 p) {
     p.xz = abs(p.xz+1.)-abs(p.xz-1.)-p.xz;
     p=p*2./clamp(dot(p.xyz,p.xyz),.15,1.)-vec4(0.5,0.5,0.8,0.);
-    p.xy*=rot(.5);
+    p.xy*=rot(0.8);
 	return p;
 }
 

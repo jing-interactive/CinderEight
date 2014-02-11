@@ -147,7 +147,7 @@ void BritneysSpaceshipApp::update()
         if (val < mn) mn = val;
 	}
     
-    float scale = 255.0/(mx - mn);
+    float scale = 1./(mx - mn);
     for( uint32_t i = startIdx, c = 512; c < 1024; i++, c++ ) {
         signal[c] = (unsigned char) ((leftBuffer->mData[i]-mn)*scale);
 	}
