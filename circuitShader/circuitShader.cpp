@@ -23,13 +23,20 @@ class circuitShaderApp : public AppBasic {
     audio::Input mInput;
     std::shared_ptr<float> mFftDataRef;
 	audio::PcmBuffer32fRef mPcmBuffer;
+    
+    float volume;
+    
+    float zoom;
 };
 
 
 void circuitShaderApp::setup()
 {
+    setFrameRate(25.0);
 	try {
-		palletteTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE_JPG ) ) );
+        //gl::Texture::Format format;
+        //format.setTargetRect();
+		palletteTexture = gl::Texture::create( loadImage( loadResource( RES_IMAGE_JPG ) ));
 	}
 	catch( ... ) {
 		std::cout << "unable to load the texture file!" << std::endl;
@@ -54,14 +61,30 @@ void circuitShaderApp::setup()
 	mInput = audio::Input();
 
 	mInput.start();
+    
+    zoom = 0.5;
+    volume = 0.0f;
 
 }
 
 void circuitShaderApp::keyDown( KeyEvent event )
 {
-	if( event.getCode() == app::KeyEvent::KEY_f ) {
+    int code = event.getCode();
+
+	if( code == app::KeyEvent::KEY_f ) {
 		setFullScreen( ! isFullScreen() );
 	}
+    
+    if (code == app::KeyEvent::KEY_RIGHT){
+        zoom += 0.01;
+    }
+
+    if (code == app::KeyEvent::KEY_LEFT){
+        zoom -= 0.01;
+    }
+    
+    zoom = math<float>::clamp( zoom, 0., 1.0 );
+    
 }
 
 void circuitShaderApp::update()
@@ -95,9 +118,14 @@ void circuitShaderApp::update()
     }
 
     float ht = 255.0/max;
+    
+    float volumeAcc = 0.0f;
 	for(int i=0;i<512;++i){
 		signal[i] = (unsigned char) (fftBuffer[i] * ht);
+        volumeAcc += fftBuffer[i] * ht;
     }
+    
+    volume = volumeAcc/(512.0*255)*0.01+1;
 
     //waveform
     uint32_t bufferSamples = mPcmBuffer->getSampleCount();
@@ -116,7 +144,7 @@ void circuitShaderApp::update()
         if (val < mn) mn = val;
 	}
 
-    float scale = 255.0/(mx - mn);
+    float scale = 1.0/(mx - mn);
     for( uint32_t i = startIdx, c = 512; c < 1024; i++, c++ ) {
         signal[c] = (unsigned char) ((leftBuffer->mData[i]-mn)*scale);
 	}
@@ -134,10 +162,11 @@ void circuitShaderApp::draw()
     palletteTexture->enableAndBind();
     
 	mShader->bind();
-	mShader->uniform( "iChannel0", soundTexture ? 0: 1 );
+	mShader->uniform( "iChannel0", soundTexture ? 0 : 1 );
     mShader->uniform( "iChannel1", 1 );
     mShader->uniform( "iResolution", Vec3f( getWindowWidth(), getWindowHeight(), 0.0f ) );
     mShader->uniform( "iGlobalTime", float( getElapsedSeconds() ) );
+    mShader->uniform("zoomm", zoom*volume);
 
 	gl::drawSolidRect( getWindowBounds() );
 
