@@ -62,7 +62,7 @@ void main(void)
 //	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //rotate
 //	uv+=vec2(sin(a),cos(a*.5))*8.;           //move
   
-    uv+=vec2(0., 1.0)*8.;           //move
+    //uv+=vec2(0., 1.0)*8.;           //move
 
 	uv*=zoom;                                //zoom
 	float pix=.5/iResolution.x*zoom/sph;

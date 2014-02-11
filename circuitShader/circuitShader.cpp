@@ -62,7 +62,7 @@ void circuitShaderApp::setup()
 
 	mInput.start();
     
-    zoom = 0.5;
+    zoom = 0.244;
     volume = 0.0f;
 
 }
@@ -76,14 +76,16 @@ void circuitShaderApp::keyDown( KeyEvent event )
 	}
     
     if (code == app::KeyEvent::KEY_RIGHT){
-        zoom += 0.01;
+        zoom += 0.001;
     }
 
     if (code == app::KeyEvent::KEY_LEFT){
-        zoom -= 0.01;
+        zoom -= 0.001;
     }
     
     zoom = math<float>::clamp( zoom, 0., 1.0 );
+    
+    std::cout<<zoom<<std::endl;
     
 }
 
