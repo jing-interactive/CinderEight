@@ -27,7 +27,7 @@ public:
 
 	void keyDown( KeyEvent event );
 
-	void resize( ResizeEvent event );
+	void resize( );
 private:
 	void enableLights();
 	void disableLights();
@@ -221,10 +221,10 @@ void SmoothMeshApp::keyDown( KeyEvent event )
 	}
 }
 
-void SmoothMeshApp::resize( ResizeEvent event )
+void SmoothMeshApp::resize( )
 {
 	CameraPersp cam = mMayaCam.getCamera();
-	cam.setAspectRatio( event.getAspectRatio() );
+	//cam.setAspectRatio( getAspectRatio() );
 
 	mMayaCam.setCurrentCam( cam );
 }

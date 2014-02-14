@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>C398FA00-568E-4DF9-A22E-23FFBE00EB17</string>
+	<key>IDESourceControlProjectName</key>
+	<string>openniMesh</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</key>
+		<string>https://github.com/pixelnerve/BlockOpenNI.git</string>
+		<key>29C6B13C-5559-4317-9931-036822D06759</key>
+		<string>https://github.com/astellato/Cinder-Syphon.git</string>
+		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
+		<string>https://github.com/eighteight/CinderEight.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>openniMesh/xcode/openniMesh.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</key>
+		<string>../../../../../blocks/BlockOpenNI</string>
+		<key>29C6B13C-5559-4317-9931-036822D06759</key>
+		<string>../../../../../blocks/Cinder-Syphon</string>
+		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/cinder/Cinder.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</string>
+			<key>IDESourceControlWCCName</key>
+			<string>BlockOpenNI</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>29C6B13C-5559-4317-9931-036822D06759</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Cinder-Syphon</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CinderEight</string>
+		</dict>
+	</array>
+</dict>
+</plist>

@@ -11,11 +11,11 @@ uniform vec3      iMouse;
     
 //    vec4 color= texture2DRect( iChannel0, gl_TexCoord[0].st * vec2( iResolution.x, iResolution.y ) );
 
-#define time iGlobalTime*.002
+#define time iGlobalTime*.02
 
 
 #define width .005
-float zoom = zoomm;//.18;
+float zoom = .18;
 float curvtr = 1.0;
 int itrtns = 40;
 
@@ -43,6 +43,8 @@ void formula(vec2 z, float c) {
     
 	color+=col*(.4+mod(minit/9.-time*10.+ot2*2.,1.)*1.6);
 	color+=vec3(1.,.7,.3)*circ*(10.-minit)*3.*smoothstep(0.,.5,.15+texture2D(iChannel0,vec2(.0,1.)).x-.5);
+    //color+=vec3(1.,.7,.3)*circ*(10.-minit)*3.*smoothstep(0.,.5,.15+zoomm-.5);
+
 }
 
 

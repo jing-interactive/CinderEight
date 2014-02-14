@@ -25,8 +25,10 @@ class circuitShaderApp : public AppBasic {
 	audio::PcmBuffer32fRef mPcmBuffer;
     
     float volume;
+    float speedMult;
     
     float zoom;
+    bool wireFrame;
 };
 
 
@@ -64,6 +66,8 @@ void circuitShaderApp::setup()
     
     zoom = 0.244;
     volume = 0.0f;
+    speedMult = 0.1;
+    wireFrame = true;
 
 }
 
@@ -76,16 +80,20 @@ void circuitShaderApp::keyDown( KeyEvent event )
 	}
     
     if (code == app::KeyEvent::KEY_RIGHT){
-        zoom += 0.001;
+        speedMult += 1.;
     }
 
     if (code == app::KeyEvent::KEY_LEFT){
-        zoom -= 0.001;
+        speedMult -= 1.;
+    }
+    
+    if (code == app::KeyEvent::KEY_SPACE){
+        wireFrame = !wireFrame;
     }
     
     zoom = math<float>::clamp( zoom, 0., 1.0 );
     
-    std::cout<<zoom<<std::endl;
+    std::cout<<speedMult<<std::endl;
     
 }
 
@@ -129,7 +137,6 @@ void circuitShaderApp::update()
     
     volume = volumeAcc/(512.0*255);
     
-    if (volume >0.2f)std::cout<<volume<<std::endl;
 
     //waveform
     uint32_t bufferSamples = mPcmBuffer->getSampleCount();
@@ -171,6 +178,8 @@ void circuitShaderApp::draw()
     mShader->uniform( "iResolution", Vec3f( getWindowWidth(), getWindowHeight(), 0.0f ) );
     mShader->uniform( "iGlobalTime", float( getElapsedSeconds() ) );
     mShader->uniform("zoomm", zoom*volume);
+    mShader->uniform("speedMult", speedMult);
+    mShader->uniform("isWireFrame", wireFrame);
 
 	gl::drawSolidRect( getWindowBounds() );
 
