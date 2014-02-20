@@ -43,7 +43,7 @@ void circuitShaderApp::setup()
 	}
 	
 	try {
-		mShader = gl::GlslProg::create( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_BLUR_FRAG ) );
+		mShader = gl::GlslProg::create( loadResource( RES_PASSTHRU_VERT ), loadResource( RES_ARRAY_FRAG ) );
 	}
 	catch( gl::GlslProgCompileExc &exc ) {
 		std::cout << "Shader compile error: " << std::endl;

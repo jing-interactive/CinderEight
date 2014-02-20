@@ -20,6 +20,7 @@
 		00D9A1330EA5998700FF5AEB /* passThru_vert.glsl in Resources */ = {isa = PBXBuildFile; fileRef = 00D9A1310EA5998700FF5AEB /* passThru_vert.glsl */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AFE0C4DA18B1ECFF004BB48F /* arrayindex_frag.glsl in Resources */ = {isa = PBXBuildFile; fileRef = AFE0C4D918B1ECFF004BB48F /* arrayindex_frag.glsl */; };
 		E6AE8DD118A70A30000A17A7 /* cinder_logo.png in Resources */ = {isa = PBXBuildFile; fileRef = E6AE8DD018A70A30000A17A7 /* cinder_logo.png */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +45,7 @@
 		32CA4F630368D1EE00C91783 /* circuitShader_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = circuitShader_Prefix.pch; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* circuitShader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = circuitShader.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFE0C4D918B1ECFF004BB48F /* arrayindex_frag.glsl */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = arrayindex_frag.glsl; path = ../data/arrayindex_frag.glsl; sourceTree = "<group>"; };
 		E6AE8DD018A70A30000A17A7 /* cinder_logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = cinder_logo.png; path = ../data/cinder_logo.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -138,6 +140,7 @@
 				00D9A1310EA5998700FF5AEB /* passThru_vert.glsl */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 				089C165CFE840E0CC02AAC07 /* InfoPlist.strings */,
+				AFE0C4D918B1ECFF004BB48F /* arrayindex_frag.glsl */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -205,6 +208,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */,
+				AFE0C4DA18B1ECFF004BB48F /* arrayindex_frag.glsl in Resources */,
 				00D9A1320EA5998700FF5AEB /* circuit_frag.glsl in Resources */,
 				00D9A1330EA5998700FF5AEB /* passThru_vert.glsl in Resources */,
 				E6AE8DD118A70A30000A17A7 /* cinder_logo.png in Resources */,
