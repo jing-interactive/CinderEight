@@ -680,7 +680,7 @@
 		565FEC2407B1792E00C4E23A /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0410;
+				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = us.onewaytheater;
 			};
 			buildConfigurationList = F0EC255808BBC88B006E9215 /* Build configuration list for PBXProject "CocoKinect" */;
@@ -789,10 +789,10 @@
 		F0EC255508BBC88B006E9215 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CINDER_PATH = ../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -826,10 +826,10 @@
 		F0EC255608BBC88B006E9215 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				CINDER_PATH = ../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				COMBINE_HIDPI_IMAGES = YES;
 				GCC_C_LANGUAGE_STANDARD = "compiler-default";
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INCREASE_PRECOMPILED_HEADER_SHARING = NO;
@@ -873,8 +873,10 @@
 					"$(CINDER_PATH)/blocks/osc/src",
 				);
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
 				USER_HEADER_SEARCH_PATHS = "$(CINDER_PATH)/include $(CINDER_PATH)/boost \"$(CINDER_PATH)/blocks/osc/include\" \"$(CINDER_PATH)/blocks/BlockOpenNI/src\"";
+				VALID_ARCHS = i386;
 				ZERO_LINK = YES;
 			};
 			name = Debug;
@@ -896,6 +898,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 10.7;
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
 				USER_HEADER_SEARCH_PATHS = "$(CINDER_PATH)/include $(CINDER_PATH)/boost \"$(CINDER_PATH)/blocks/osc/include\" \"$(CINDER_PATH)/blocks/BlockOpenNI/src\"";
+				VALID_ARCHS = i386;
 			};
 			name = Release;
 		};

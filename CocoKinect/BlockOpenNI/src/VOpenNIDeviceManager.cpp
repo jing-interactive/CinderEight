@@ -26,7 +26,7 @@ namespace V
 	void XN_CALLBACK_TYPE onErrorStateChanged( XnStatus errorState, void* pCookie )
 	{
         if (errorState == XN_STATUS_DEVICE_NOT_CONNECTED){
-            int i = 0;
+
         }
 		if (errorState != XN_STATUS_OK)
 		{
