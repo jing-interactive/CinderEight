@@ -102,8 +102,8 @@ public:
     CocoKinect();
 	~CocoKinect();
     
-	static const int WIDTH = 560;
-	static const int HEIGHT = 240;
+	static const int WIDTH = 379;
+	static const int HEIGHT = 279;
     
 	static const int KINECT_COLOR_WIDTH = 640;	//1280;
 	static const int KINECT_COLOR_HEIGHT = 480;	//1024;

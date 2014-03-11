@@ -3,7 +3,7 @@
 //  CocoKinect
 //
 //  Created by Vladimir Gusev on 6/1/12.
-//  Copyright (c) 2012 SMALLAB.ORG. All rights reserved.
+//  Copyright onewaytheater.us. All rights reserved.
 //
 
 #include "CocoKinect.h"
@@ -148,7 +148,7 @@ void CocoKinect::fileDrop( FileDropEvent event )
         
         _manager = V::OpenNIDeviceManager::InstancePtr();
     std::string fileName =  event.getFile(0).c_str();
-    isDevice = _manager->createDevice(event.getFile(0).c_str(), V::NODE_TYPE_IMAGE | V::NODE_TYPE_DEPTH | V::NODE_TYPE_USER | V::NODE_TYPE_SCENE, 0 );
+    isDevice = _manager->createDevice(event.getFile(0).c_str(), V::NODE_TYPE_DEPTH | V::NODE_TYPE_USER | V::NODE_TYPE_SCENE, 0 );
 
     if (isDevice && setDevice()){
          status = "Playing file " +fileName;
@@ -166,7 +166,7 @@ void CocoKinect::reset(){
     _manager->Release();
 
     _manager = V::OpenNIDeviceManager::InstancePtr();
-    isDevice = _manager->createDevices( 1, V::NODE_TYPE_IMAGE | V::NODE_TYPE_DEPTH | V::NODE_TYPE_SCENE | V::NODE_TYPE_USER );
+    isDevice = _manager->createDevices( 1, V::NODE_TYPE_DEPTH | V::NODE_TYPE_SCENE | V::NODE_TYPE_USER );
 
     if (setDevice()){
         status = "Kinect connected";
@@ -206,7 +206,7 @@ void CocoKinect::setup()
     
     V::OpenNIDeviceManager::USE_THREAD = false;
     _manager = V::OpenNIDeviceManager::InstancePtr();
-    isDevice = _manager->createDevices( 1, V::NODE_TYPE_IMAGE | V::NODE_TYPE_DEPTH | V::NODE_TYPE_SCENE | V::NODE_TYPE_USER );
+    isDevice = _manager->createDevices( 1, V::NODE_TYPE_DEPTH | V::NODE_TYPE_SCENE | V::NODE_TYPE_USER );
     numUsers = 1;
     if (setDevice()){
         status = "Kinect connected";
@@ -258,7 +258,7 @@ void CocoKinect::update()
         }
         
         // Update textures
-        mColorTex = getColorImage();
+        //mColorTex = getColorImage();
         mDepthTex = getDepthImage();
         
         // Uses manager to handle users.
@@ -298,16 +298,20 @@ void CocoKinect::draw(){
         gl::color( cinder::ColorA(1, 1, 1, 1) );
         if (mColorTex)
             gl::draw( mColorTex, Rectf( xoff, yoff, xoff+sx, yoff+sy) );
-        if (mDepthTex)
-            gl::draw( mDepthTex, Rectf( xoff*2+sx*1, yoff, xoff+sx*2, yoff+sy) );
+        if (mDepthTex){
+            if (mColorTex)
+                gl::draw( mDepthTex, Rectf( xoff*2+sx*1, yoff, xoff+sx*2, yoff+sy) );
+            else
+                gl::draw( mDepthTex,Rectf( 0, 0, WIDTH, HEIGHT) );
+        }
     }
 
     gl::drawString(status, Vec2f(5.0f, ((float)HEIGHT) - 16.0f), ColorA( 1, 1, 1, 1 ), mFont);
     
     if(isDisplayInput && _manager->hasUsers()) {
         gl::disable( GL_TEXTURE_2D );
-        gl::translate(cinder::Vec2f(xoff*2+sx*1,yoff));
-        _manager->renderJoints( sx, sy, 1, 3, false );
+        //gl::translate(cinder::Vec2f(xoff*2+sx*1,yoff));
+        _manager->renderJoints( WIDTH, HEIGHT, 1, 3, false );
     }
 }
 
