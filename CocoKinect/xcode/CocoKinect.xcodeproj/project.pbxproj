@@ -730,7 +730,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "#!/bin/bash\nEXECFILE=${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\nLIBPATH=${CODESIGNING_FOLDER_PATH}/Contents/MacOS\nNEWLIBPATH=\"@executable_path\"\n\n# space separated list of libraries\nTARGETS=\"libnimCodecs.dylib libnimMockNodes.dylib libnimRecorder.dylib libOpenNI.dylib libusb-1.0.0.dylib\"\nfor TARGET in ${TARGETS} ; do\nLIBFILE=${LIBPATH}/${TARGET}\nTARGETID=`otool -DX ${LIBPATH}/$TARGET`\nNEWTARGETID=${NEWLIBPATH}/${TARGET}\ninstall_name_tool -id ${NEWTARGETID} ${LIBFILE}\ninstall_name_tool -change ${TARGETID} ${NEWTARGETID} ${EXECFILE}\ndone";
+			shellScript = "#!/bin/bash\nEXECFILE=${BUILT_PRODUCTS_DIR}/${EXECUTABLE_PATH}\nLIBPATH=${CODESIGNING_FOLDER_PATH}/Contents/MacOS\nNEWLIBPATH=\"@executable_path\"\n\n# space separated list of libraries\nTARGETS=\"libnimCodecs.dylib libnimMockNodes.dylib libnimRecorder.dylib libOpenNI.dylib libusb-1.0.0.dylib\"\nfor TARGET in ${TARGETS} ; do\nLIBFILE=${LIBPATH}/${TARGET}\nTARGETID=`otool -DX ${LIBPATH}/$TARGET`\nNEWTARGETID=${NEWLIBPATH}/${TARGET}\ninstall_name_tool -id ${NEWTARGETID} ${LIBFILE}\ninstall_name_tool -change ${TARGETID} ${NEWTARGETID} ${EXECFILE}\nRESULTTARGETID=`otool -DX ${LIBPATH}/$TARGET`\necho \"Target\" ${TARGET}: \"ID: \" ${TARGETID} \" -> New ID: \" ${NEWTARGETID} \"Result\" ${RESULTTARGETID}\ndone";
 		};
 /* End PBXShellScriptBuildPhase section */
 
