@@ -43,7 +43,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-const Vec2i	kWindowSize	= Vec2i( 1280, 720 );
+const Vec2i	kWindowSize	= Vec2i( 800, 200 );
 const Vec2f	kPixel		= Vec2f::one() / Vec2f( kWindowSize );
 
 void GpGpuWaveVideoApp::draw()
