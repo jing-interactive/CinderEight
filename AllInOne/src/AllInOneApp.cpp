@@ -67,7 +67,7 @@ void AllInOneApp::keyDown( KeyEvent event )
             boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
             std::stringstream timestamp;
             timestamp << now;
-			writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), copyWindowSurface() );
+			writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface );
         }
             break;
         default:
