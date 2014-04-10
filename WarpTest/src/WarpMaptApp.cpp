@@ -240,9 +240,9 @@ void WarpTestApp::keyUp( KeyEvent event )
 void WarpTestApp::updateWindowTitle()
 {
 	if(mUseBeginEnd)
-		getWindow()->setTitle("Warping Sample - Using begin() and end()");
+		getWindow()->setTitle("Mapping - Using begin() and end()");
 	else
-		getWindow()->setTitle("Warping Sample - Using draw()");
+		getWindow()->setTitle("Mapping - Using draw()");
 }
 
 CINDER_APP_BASIC( WarpTestApp, RendererGl )
