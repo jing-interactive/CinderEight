@@ -70,19 +70,15 @@ void AllInOneApp::update()
         mPrevTexture = mTexture;
         
         if (frameNum > 0){
-            size_t i = 0, j = 0;
             Surface::Iter iter = mSurface.getIter( );
             Surface::Iter mCumulativeIter = mCumulativeSurface.getIter();
             while( iter.line() && mCumulativeIter.line()) {
-                j = 0;
                 while( iter.pixel() && mCumulativeIter.pixel()) {
                     //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
                     mCumulativeIter.r() = (frameNum-1) / (float)frameNum * mCumulativeIter.r() + iter.r() / (float)frameNum;
                     mCumulativeIter.g() = (frameNum-1) / (float)frameNum * mCumulativeIter.g() + iter.g() / (float)frameNum;
                     mCumulativeIter.b() = (frameNum-1) / (float)frameNum * mCumulativeIter.b() + iter.r() / (float)frameNum;
-                    j++;
                 }
-                i++;
             }
             mTexture = gl::Texture::create(mCumulativeSurface);
         } else {
