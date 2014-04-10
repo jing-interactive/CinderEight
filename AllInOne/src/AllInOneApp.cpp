@@ -4,6 +4,9 @@
 #include "cinder/Capture.h"
 #include "cinder/Text.h"
 #include "cinder/gl/gl.h"
+#include "cinder/Utilities.h"
+
+#include <boost/date_time/posix_time/posix_time.hpp>
 
 using namespace ci;
 using namespace ci::app;
@@ -54,10 +57,21 @@ void AllInOneApp::setup()
 
 void AllInOneApp::keyDown( KeyEvent event )
 {
-	if( event.getChar() == 'f' )
-		setFullScreen( ! isFullScreen() );
-	else if( event.getChar() == ' ' ) {
-		mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
+    switch( event.getChar() ) {
+        case 'f': setFullScreen( ! isFullScreen() ); break;
+        case ' ':
+            mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
+            break;
+		case 's':
+        {
+            boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+            std::stringstream timestamp;
+            timestamp << now;
+			writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), copyWindowSurface() );
+        }
+            break;
+        default:
+            break;
 	}
 }
 

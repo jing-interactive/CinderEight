@@ -14,9 +14,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "91"
-            endingLineNumber = "91"
-            landmarkName = "AllInOneApp::update()"
-            landmarkType = "5">
+            endingLineNumber = "91">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -122,9 +120,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "111"
-            endingLineNumber = "111"
-            landmarkName = "AllInOneApp::draw()"
-            landmarkType = "5">
+            endingLineNumber = "111">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
