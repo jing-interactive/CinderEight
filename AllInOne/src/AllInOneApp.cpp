@@ -90,7 +90,7 @@ void AllInOneApp::update()
                     //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
                     mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()) * oneOverFrameNum;
                     mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()) * oneOverFrameNum;
-                    mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.r()) * oneOverFrameNum;
+                    mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()) * oneOverFrameNum;
                 }
             }
             mTexture = gl::Texture::create(mCumulativeSurface);
