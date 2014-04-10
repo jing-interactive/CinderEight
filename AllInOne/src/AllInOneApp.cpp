@@ -20,7 +20,7 @@ public:
 	
 private:
 	CaptureRef		mCapture;
-	gl::TextureRef	mTexture, mPrevTexture;
+	gl::TextureRef	mTexture;
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mCumulativeSurface;
     size_t          frameNum;
@@ -66,8 +66,6 @@ void AllInOneApp::update()
 	if( mCapture->checkNewFrame() ) {
 
         mSurface = mCapture->getSurface();
-
-        mPrevTexture = mTexture;
         
         if (frameNum > 0){
             Surface::Iter iter = mSurface.getIter( );
