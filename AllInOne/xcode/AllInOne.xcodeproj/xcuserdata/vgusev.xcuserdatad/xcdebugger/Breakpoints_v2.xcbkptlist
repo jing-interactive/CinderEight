@@ -10,56 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/AllInOneApp.cpp"
-            timestampString = "418770731.0468"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "91"
-            endingLineNumber = "91">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AllInOneApp::update()"
-                  moduleName = "AllInOne"
-                  urlString = "file://localhost/Users/vgusev/repos/Cinder/CinderEight/AllInOne/src/AllInOneApp.cpp"
-                  timestampString = "418769221.623245"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
-                  offsetFromSymbolStart = "2066">
-               </Location>
-               <Location
-                  shouldBeEnabled = "No"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "AllInOneApp::update()"
-                  moduleName = "AllInOne"
-                  urlString = "file://localhost/Users/vgusev/repos/Cinder/CinderEight/AllInOne/src/AllInOneApp.cpp"
-                  timestampString = "418769221.623676"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "89"
-                  endingLineNumber = "89"
-                  offsetFromSymbolStart = "2481">
-               </Location>
-            </Locations>
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../src/AllInOneApp.cpp"
             timestampString = "418769366.355078"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "72"
             endingLineNumber = "72"
-            landmarkName = "AllInOneApp::update()"
+            landmarkName = "AllInOneApp::keyDown( KeyEvent event )"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -70,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/AllInOneApp.cpp"
-            timestampString = "418770731.0468"
+            timestampString = "418856437.784449"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
             landmarkName = "AllInOneApp::update()"
             landmarkType = "5">
             <Locations>
@@ -116,11 +72,45 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/AllInOneApp.cpp"
-            timestampString = "418770731.0468"
+            timestampString = "418856852.619062"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "111"
-            endingLineNumber = "111">
+            startingLineNumber = "123"
+            endingLineNumber = "123"
+            landmarkName = "AllInOneApp::draw()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/AllInOneApp.cpp"
+            timestampString = "418856852.619062"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "98"
+            endingLineNumber = "98"
+            landmarkName = "AllInOneApp::update()"
+            landmarkType = "5">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "../src/AllInOneApp.cpp"
+            timestampString = "418856846.152218"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "96"
+            endingLineNumber = "96"
+            landmarkName = "AllInOneApp::update()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
