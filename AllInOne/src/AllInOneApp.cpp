@@ -5,6 +5,7 @@
 #include "cinder/Text.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
+#include "cinder/qtime/QuickTime.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 
@@ -13,6 +14,11 @@ using namespace ci::app;
 using namespace std;
 
 static const int WIDTH = 640, HEIGHT = 480;
+static const float ONE_OVER_255 = 1.0/255.;
+static const int AVERAGE_TYPE = 1;
+static const int SCREEN_TYPE = 2;
+
+#define toDigit(c) (c-'0')
 
 class AllInOneApp : public AppNative {
 public:
@@ -20,13 +26,18 @@ public:
 	void keyDown( KeyEvent event );
 	void update();
 	void draw();
+    void fileDrop( ci::app::FileDropEvent event );
 	
 private:
 	CaptureRef		mCapture;
 	gl::TextureRef	mTexture;
 	gl::TextureRef	mNameTexture;
-	Surface		    mSurface, mCumulativeSurface;
+	Surface		    mSurface, mCumulativeSurface, mPrevSurface;
     size_t          frameNum;
+    int type;
+    qtime::MovieSurface mMovie;
+    void computeAverage();
+    void computeScreen();
 };
 
 void AllInOneApp::setup()
@@ -37,7 +48,7 @@ void AllInOneApp::setup()
 		Capture::DeviceRef device = *deviceIt;
 		console() << "Found Device " << device->getName() << " ID: " << device->getUniqueId() << std::endl;
         try {
-            mCapture = Capture::create( 640, 480 );
+            mCapture = Capture::create( WIDTH, HEIGHT );
             mCapture->start();
             
             TextLayout layout;
@@ -51,8 +62,29 @@ void AllInOneApp::setup()
         }
 	}
     frameNum = 0;
+    type = AVERAGE_TYPE;
     
     getWindow()->setTitle("All In One by eight_io");
+}
+
+void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
+
+    fs::path moviePath = event.getFile(0);
+	if( moviePath.empty() ) return;
+
+    try {
+		// load up the movie, set it to loop, and begin playing
+        mMovie = qtime::MovieSurface( moviePath );
+		mMovie.setLoop(true);
+        mMovie.play();
+        mCapture -> stop();
+        frameNum = 0;
+	}
+	catch( ... ) {
+		console() << "Unable to load the movie." << std::endl;
+		mMovie.reset();
+		mTexture.reset();
+	}
 }
 
 void AllInOneApp::keyDown( KeyEvent event )
@@ -63,72 +95,142 @@ void AllInOneApp::keyDown( KeyEvent event )
             mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
             break;
 		case 's':
-        {
-            boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-            std::stringstream timestamp;
-            timestamp << now;
-			writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface );
-        }
+            {
+                boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+                std::stringstream timestamp;
+                timestamp << now;
+                writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface );
+            }
             break;
+        case 'r':
+            frameNum = 0;
         default:
+            if (isdigit(event.getChar())){
+                int newType = toDigit(event.getChar());
+                if (newType != type && (newType >=AVERAGE_TYPE && newType <= SCREEN_TYPE)){
+                    type = newType;
+                    frameNum = 0;
+                }
+            }
             break;
 	}
 }
 
+void AllInOneApp::computeAverage(){
+    float oneOverFrameNum = 1./(float)frameNum;
+    Surface::Iter iter = mSurface.getIter( );
+    auto mCumulativeIter = mCumulativeSurface.getIter();
+    while( iter.line() && mCumulativeIter.line()) {
+        while( iter.pixel() && mCumulativeIter.pixel()) {
+            //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
+            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()) * oneOverFrameNum;
+            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()) * oneOverFrameNum;
+            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()) * oneOverFrameNum;
+        }
+    }
+    mTexture = gl::Texture::create(mCumulativeSurface);
+}
+
+void AllInOneApp::computeScreen(){
+    
+    //apply screen blending to previous surface
+    Surface::Iter iter = mSurface.getIter( );
+    Surface::Iter prevIter = mPrevSurface.getIter();
+    while( iter.line() && prevIter.line()) {
+        while( iter.pixel() && prevIter.pixel()) {
+            //result = one - (one - a) * (one - b);
+            prevIter.r() = 255 - (255 - prevIter.r()) * (255 - iter.r()) * ONE_OVER_255;
+            prevIter.g() = 255 - (255 - prevIter.g()) * (255 - iter.g()) * ONE_OVER_255;
+            prevIter.b() = 255 - (255 - prevIter.b()) * (255 - iter.b()) * ONE_OVER_255;
+        }
+    }
+    
+    //accumulate partial screen blending
+    float oneOverFrameNum = 1./(float)frameNum;
+    prevIter = mPrevSurface.getIter( );
+    Surface::Iter mCumulativeIter = mCumulativeSurface.getIter();
+    while( prevIter.line() && mCumulativeIter.line()) {
+        while( prevIter.pixel() && mCumulativeIter.pixel()) {
+            //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
+            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + prevIter.r()) * oneOverFrameNum;
+            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + prevIter.g()) * oneOverFrameNum;
+            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()) * oneOverFrameNum;
+        }
+    }
+
+    mTexture = gl::Texture::create(mCumulativeSurface);
+    
+    //retain current surface for next iteration
+    mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
+}
+
 void AllInOneApp::update()
 {
-	if( mCapture->checkNewFrame() ) {
-
+    bool isUpdated = false;
+	if ( mCapture->checkNewFrame() ) {
         mSurface = mCapture->getSurface();
-        
+        isUpdated = true;
+    }
+    if (mMovie && mMovie.checkNewFrame()){
+        mSurface = mMovie.getSurface();
+        isUpdated = true;
+    }
+    
+    if (!isUpdated) return;
+
         if (frameNum > 0){
-            bool screen = false;
-            float oneOverFrameNum = 1./(float)frameNum;
-            Surface::Iter iter = mSurface.getIter( );
-            Surface::Iter mCumulativeIter = mCumulativeSurface.getIter();
-            while( iter.line() && mCumulativeIter.line()) {
-                while( iter.pixel() && mCumulativeIter.pixel()) {
-                    if (screen){
-                        //result = one - (one - a) * (one - b);
-                        float curr = iter.r();
-                        float prev = mCumulativeIter.r();
-                        float res = 255 - (255 - mCumulativeIter.r())*( 255 - iter.r())/255;
-                        mCumulativeIter.r() = (1 - (1 - mCumulativeIter.r()/(float)255)*( 1 - iter.r()/(float)255))*(float)255;
-                        mCumulativeIter.g() = (1 - (1 - mCumulativeIter.g()/(float)255)*( 1 - iter.g()/(float)255))*(float)255;
-                        mCumulativeIter.b() = (1 - (1 - mCumulativeIter.b()/(float)255)*( 1 - iter.b()/(float)255))*(float)255;
-                                                //cout<<curr<<" "<<res<<endl;
-                    } else { //average
-                        //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
-                        mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()) * oneOverFrameNum;
-                        mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()) * oneOverFrameNum;
-                        mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()) * oneOverFrameNum;
-                    }
-                }
-            }
-            mTexture = gl::Texture::create(mCumulativeSurface);
+            switch (type) {
+                case AVERAGE_TYPE:
+                    computeAverage();
+                    break;
+                case SCREEN_TYPE:
+                    computeScreen();
+                    break;
+                default:
+                    break;
+            } 
         } else {
-            mTexture = gl::Texture::create (mSurface);
+
             Area area = mSurface.getBounds();
             mCumulativeSurface = Surface( area.getWidth(), area.getHeight(), false );
-            mCumulativeSurface.copyFrom(mSurface, area);
+            
+            switch (type) {
+                case AVERAGE_TYPE:
+                    mCumulativeSurface.copyFrom(mSurface, area);
+                    break;
+                case SCREEN_TYPE:
+                {
+                    mPrevSurface = Surface(area.getWidth(), area.getHeight(),false);
+                    mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
+                    
+                    Surface::Iter prevIter = mPrevSurface.getIter();
+                    while( prevIter.line()) {
+                        while( prevIter.pixel() ) {
+                            prevIter.r() = 255 - prevIter.r();
+                            prevIter.g() = 255 - prevIter.g();
+                            prevIter.b() = 255 - prevIter.b();
+                        }
+                    }
+                    mCumulativeSurface.copyFrom(mPrevSurface, area);
+                    break;
+                }
+                default:
+                    break;
+            }
+            mTexture = gl::Texture::create (mSurface);
         }
         frameNum++;
-    }
 }
 
 void AllInOneApp::draw()
 {
-	gl::enableAlphaBlending();
+	//gl::enableAlphaBlending();
 	gl::clear( Color::black() );
-    
-	float width = getWindowWidth();
-	float height = width / ( WIDTH / (float)HEIGHT );
-	float x = 0, y = ( getWindowHeight() - height ) / 2.0f;
 
     // draw the latest frame
     gl::color( Color::white() );
     if( mTexture)
-        gl::draw( mTexture, Rectf( x, y, x + width, y + height ) );
+        gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
     
 }
 
