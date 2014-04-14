@@ -8,6 +8,7 @@
 #include "cinder/qtime/QuickTime.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
+#include <boost/format.hpp>
 
 using namespace ci;
 using namespace ci::app;
@@ -32,13 +33,20 @@ private:
 	CaptureRef		mCapture;
 	gl::TextureRef	mTexture;
 	gl::TextureRef	mNameTexture;
-	Surface		    mSurface, mCumulativeSurface, mPrevSurface, mWhiteSurface;
+	Surface		    mSurface, mPrevSurface;
+    Surface32f      mCumulativeSurface32f;
+    gl::Texture::Format hdrFormat;
     size_t          frameNum;
     Color           averageColor;
     int type;
     qtime::MovieSurface mMovie;
+    
+    void initAverage();
     void computeAverage();
+    void initScreen();
     void computeScreen();
+    
+    string getBlendMode();
 };
 
 void AllInOneApp::setup()
@@ -64,15 +72,15 @@ void AllInOneApp::setup()
 	}
     frameNum = 0;
     type = AVERAGE_TYPE;
-
+    hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
     getWindow()->setTitle("All In One by eight_io");
 }
 
 void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
-
+    
     fs::path moviePath = event.getFile(0);
 	if( moviePath.empty() ) return;
-
+    
     try {
 		// load up the movie, set it to loop, and begin playing
         mMovie = qtime::MovieSurface( moviePath );
@@ -96,12 +104,12 @@ void AllInOneApp::keyDown( KeyEvent event )
             mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
             break;
 		case 's':
-            {
-                boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-                std::stringstream timestamp;
-                timestamp << now;
-                writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface );
-            }
+        {
+            boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+            std::stringstream timestamp;
+            timestamp << now;
+            writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface32f );
+        }
             break;
         case 'r':
             frameNum = 0;
@@ -117,36 +125,68 @@ void AllInOneApp::keyDown( KeyEvent event )
 	}
 }
 
+void AllInOneApp::initAverage(){
+    Area area = mSurface.getBounds();
+    mCumulativeSurface32f = Surface32f( area.getWidth(), area.getHeight(), false );
+    auto cumIter = mCumulativeSurface32f.getIter();
+    auto surfaceIter = mSurface.getIter();
+    while(cumIter.line() && surfaceIter.line()){
+        while(cumIter.pixel() && surfaceIter.pixel()){
+            cumIter.r() = surfaceIter.r() * ONE_OVER_255;
+            cumIter.g() = surfaceIter.g() * ONE_OVER_255;
+            cumIter.b() = surfaceIter.b() * ONE_OVER_255;
+        }
+    }
+}
+
 void AllInOneApp::computeAverage(){
+    if (frameNum == 0) {
+        initAverage();
+        return;
+    }
+    
     float oneOverFrameNum = 1./(float)frameNum;
     auto iter = mSurface.getIter( );
-    auto mCumulativeIter = mCumulativeSurface.getIter();
+    auto mCumulativeIter = mCumulativeSurface32f.getIter();
     while( iter.line() && mCumulativeIter.line()) {
         while( iter.pixel() && mCumulativeIter.pixel()) {
             //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
-            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()) * oneOverFrameNum;
-            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()) * oneOverFrameNum;
-            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()) * oneOverFrameNum;
+            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()*ONE_OVER_255) * oneOverFrameNum;
+            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()*ONE_OVER_255) * oneOverFrameNum;
+            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()*ONE_OVER_255) * oneOverFrameNum;
         }
     }
-    averageColor = mCumulativeSurface.areaAverage(mCumulativeSurface.getBounds());
-    mTexture = gl::Texture::create(mCumulativeSurface);
+    averageColor = mCumulativeSurface32f.areaAverage(mSurface.getBounds());
+}
+
+void AllInOneApp::initScreen(){
+    Area area = mSurface.getBounds();
+    mCumulativeSurface32f = Surface32f( area.getWidth(), area.getHeight(), false );
+    
+    mPrevSurface = Surface(area.getWidth(), area.getHeight(),false);
+    mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
+    
+    auto prevIter = mPrevSurface.getIter();
+    auto cumIter = mCumulativeSurface32f.getIter();
+    
+    while( prevIter.line()&&cumIter.line()) {
+        while( prevIter.pixel() && cumIter.pixel()) {
+            cumIter.r() = prevIter.r() * ONE_OVER_255;
+            cumIter.g() = prevIter.g() * ONE_OVER_255;
+            cumIter.b() = prevIter.b() * ONE_OVER_255;
+        }
+    }
 }
 
 void AllInOneApp::computeScreen(){
     
-    //apply screen blending to previous surface
-    if (frameNum > 10 && false) {
-        mSurface = Surface(mSurface.getWidth(), mSurface.getHeight(),false);
-        auto it = mSurface.getIter();
-        while (it.line()) {
-            while(it.pixel()){
-                it.r() = 255;
-                it.g() = 255;
-                it.b() = 255;
-            }
-        }
+
+    if (frameNum == 0) {
+        initScreen();
+        return;
     }
+    
+    //apply screen blending to previous surface
     auto iter = mSurface.getIter( );
     auto prevIter = mPrevSurface.getIter();
     while( iter.line() && prevIter.line()) {
@@ -158,25 +198,21 @@ void AllInOneApp::computeScreen(){
         }
     }
     
-    //accumulate partial screen blending
+    //accumulate screen blending
     float oneOverFrameNum = 1./(float)frameNum;
     prevIter = mPrevSurface.getIter( );
-    auto mCumulativeIter = mCumulativeSurface.getIter();
+    auto mCumulativeIter = mCumulativeSurface32f.getIter();
     while( prevIter.line() && mCumulativeIter.line()) {
         while( prevIter.pixel() && mCumulativeIter.pixel()) {
             //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
-            int prv = prevIter.r();
-            int cml = mCumulativeIter.r();
-            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + prevIter.r()) * oneOverFrameNum;
-            cml = mCumulativeIter.r();
-            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + prevIter.g()) * oneOverFrameNum;
-            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()) * oneOverFrameNum;
+            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + prevIter.r()*ONE_OVER_255) * oneOverFrameNum;
+            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + prevIter.g()*ONE_OVER_255) * oneOverFrameNum;
+            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()*ONE_OVER_255) * oneOverFrameNum;
         }
     }
 
-    mTexture = gl::Texture::create(mCumulativeSurface);
-    averageColor = mCumulativeSurface.areaAverage(mCumulativeSurface.getBounds());
-
+    averageColor = mCumulativeSurface32f.areaAverage(mSurface.getBounds());
+    
     //retain current surface for next iteration
     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
 }
@@ -194,63 +230,46 @@ void AllInOneApp::update()
     }
     
     if (!isUpdated) return;
-
-        if (frameNum > 0){
-            switch (type) {
-                case AVERAGE_TYPE:
-                    computeAverage();
-                    break;
-                case SCREEN_TYPE:
-                    computeScreen();
-                    break;
-                default:
-                    break;
-            } 
-        } else {
-
-            Area area = mSurface.getBounds();
-            mCumulativeSurface = Surface( area.getWidth(), area.getHeight(), false );
-            
-            switch (type) {
-                case AVERAGE_TYPE:
-                    mCumulativeSurface.copyFrom(mSurface, area);
-                    break;
-                case SCREEN_TYPE:
-                {
-                    mPrevSurface = Surface(area.getWidth(), area.getHeight(),false);
-                    mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
-                    
-                    auto prevIter = mPrevSurface.getIter();
-                    while( prevIter.line()) {
-                        while( prevIter.pixel() ) {
-                            prevIter.r() = 255 - prevIter.r();
-                            prevIter.g() = 255 - prevIter.g();
-                            prevIter.b() = 255 - prevIter.b();
-                        }
-                    }
-                    mCumulativeSurface.copyFrom(mPrevSurface, area);
-                    break;
-                }
-                default:
-                    break;
-            }
-            mTexture = gl::Texture::create (mSurface);
-        }
-        frameNum++;
+    switch (type) {
+        case AVERAGE_TYPE:
+            computeAverage();
+            break;
+        case SCREEN_TYPE:
+            computeScreen();
+            break;
+        default:
+            break;
+    }
+    mTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
+    frameNum++;
 }
 
 void AllInOneApp::draw()
 {
 	//gl::enableAlphaBlending();
 	gl::clear( Color::black() );
-
+    
     // draw the latest frame
     gl::color( Color::white() );
     if( mTexture)
         gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
     
-    gl::drawString("color "+ toString((float) averageColor.length())+ " "+ toString(getFrameRate())+" FPS", Vec2f(5.0f, 5.0f));
-    
+    gl::drawString("color "+ boost::str(boost::format("%.3f") % averageColor.length())+ " "+ toString(getFrameRate())+" FPS " +"Blend: "+getBlendMode(), Vec2f(5.0f, 5.0f));
+
+}
+
+string AllInOneApp::getBlendMode(){
+    switch (type) {
+        case AVERAGE_TYPE:
+            return "Average";
+            break;
+        case SCREEN_TYPE:
+            return "Screen";
+            break;
+        default:
+            return "UNKNOWN";
+            break;
+    }
 }
 
 CINDER_APP_NATIVE( AllInOneApp, RendererGl )
