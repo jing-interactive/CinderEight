@@ -34,6 +34,7 @@ private:
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mCumulativeSurface, mPrevSurface;
     size_t          frameNum;
+    Color           averageColor;
     int type;
     qtime::MovieSurface mMovie;
     void computeAverage();
@@ -118,7 +119,7 @@ void AllInOneApp::keyDown( KeyEvent event )
 
 void AllInOneApp::computeAverage(){
     float oneOverFrameNum = 1./(float)frameNum;
-    Surface::Iter iter = mSurface.getIter( );
+    auto iter = mSurface.getIter( );
     auto mCumulativeIter = mCumulativeSurface.getIter();
     while( iter.line() && mCumulativeIter.line()) {
         while( iter.pixel() && mCumulativeIter.pixel()) {
@@ -128,14 +129,15 @@ void AllInOneApp::computeAverage(){
             mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()) * oneOverFrameNum;
         }
     }
+    averageColor = mCumulativeSurface.areaAverage(mCumulativeSurface.getBounds());
     mTexture = gl::Texture::create(mCumulativeSurface);
 }
 
 void AllInOneApp::computeScreen(){
     
     //apply screen blending to previous surface
-    Surface::Iter iter = mSurface.getIter( );
-    Surface::Iter prevIter = mPrevSurface.getIter();
+    auto iter = mSurface.getIter( );
+    auto prevIter = mPrevSurface.getIter();
     while( iter.line() && prevIter.line()) {
         while( iter.pixel() && prevIter.pixel()) {
             //result = one - (one - a) * (one - b);
@@ -148,7 +150,7 @@ void AllInOneApp::computeScreen(){
     //accumulate partial screen blending
     float oneOverFrameNum = 1./(float)frameNum;
     prevIter = mPrevSurface.getIter( );
-    Surface::Iter mCumulativeIter = mCumulativeSurface.getIter();
+    auto mCumulativeIter = mCumulativeSurface.getIter();
     while( prevIter.line() && mCumulativeIter.line()) {
         while( prevIter.pixel() && mCumulativeIter.pixel()) {
             //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
@@ -159,7 +161,8 @@ void AllInOneApp::computeScreen(){
     }
 
     mTexture = gl::Texture::create(mCumulativeSurface);
-    
+    averageColor = mCumulativeSurface.areaAverage(mCumulativeSurface.getBounds());
+
     //retain current surface for next iteration
     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
 }
@@ -171,7 +174,7 @@ void AllInOneApp::update()
         mSurface = mCapture->getSurface();
         isUpdated = true;
     }
-    if (mMovie && mMovie.checkNewFrame()){
+    if (!isUpdated && mMovie && mMovie.checkNewFrame()){
         mSurface = mMovie.getSurface();
         isUpdated = true;
     }
@@ -203,7 +206,7 @@ void AllInOneApp::update()
                     mPrevSurface = Surface(area.getWidth(), area.getHeight(),false);
                     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
                     
-                    Surface::Iter prevIter = mPrevSurface.getIter();
+                    auto prevIter = mPrevSurface.getIter();
                     while( prevIter.line()) {
                         while( prevIter.pixel() ) {
                             prevIter.r() = 255 - prevIter.r();
@@ -231,6 +234,8 @@ void AllInOneApp::draw()
     gl::color( Color::white() );
     if( mTexture)
         gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
+    
+    gl::drawString("color "+ toString((float) averageColor.length())+ " "+ toString(getFrameRate())+" FPS", Vec2f(5.0f, 5.0f));
     
 }
 
