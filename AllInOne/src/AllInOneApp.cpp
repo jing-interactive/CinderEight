@@ -32,7 +32,7 @@ private:
 	CaptureRef		mCapture;
 	gl::TextureRef	mTexture;
 	gl::TextureRef	mNameTexture;
-	Surface		    mSurface, mCumulativeSurface, mPrevSurface;
+	Surface		    mSurface, mCumulativeSurface, mPrevSurface, mWhiteSurface;
     size_t          frameNum;
     Color           averageColor;
     int type;
@@ -64,7 +64,7 @@ void AllInOneApp::setup()
 	}
     frameNum = 0;
     type = AVERAGE_TYPE;
-    
+
     getWindow()->setTitle("All In One by eight_io");
 }
 
@@ -136,6 +136,17 @@ void AllInOneApp::computeAverage(){
 void AllInOneApp::computeScreen(){
     
     //apply screen blending to previous surface
+    if (frameNum > 10 && false) {
+        mSurface = Surface(mSurface.getWidth(), mSurface.getHeight(),false);
+        auto it = mSurface.getIter();
+        while (it.line()) {
+            while(it.pixel()){
+                it.r() = 255;
+                it.g() = 255;
+                it.b() = 255;
+            }
+        }
+    }
     auto iter = mSurface.getIter( );
     auto prevIter = mPrevSurface.getIter();
     while( iter.line() && prevIter.line()) {
@@ -154,7 +165,10 @@ void AllInOneApp::computeScreen(){
     while( prevIter.line() && mCumulativeIter.line()) {
         while( prevIter.pixel() && mCumulativeIter.pixel()) {
             //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
+            int prv = prevIter.r();
+            int cml = mCumulativeIter.r();
             mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + prevIter.r()) * oneOverFrameNum;
+            cml = mCumulativeIter.r();
             mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + prevIter.g()) * oneOverFrameNum;
             mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()) * oneOverFrameNum;
         }
