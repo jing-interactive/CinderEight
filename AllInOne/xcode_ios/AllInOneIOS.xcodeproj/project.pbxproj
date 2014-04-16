@@ -20,13 +20,13 @@
 		725F08408F334BA48505AD4C /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 9711FF5A52A14BB2B2124EFF /* CinderApp_ios.png */; };
 		9362E0338AF4403E9656C4B3 /* LocationManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 04B0F2A08B334A19BCD89FDF /* LocationManager.cpp */; };
 		A5E770845F234A54AD9683AE /* MotionManager.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 9D87010421A54D85B6FEC108 /* MotionManager.cpp */; };
-		AF60BF3018FCC6E600157C3B /* AllInOneApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF60BF2F18FCC6E600157C3B /* AllInOneApp.cpp */; };
 		C725DFFE121DAC7F00FA186B /* CoreMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02B121B400300192073 /* CoreMedia.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8F00FA186B /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C725E000121DAC8F00FA186B /* AVFoundation.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C725E001121DAC8FFFFA18FF /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00CFDF6A1138442D0091FFFF /* ImageIO.framework */; };
 		C727C02E121B400300192073 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C727C02D121B400300192073 /* CoreVideo.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		C7FB19D6124BC0D70045AFD2 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */; };
 		DDDDE001121DAC8FFFFADDDD /* MobileCoreServices.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */; };
+		E614078818FD80CA00EDFEDE /* AllInOneAppIOS.cpp in Sources */ = {isa = PBXBuildFile; fileRef = E614078718FD80CA00EDFEDE /* AllInOneAppIOS.cpp */; };
 		FCDBAC82DC1846FF9F8C4E00 /* MotionImplCoreMotion.mm in Sources */ = {isa = PBXBuildFile; fileRef = ABD3471556D54B09A53214DE /* MotionImplCoreMotion.mm */; };
 /* End PBXBuildFile section */
 
@@ -50,13 +50,13 @@
 		A694CDB7FF594382933F91A8 /* CoreMotion.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMotion.framework; path = System/Library/Frameworks/CoreMotion.framework; sourceTree = SDKROOT; };
 		ABD3471556D54B09A53214DE /* MotionImplCoreMotion.mm */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.objcpp; name = MotionImplCoreMotion.mm; path = ../../../blocks/MotionManager/src/cinder/MotionImplCoreMotion.mm; sourceTree = "<group>"; };
 		AE7696666BCE4EA1934EA87C /* MotionImplCoreMotion.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = MotionImplCoreMotion.h; path = ../../../blocks/MotionManager/src/cinder/MotionImplCoreMotion.h; sourceTree = "<group>"; };
-		AF60BF2F18FCC6E600157C3B /* AllInOneApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AllInOneApp.cpp; path = ../src/AllInOneApp.cpp; sourceTree = "<group>"; };
 		B2AAEF7EC5FB415CB1C0302A /* AllInOneIOS_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = AllInOneIOS_Prefix.pch; sourceTree = "<group>"; };
 		C725E000121DAC8F00FA186B /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		C727C02B121B400300192073 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		C727C02D121B400300192073 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = System/Library/Frameworks/CoreVideo.framework; sourceTree = SDKROOT; };
 		C7FB19D5124BC0D70045AFD2 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		DDDDDF6A1138442D0091DDDD /* MobileCoreServices.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MobileCoreServices.framework; path = System/Library/Frameworks/MobileCoreServices.framework; sourceTree = SDKROOT; };
+		E614078718FD80CA00EDFEDE /* AllInOneAppIOS.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = AllInOneAppIOS.cpp; path = ../src/AllInOneAppIOS.cpp; sourceTree = "<group>"; };
 		EA76B51CE4F14171A545230A /* LocationManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = LocationManager.h; path = ../../../blocks/LocationManager/src/cinder/LocationManager.h; sourceTree = "<group>"; };
 		FF601F2CD6C649A596C7F6A5 /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -130,7 +130,7 @@
 		00692BD914FF149000D0A05E /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				AF60BF2F18FCC6E600157C3B /* AllInOneApp.cpp */,
+				E614078718FD80CA00EDFEDE /* AllInOneAppIOS.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -281,8 +281,8 @@
 			files = (
 				9362E0338AF4403E9656C4B3 /* LocationManager.cpp in Sources */,
 				A5E770845F234A54AD9683AE /* MotionManager.cpp in Sources */,
-				AF60BF3018FCC6E600157C3B /* AllInOneApp.cpp in Sources */,
 				FCDBAC82DC1846FF9F8C4E00 /* MotionImplCoreMotion.mm in Sources */,
+				E614078818FD80CA00EDFEDE /* AllInOneAppIOS.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -324,6 +324,7 @@
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
 				IPHONEOS_DEPLOYMENT_TARGET = 5.0;
 				ONLY_ACTIVE_ARCH = YES;
+				"PROVISIONING_PROFILE[sdk=iphoneos*]" = "";
 				SDKROOT = iphoneos;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../../../blocks/LocationManager/src ../../../blocks/MotionManager/src";
@@ -343,7 +344,7 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				DEAD_CODE_STRIPPING = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

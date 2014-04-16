@@ -5,7 +5,6 @@
 #include "cinder/Text.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
-#include "cinder/qtime/QuickTime.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
@@ -27,7 +26,6 @@ public:
 	void keyDown( KeyEvent event );
 	void update();
 	void draw();
-    void fileDrop( ci::app::FileDropEvent event );
 	
 private:
 	CaptureRef		mCapture;
@@ -36,11 +34,9 @@ private:
 	Surface		    mSurface, mPrevSurface;
     Surface32f      mCumulativeSurface32f;
     gl::Texture::Format hdrFormat;
-    Font            mFont;
     size_t          frameNum;
     Color           averageColor;
     int type;
-    qtime::MovieSurface mMovie;
     
     void initAverage();
     void computeAverage();
@@ -73,33 +69,8 @@ void AllInOneApp::setup()
 	}
     frameNum = 0;
     type = AVERAGE_TYPE;
-    hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
+    hdrFormat.setInternalFormat(GL_FLOAT);
     getWindow()->setTitle("All In One by eight_io");
-    mFont = Font( "Helvetica", 12.0f );
-    gl::disableVerticalSync();
-    disableFrameRate();
-    gl::enableAlphaBlending();
-}
-
-void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
-    
-    fs::path moviePath = event.getFile(0);
-	if( moviePath.empty() ) return;
-    
-    try {
-		// load up the movie, set it to loop, and begin playing
-        mMovie = qtime::MovieSurface( moviePath );
-		mMovie.setLoop(true);
-        mMovie.play();
-        mMovie.setRate(10.);
-        mCapture -> stop();
-        frameNum = 0;
-	}
-	catch( ... ) {
-		console() << "Unable to load the movie." << std::endl;
-		mMovie.reset();
-		mTexture.reset();
-	}
 }
 
 void AllInOneApp::keyDown( KeyEvent event )
@@ -230,10 +201,6 @@ void AllInOneApp::update()
         mSurface = mCapture->getSurface();
         isUpdated = true;
     }
-    if (!isUpdated && mMovie && mMovie.checkNewFrame()){
-        mSurface = mMovie.getSurface();
-        isUpdated = true;
-    }
     
     if (!isUpdated) return;
     switch (type) {
@@ -260,7 +227,7 @@ void AllInOneApp::draw()
     if( mTexture)
         gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
     
-    gl::drawString("Color "+ boost::str(boost::format("%.3f") % averageColor.length())+ "  FPS: "+ toString(getFrameRate())+"  Blend: "+getBlendMode(), Vec2f(5.0f, 5.0f),Color::white(),mFont);
+    gl::drawString("color "+ boost::str(boost::format("%.3f") % averageColor.length())+ " "+ toString(getFrameRate())+" FPS " +"Blend: "+getBlendMode(), Vec2f(5.0f, 5.0f));
 
 }
 
