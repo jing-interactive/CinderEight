@@ -13,7 +13,6 @@
 		180068EDD6C646C0B3F8308A /* AllInOneApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		AF1A861718F6248500C724FA /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF1A861618F6248500C724FA /* AllInOneApp.icns */; };
-		AF7C9D4A18FF5F460064BA77 /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF1A861618F6248500C724FA /* AllInOneApp.icns */; };
 		AF7C9D4C18FF5F460064BA77 /* AllInOneApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */; };
 		AF7C9D5118FF5F460064BA77 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		AF7C9D5318FF5F460064BA77 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
@@ -41,6 +40,9 @@
 		AF7CA22C18FF847A0064BA77 /* ImageIO.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22B18FF847A0064BA77 /* ImageIO.framework */; };
 		AF7CA22E18FF84930064BA77 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22D18FF84930064BA77 /* CoreText.framework */; };
 		AF7CA23018FF95F20064BA77 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22F18FF95F20064BA77 /* Cocoa.framework */; };
+		E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED4190024F9005E2E66 /* CinderApp_ios.png */; };
+		E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED61900251D005E2E66 /* Default-568h@2x.png */; };
+		E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6CCD509190066A90026DDFF /* Info-IOS.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -55,7 +57,6 @@
 		8D1107320486CEB800E47090 /* AllInOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllInOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF1A861618F6248500C724FA /* AllInOneApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AllInOneApp.icns; sourceTree = "<group>"; };
 		AF7C9D5A18FF5F460064BA77 /* AllInOne copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AllInOne copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF7C9D5B18FF5F470064BA77 /* AllInOne copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "AllInOne copy-Info.plist"; path = "/Users/eight/repos/Cinder/CinderEight/AllInOne/xcode/AllInOne copy-Info.plist"; sourceTree = "<absolute>"; };
 		AF7CA03518FF7ACB0064BA77 /* Avf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avf.h; sourceTree = "<group>"; };
 		AF7CA03718FF7ACB0064BA77 /* AvfUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfUtils.h; sourceTree = "<group>"; };
 		AF7CA03818FF7ACB0064BA77 /* AvfWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfWriter.h; sourceTree = "<group>"; };
@@ -79,6 +80,9 @@
 		AF7CA22D18FF84930064BA77 /* CoreText.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreText.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS7.1.sdk/System/Library/Frameworks/CoreText.framework; sourceTree = DEVELOPER_DIR; };
 		AF7CA22F18FF95F20064BA77 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../../../../../System/Library/Frameworks/Cocoa.framework; sourceTree = "<group>"; };
 		E2F4825864554937BAC3BFEC /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		E613CED4190024F9005E2E66 /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CinderApp_ios.png; path = ../resources/CinderApp_ios.png; sourceTree = "<group>"; };
+		E613CED61900251D005E2E66 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../resources/Default-568h@2x.png"; sourceTree = "<group>"; };
+		E6CCD509190066A90026DDFF /* Info-IOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-IOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -191,7 +195,6 @@
 				29B97317FDCFA39411CA2CEA /* Resources */,
 				29B97323FDCFA39411CA2CEA /* Frameworks */,
 				19C28FACFE9D520D11CA2CBB /* Products */,
-				AF7C9D5B18FF5F470064BA77 /* AllInOne copy-Info.plist */,
 			);
 			name = AllInOne;
 			sourceTree = "<group>";
@@ -208,6 +211,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E6CCD509190066A90026DDFF /* Info-IOS.plist */,
+				E613CED61900251D005E2E66 /* Default-568h@2x.png */,
+				E613CED4190024F9005E2E66 /* CinderApp_ios.png */,
 				AF1A861618F6248500C724FA /* AllInOneApp.icns */,
 				0A9463D9D12742F8BCC3801A /* Info.plist */,
 			);
@@ -299,7 +305,7 @@
 		29B97313FDCFA39411CA2CEA /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
-				LastUpgradeCheck = 0500;
+				LastUpgradeCheck = 0510;
 			};
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "AllInOne" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -334,7 +340,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF7C9D4A18FF5F460064BA77 /* AllInOneApp.icns in Resources */,
+				E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */,
+				E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */,
+				E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -369,7 +377,6 @@
 		AF7C9D5818FF5F460064BA77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -383,7 +390,7 @@
 					"$(inherited)",
 				);
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = "AllInOne copy-Info.plist";
+				INFOPLIST_FILE = "Info-IOS.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -404,7 +411,6 @@
 		AF7C9D5918FF5F460064BA77 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -415,7 +421,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = AllInOne_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
-				INFOPLIST_FILE = "AllInOne copy-Info.plist";
+				INFOPLIST_FILE = "Info-IOS.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -438,7 +444,6 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -468,7 +473,6 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ARCHS = "$(ARCHS_STANDARD_32_BIT)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";

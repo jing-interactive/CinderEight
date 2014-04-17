@@ -102,7 +102,7 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
         mMovie = avf::MovieSurface::create( moviePath );
 		mMovie->setLoop(true);
         mMovie->play();
-        mMovie->setRate(10.);
+        mMovie->setRate(1.);
         mCapture -> stop();
         frameNum = 0;
 	}

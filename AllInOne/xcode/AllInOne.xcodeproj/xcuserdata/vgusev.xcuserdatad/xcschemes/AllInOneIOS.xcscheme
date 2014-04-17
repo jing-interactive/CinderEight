@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "8D1107260486CEB800E47090"
-               BuildableName = "AllInOne.app"
-               BlueprintName = "AllInOne"
+               BlueprintIdentifier = "AF7C9D4818FF5F460064BA77"
+               BuildableName = "AllInOne copy.app"
+               BlueprintName = "AllInOneIOS"
                ReferencedContainer = "container:AllInOne.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -32,9 +32,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "AllInOne.app"
-            BlueprintName = "AllInOne"
+            BlueprintIdentifier = "AF7C9D4818FF5F460064BA77"
+            BuildableName = "AllInOne copy.app"
+            BlueprintName = "AllInOneIOS"
             ReferencedContainer = "container:AllInOne.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -51,9 +51,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "AllInOne.app"
-            BlueprintName = "AllInOne"
+            BlueprintIdentifier = "AF7C9D4818FF5F460064BA77"
+            BuildableName = "AllInOne copy.app"
+            BlueprintName = "AllInOneIOS"
             ReferencedContainer = "container:AllInOne.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -69,9 +69,9 @@
       <BuildableProductRunnable>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "8D1107260486CEB800E47090"
-            BuildableName = "AllInOne.app"
-            BlueprintName = "AllInOne"
+            BlueprintIdentifier = "AF7C9D4818FF5F460064BA77"
+            BuildableName = "AllInOne copy.app"
+            BlueprintName = "AllInOneIOS"
             ReferencedContainer = "container:AllInOne.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
