@@ -5,7 +5,10 @@
 #include "cinder/Text.h"
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
-#include "cinder/qtime/QuickTime.h"
+
+#if defined ( CINDER_MAC )
+    #include "cinder/qtime/QuickTime.h"
+#endif
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
@@ -28,6 +31,7 @@ public:
 	void update();
 	void draw();
     void fileDrop( ci::app::FileDropEvent event );
+    void prepareSettings(Settings *settings);
 	
 private:
 	CaptureRef		mCapture;
@@ -40,7 +44,9 @@ private:
     size_t          frameNum;
     Color           averageColor;
     int type;
+#if defined ( CINDER_MAC )
     qtime::MovieSurface mMovie;
+#endif
     
     void initAverage();
     void computeAverage();
@@ -49,6 +55,10 @@ private:
     
     string getBlendMode();
 };
+
+void AllInOneApp::prepareSettings(Settings *settings){
+    settings->disableFrameRate();
+}
 
 void AllInOneApp::setup()
 {
@@ -73,16 +83,20 @@ void AllInOneApp::setup()
 	}
     frameNum = 0;
     type = AVERAGE_TYPE;
+#if defined ( CINDER_MAC )
     hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
+#else
+    hdrFormat.setInternalFormat(GL_FLOAT);
+#endif
     getWindow()->setTitle("All In One by eight_io");
     mFont = Font( "Helvetica", 12.0f );
     gl::disableVerticalSync();
-    disableFrameRate();
+
     gl::enableAlphaBlending();
 }
 
 void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
-    
+#if defined ( CINDER_MAC )
     fs::path moviePath = event.getFile(0);
 	if( moviePath.empty() ) return;
     
@@ -100,6 +114,7 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
 		mMovie.reset();
 		mTexture.reset();
 	}
+#endif
 }
 
 void AllInOneApp::keyDown( KeyEvent event )
@@ -230,10 +245,12 @@ void AllInOneApp::update()
         mSurface = mCapture->getSurface();
         isUpdated = true;
     }
+#if defined ( CINDER_MAC )
     if (!isUpdated && mMovie && mMovie.checkNewFrame()){
         mSurface = mMovie.getSurface();
         isUpdated = true;
     }
+#endif
     
     if (!isUpdated) return;
     switch (type) {
@@ -252,7 +269,6 @@ void AllInOneApp::update()
 
 void AllInOneApp::draw()
 {
-	//gl::enableAlphaBlending();
 	gl::clear( Color::black() );
     
     // draw the latest frame

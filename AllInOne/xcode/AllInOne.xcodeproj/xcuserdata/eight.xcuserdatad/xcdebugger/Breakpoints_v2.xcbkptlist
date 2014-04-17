@@ -14,9 +14,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "97"
-            endingLineNumber = "97"
-            landmarkName = "AllInOneApp::keyDown( KeyEvent event )"
-            landmarkType = "5">
+            endingLineNumber = "97">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -31,7 +29,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "90"
             endingLineNumber = "90"
-            landmarkName = "AllInOneApp::keyDown( KeyEvent event )"
+            landmarkName = "AllInOneApp::setup()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
