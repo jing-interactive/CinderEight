@@ -6,9 +6,7 @@
 #include "cinder/gl/gl.h"
 #include "cinder/Utilities.h"
 
-#if defined ( CINDER_MAC )
-    #include "cinder/qtime/QuickTime.h"
-#endif
+#include "Avf.h"
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
@@ -44,9 +42,8 @@ private:
     size_t          frameNum;
     Color           averageColor;
     int type;
-#if defined ( CINDER_MAC )
-    qtime::MovieSurface mMovie;
-#endif
+
+    avf::MovieSurfaceRef mMovie;
     
     void initAverage();
     void computeAverage();
@@ -102,10 +99,10 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
     
     try {
 		// load up the movie, set it to loop, and begin playing
-        mMovie = qtime::MovieSurface( moviePath );
-		mMovie.setLoop(true);
-        mMovie.play();
-        mMovie.setRate(10.);
+        mMovie = avf::MovieSurface::create( moviePath );
+		mMovie->setLoop(true);
+        mMovie->play();
+        mMovie->setRate(10.);
         mCapture -> stop();
         frameNum = 0;
 	}
@@ -245,12 +242,11 @@ void AllInOneApp::update()
         mSurface = mCapture->getSurface();
         isUpdated = true;
     }
-#if defined ( CINDER_MAC )
-    if (!isUpdated && mMovie && mMovie.checkNewFrame()){
-        mSurface = mMovie.getSurface();
+
+    if (!isUpdated && mMovie && mMovie->checkNewFrame()){
+        mSurface = mMovie->getSurface();
         isUpdated = true;
     }
-#endif
     
     if (!isUpdated) return;
     switch (type) {
