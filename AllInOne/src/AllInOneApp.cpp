@@ -136,7 +136,17 @@ void AllInOneApp::keyDown( KeyEvent event )
                 int newType = toDigit(event.getChar());
                 if (newType != type && (newType >=AVERAGE_TYPE && newType <= SCREEN_TYPE)){
                     type = newType;
-                    frameNum = 0;
+                    
+                    switch (type) {
+                        case AVERAGE_TYPE:
+                            initAverage();
+                            break;
+                        case SCREEN_TYPE:
+                            initScreen();
+                            break;
+                        default:
+                            break;
+                    }
                 }
             }
             break;
