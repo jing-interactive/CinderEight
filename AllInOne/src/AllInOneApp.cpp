@@ -33,9 +33,14 @@ public:
 	
 private:
 	CaptureRef		mCapture;
-	gl::TextureRef	mTexture, mRealTimeTexture;
+	gl::TextureRef	mAccumTexture, mRealTimeTexture;
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mPrevSurface;
+
+#if defined (CINDER_COCOA_TOUCH)
+    Surface iosSurface;
+#endif
+    
     Surface32f      mCumulativeSurface32f;
     gl::Texture::Format hdrFormat;
     Font            mFont;
@@ -64,23 +69,25 @@ void AllInOneApp::setup()
 	vector<Capture::DeviceRef> devices( Capture::getDevices() );
 	for( vector<Capture::DeviceRef>::const_iterator deviceIt = devices.begin(); deviceIt != devices.end(); ++deviceIt ) {
 		Capture::DeviceRef device = *deviceIt;
-		console() << "Found Device " << device->getName() << " ID: " << device->getUniqueId() << std::endl;
-        try {
-            mCapture = Capture::create( WIDTH, HEIGHT );
-            mCapture->start();
-            
-            TextLayout layout;
-            layout.setFont( Font( "Arial", 24 ) );
-            layout.setColor( Color( 1, 1, 1 ) );
-            layout.addLine( device->getName() );
-            mNameTexture = gl::Texture::create( layout.render( true ) ) ;
-        }
-        catch( ... ) {
-            console() << "Failed to initialize capture" << std::endl;
-        }
+		console() << "Found Device " << device->getName() << " " << std::endl;
 	}
+    
+    try {
+        mCapture = Capture::create( WIDTH, HEIGHT );
+        mCapture->start();
+        
+        TextLayout layout;
+        layout.setFont( Font( "Arial", 24 ) );
+        layout.setColor( Color( 1, 1, 1 ) );
+       // layout.addLine( device->getName() );
+        //mNameTexture = gl::Texture::create( layout.render( true ) ) ;
+    }
+    catch( ... ) {
+        console() << "Failed to initialize capture" << std::endl;
+    }
+    
     frameNum = 0;
-    type = AVERAGE_TYPE;
+    type = SCREEN_TYPE;
 #if defined ( CINDER_MAC )
     hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
 #else
@@ -111,7 +118,7 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
 	catch( ... ) {
 		console() << "Unable to load the movie." << std::endl;
 		mMovie.reset();
-		mTexture.reset();
+		mAccumTexture.reset();
 	}
 #endif
 }
@@ -279,25 +286,56 @@ void AllInOneApp::update()
         default:
             break;
     }
-    mTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
+#if defined (CINDER_COCOA_TOUCH)
+    
+    Area area = mSurface.getBounds();
+    Surface iosSurface = Surface(area.getWidth(), area.getHeight(), false);
+    auto iosIt = iosSurface.getIter();
+    auto cumIt = mCumulativeSurface32f.getIter();
+
+    while( cumIt.line() && iosIt.line()) {
+        while( cumIt.pixel() && iosIt.pixel()) {
+            iosIt.r() = cumIt.r()*255;
+            iosIt.g() = cumIt.g()*255;
+            iosIt.b() = cumIt.b()*255;
+        }
+    }
+    mAccumTexture = gl::Texture::create(iosSurface);
+#elif defined (CINDER_MAC)
+    mAccumTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
+#endif
+    
     if (doRecord)     frameNum++;
 }
 
 void AllInOneApp::draw()
 {
 	gl::clear( Color::black() );
+	gl::setMatricesWindow( getWindowWidth(), getWindowHeight() );
+#if defined( CINDER_COCOA_TOUCH )
+    //change iphone to landscape orientation
+    gl::rotate( 90.0f );
+    gl::translate( 0.0f, -getWindowWidth() );
     
-    // draw the latest frame
-    gl::color( Color::white() );
-    if( mTexture)
-        gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
+    Rectf flippedBounds( 0.0f, 0.0f, getWindowHeight(), getWindowWidth() );
+    if( mAccumTexture)
+        gl::draw( mAccumTexture, flippedBounds );
+    if (mRealTimeTexture){
+        gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
+    }
+#else
+    if( mAccumTexture)
+        gl::draw( mAccumTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
     
     if (mRealTimeTexture){
-        gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mTexture->getAspectRatio()));
+        gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
     }
+
+#endif
     
     gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 5.0f),Color::white(),mFont);
 
+    glPopMatrix();
 }
 
 string AllInOneApp::getBlendMode(){

@@ -12,7 +12,6 @@
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
 		180068EDD6C646C0B3F8308A /* AllInOneApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
-		AF1A861718F6248500C724FA /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = AF1A861618F6248500C724FA /* AllInOneApp.icns */; };
 		AF7C9D4C18FF5F460064BA77 /* AllInOneApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */; };
 		AF7C9D5118FF5F460064BA77 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		AF7C9D5318FF5F460064BA77 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784AF0FF439BC000DE1D7 /* Accelerate.framework */; };
@@ -42,6 +41,8 @@
 		AF7CA23018FF95F20064BA77 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22F18FF95F20064BA77 /* Cocoa.framework */; };
 		E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED4190024F9005E2E66 /* CinderApp_ios.png */; };
 		E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED61900251D005E2E66 /* Default-568h@2x.png */; };
+		E633B9A01901A12D00F08016 /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = E633B99F1901A12D00F08016 /* AllInOneApp.icns */; };
+		E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E633B9A11901A14B00F08016 /* AllInOne_ios.png */; };
 		E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6CCD509190066A90026DDFF /* Info-IOS.plist */; };
 /* End PBXBuildFile section */
 
@@ -55,12 +56,10 @@
 		51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = AllInOneApp.cpp; path = ../src/AllInOneApp.cpp; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* AllInOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllInOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF1A861618F6248500C724FA /* AllInOneApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; path = AllInOneApp.icns; sourceTree = "<group>"; };
 		AF7C9D5A18FF5F460064BA77 /* AllInOne copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AllInOne copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF7CA03518FF7ACB0064BA77 /* Avf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avf.h; sourceTree = "<group>"; };
 		AF7CA03718FF7ACB0064BA77 /* AvfUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfUtils.h; sourceTree = "<group>"; };
 		AF7CA03818FF7ACB0064BA77 /* AvfWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfWriter.h; sourceTree = "<group>"; };
-		AF7CA03918FF7ACB0064BA77 /* CaptureImplAvFoundation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CaptureImplAvFoundation.h; sourceTree = "<group>"; };
 		AF7CA11718FF7ACC0064BA77 /* Avf.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Avf.mm; sourceTree = "<group>"; };
 		AF7CA11918FF7ACC0064BA77 /* AvfUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvfUtils.mm; sourceTree = "<group>"; };
 		AF7CA11A18FF7ACC0064BA77 /* AvfWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvfWriter.mm; sourceTree = "<group>"; };
@@ -82,6 +81,8 @@
 		E2F4825864554937BAC3BFEC /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		E613CED4190024F9005E2E66 /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CinderApp_ios.png; path = ../resources/CinderApp_ios.png; sourceTree = "<group>"; };
 		E613CED61900251D005E2E66 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../resources/Default-568h@2x.png"; sourceTree = "<group>"; };
+		E633B99F1901A12D00F08016 /* AllInOneApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = AllInOneApp.icns; path = ../resources/AllInOneApp.icns; sourceTree = "<group>"; };
+		E633B9A11901A14B00F08016 /* AllInOne_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AllInOne_ios.png; path = ../resources/AllInOne_ios.png; sourceTree = "<group>"; };
 		E6CCD509190066A90026DDFF /* Info-IOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-IOS.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -211,10 +212,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E633B9A11901A14B00F08016 /* AllInOne_ios.png */,
 				E6CCD509190066A90026DDFF /* Info-IOS.plist */,
 				E613CED61900251D005E2E66 /* Default-568h@2x.png */,
 				E613CED4190024F9005E2E66 /* CinderApp_ios.png */,
-				AF1A861618F6248500C724FA /* AllInOneApp.icns */,
+				E633B99F1901A12D00F08016 /* AllInOneApp.icns */,
 				0A9463D9D12742F8BCC3801A /* Info.plist */,
 			);
 			name = Resources;
@@ -245,7 +247,6 @@
 				AF7CA03518FF7ACB0064BA77 /* Avf.h */,
 				AF7CA03718FF7ACB0064BA77 /* AvfUtils.h */,
 				AF7CA03818FF7ACB0064BA77 /* AvfWriter.h */,
-				AF7CA03918FF7ACB0064BA77 /* CaptureImplAvFoundation.h */,
 			);
 			path = include;
 			sourceTree = "<group>";
@@ -332,7 +333,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				AF1A861718F6248500C724FA /* AllInOneApp.icns in Resources */,
+				E633B9A01901A12D00F08016 /* AllInOneApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -343,6 +344,7 @@
 				E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */,
 				E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */,
 				E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */,
+				E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -377,6 +379,8 @@
 		AF7C9D5818FF5F460064BA77 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				"ARCHS[sdk=iphoneos*]" = "$(ARCHS_STANDARD_32_BIT)";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladimir Gusev (3W2SEYSLJQ)";
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -392,6 +396,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Info-IOS.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../blocks/QuickTime/lib/msw\"",
@@ -401,9 +406,10 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
 				);
-				PRODUCT_NAME = "AllInOne copy";
+				PRODUCT_NAME = AllInOneIOS;
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -411,6 +417,7 @@
 		AF7C9D5918FF5F460064BA77 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladimir Gusev (3W2SEYSLJQ)";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -423,6 +430,7 @@
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Info-IOS.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
+				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					"\"$(SRCROOT)/../../../blocks/QuickTime/lib/msw\"",
@@ -433,10 +441,11 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
 				);
-				PRODUCT_NAME = "AllInOne copy";
+				PRODUCT_NAME = AllInOneIOS;
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
+				TARGETED_DEVICE_FAMILY = "1,2";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;
@@ -504,6 +513,7 @@
 				CINDER_PATH = ../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladimir Gusev (3W2SEYSLJQ)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
@@ -521,6 +531,7 @@
 				CINDER_PATH = ../../..;
 				CLANG_CXX_LANGUAGE_STANDARD = "c++0x";
 				CLANG_CXX_LIBRARY = "libc++";
+				CODE_SIGN_IDENTITY = "iPhone Developer: Vladimir Gusev (3W2SEYSLJQ)";
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
