@@ -33,15 +33,15 @@ public:
 	
 private:
 	CaptureRef		mCapture;
-	gl::TextureRef	mTexture;
+	gl::TextureRef	mTexture, mRealTimeTexture;
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mPrevSurface;
     Surface32f      mCumulativeSurface32f;
     gl::Texture::Format hdrFormat;
     Font            mFont;
     size_t          frameNum;
-    Color           averageColor;
     int type;
+    bool doRecord;
 
     avf::MovieSurfaceRef mMovie;
     
@@ -89,8 +89,9 @@ void AllInOneApp::setup()
     getWindow()->setTitle("All In One by eight_io");
     mFont = Font( "Helvetica", 12.0f );
     gl::disableVerticalSync();
-
     gl::enableAlphaBlending();
+    
+    doRecord = true;
 }
 
 void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
@@ -120,7 +121,8 @@ void AllInOneApp::keyDown( KeyEvent event )
     switch( event.getChar() ) {
         case 'f': setFullScreen( ! isFullScreen() ); break;
         case ' ':
-            mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
+            //mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
+            doRecord = !doRecord;
             break;
 		case 's':
         {
@@ -170,10 +172,13 @@ void AllInOneApp::initAverage(bool reset){
 }
 
 void AllInOneApp::computeAverage(){
+    
     if (frameNum == 0) {
         initAverage(true);
         return;
     }
+    
+    if (!doRecord) return;
     
     float oneOverFrameNum = 1./(float)frameNum;
     auto iter = mSurface.getIter( );
@@ -186,7 +191,6 @@ void AllInOneApp::computeAverage(){
             mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()*ONE_OVER_255) * oneOverFrameNum;
         }
     }
-    averageColor = mCumulativeSurface32f.areaAverage(mSurface.getBounds());
 }
 
 void AllInOneApp::initScreen(bool reset){
@@ -211,7 +215,8 @@ void AllInOneApp::initScreen(bool reset){
 }
 
 void AllInOneApp::computeScreen(){
-
+    if (!doRecord) return;
+    
     if (frameNum == 0) {
         initScreen(true);
         return;
@@ -241,8 +246,6 @@ void AllInOneApp::computeScreen(){
             mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()*ONE_OVER_255) * oneOverFrameNum;
         }
     }
-
-    averageColor = mCumulativeSurface32f.areaAverage(mSurface.getBounds());
     
     //retain current surface for next iteration
     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
@@ -261,7 +264,11 @@ void AllInOneApp::update()
         isUpdated = true;
     }
     
-    if (!isUpdated) return;
+    if (isUpdated) {
+        mRealTimeTexture = gl::Texture::create(mSurface);
+    } else {
+        return;
+    }
     switch (type) {
         case AVERAGE_TYPE:
             computeAverage();
@@ -285,7 +292,11 @@ void AllInOneApp::draw()
     if( mTexture)
         gl::draw( mTexture, Rectf( 0, 0, getWindowWidth(), getWindowHeight()) );
     
-    gl::drawString("Color "+ boost::str(boost::format("%.3f") % averageColor.length())+ "  FPS: "+ toString(getFrameRate())+"  Blend: "+getBlendMode(), Vec2f(5.0f, 5.0f),Color::white(),mFont);
+    if (mRealTimeTexture){
+        gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mTexture->getAspectRatio()));
+    }
+    
+    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    R: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 5.0f),Color::white(),mFont);
 
 }
 
