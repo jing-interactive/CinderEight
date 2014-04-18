@@ -45,9 +45,10 @@ private:
 
     avf::MovieSurfaceRef mMovie;
     
-    void initAverage();
+    void initAverage(bool reset = false);
     void computeAverage();
-    void initScreen();
+
+    void initScreen(bool reset = false);
     void computeScreen();
     
     string getBlendMode();
@@ -153,7 +154,8 @@ void AllInOneApp::keyDown( KeyEvent event )
 	}
 }
 
-void AllInOneApp::initAverage(){
+void AllInOneApp::initAverage(bool reset){
+    if (!reset) return;
     Area area = mSurface.getBounds();
     mCumulativeSurface32f = Surface32f( area.getWidth(), area.getHeight(), false );
     auto cumIter = mCumulativeSurface32f.getIter();
@@ -169,7 +171,7 @@ void AllInOneApp::initAverage(){
 
 void AllInOneApp::computeAverage(){
     if (frameNum == 0) {
-        initAverage();
+        initAverage(true);
         return;
     }
     
@@ -187,14 +189,16 @@ void AllInOneApp::computeAverage(){
     averageColor = mCumulativeSurface32f.areaAverage(mSurface.getBounds());
 }
 
-void AllInOneApp::initScreen(){
+void AllInOneApp::initScreen(bool reset){
     Area area = mSurface.getBounds();
-    mCumulativeSurface32f = Surface32f( area.getWidth(), area.getHeight(), false );
-    
+
     mPrevSurface = Surface(area.getWidth(), area.getHeight(),false);
     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
     
     auto prevIter = mPrevSurface.getIter();
+    
+    if (!reset) return;
+    mCumulativeSurface32f = Surface32f( area.getWidth(), area.getHeight(), false );
     auto cumIter = mCumulativeSurface32f.getIter();
     
     while( prevIter.line()&&cumIter.line()) {
@@ -207,10 +211,9 @@ void AllInOneApp::initScreen(){
 }
 
 void AllInOneApp::computeScreen(){
-    
 
     if (frameNum == 0) {
-        initScreen();
+        initScreen(true);
         return;
     }
     
