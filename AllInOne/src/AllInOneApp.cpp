@@ -120,7 +120,7 @@ void AllInOneApp::keyDown( KeyEvent event )
 {
     switch( event.getChar() ) {
         case 'f': setFullScreen( ! isFullScreen() ); break;
-        case ' ':
+        case 'r':
             //mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
             doRecord = !doRecord;
             break;
@@ -132,7 +132,7 @@ void AllInOneApp::keyDown( KeyEvent event )
             writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface32f );
         }
             break;
-        case 'r':
+        case ' ':
             frameNum = 0;
         default:
             if (isdigit(event.getChar())){
@@ -296,7 +296,7 @@ void AllInOneApp::draw()
         gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mTexture->getAspectRatio()));
     }
     
-    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    R: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 5.0f),Color::white(),mFont);
+    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 5.0f),Color::white(),mFont);
 
 }
 
