@@ -280,7 +280,7 @@ void AllInOneApp::update()
             break;
     }
     mTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
-    frameNum++;
+    if (doRecord)     frameNum++;
 }
 
 void AllInOneApp::draw()
