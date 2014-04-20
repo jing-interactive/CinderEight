@@ -46,6 +46,7 @@ private:
 	Surface		    mSurface, mPrevSurface;
 
     std::vector<SwipeGestureRecognizerInfo *> swipeRecognizerInfos;
+    std::vector<TapGestureRecognizerInfo*> tapRecognizerInfos;
     
     void setupTouches();
     
@@ -69,6 +70,9 @@ private:
     
     void handleSwipeLeftGesture();
     void handleSwipeRightGesture();
+    
+    void handleTapGesture();
+    void handleDoubleTapGesture();
 };
 
 void AllInOneApp::touchesBegan( TouchEvent event )
@@ -112,6 +116,14 @@ void AllInOneApp::setupTouches(){
     swipeRecognizerInfos.push_back( new SwipeGestureRecognizerInfo( left, false, true ) );
     
     addSwipeGestures( swipeRecognizerInfos, getWindow() );
+    
+    
+    GestureRecognizerCallBack tap( boost::bind( &AllInOneApp::handleTapGesture, this ) );
+    GestureRecognizerCallBack doubleTap(boost::bind( &AllInOneApp::handleDoubleTapGesture, this));
+    
+    tapRecognizerInfos.push_back(new TapGestureRecognizerInfo(tap));
+    tapRecognizerInfos.push_back(new TapGestureRecognizerInfo(doubleTap, 2));
+    addTapGestures(tapRecognizerInfos, getWindow());
 }
 
 void AllInOneApp::handleSwipeLeftGesture()
@@ -123,7 +135,15 @@ void AllInOneApp::handleSwipeLeftGesture()
 void AllInOneApp::handleSwipeRightGesture()
 {
         type = AVERAGE_TYPE;
-    cout << "right"<<endl;
+
+}
+
+void AllInOneApp::handleTapGesture(){
+    type = type == AVERAGE_TYPE ? SCREEN_TYPE : AVERAGE_TYPE;
+}
+
+void AllInOneApp::handleDoubleTapGesture(){
+    frameNum = 0;
 }
 
 void AllInOneApp::setup()
