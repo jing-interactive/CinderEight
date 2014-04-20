@@ -11,9 +11,7 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
 #include "CocoaTouchGestures.h"
-#if defined (CINDER_COCOA_TOUCH)
 
-#endif
 
 using namespace ci;
 using namespace ci::app;
@@ -65,6 +63,8 @@ private:
     void initScreen(bool reset = false);
     void computeScreen();
     
+    void saveSurface();
+    
     void toggleType(int newType);
     string getBlendMode();
     
@@ -77,7 +77,7 @@ private:
 
 void AllInOneApp::touchesBegan( TouchEvent event )
 {
-    console() << "Began: " << event << std::endl;
+    //console() << "Began: " << event << std::endl;
 
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
         ;
@@ -86,14 +86,14 @@ void AllInOneApp::touchesBegan( TouchEvent event )
 
 void AllInOneApp::touchesMoved( TouchEvent event )
 {
-    console() << "Moved: " << event << std::endl;
+    //console() << "Moved: " << event << std::endl;
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt )
         ;
 }
 
 void AllInOneApp::touchesEnded( TouchEvent event )
 {
-    console() << "Ended: " << event << std::endl;
+    //console() << "Ended: " << event << std::endl;
 
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
         ;
@@ -117,18 +117,15 @@ void AllInOneApp::setupTouches(){
     
     addSwipeGestures( swipeRecognizerInfos, getWindow() );
     
-    
     GestureRecognizerCallBack tap( boost::bind( &AllInOneApp::handleTapGesture, this ) );
     GestureRecognizerCallBack doubleTap(boost::bind( &AllInOneApp::handleDoubleTapGesture, this));
-    
-    tapRecognizerInfos.push_back(new TapGestureRecognizerInfo(tap));
-    tapRecognizerInfos.push_back(new TapGestureRecognizerInfo(doubleTap, 2));
-    addTapGestures(tapRecognizerInfos, getWindow());
+
+    addTapGestures(new TapGestureRecognizerInfo(tap), new TapGestureRecognizerInfo(doubleTap), getWindow());
 }
 
 void AllInOneApp::handleSwipeLeftGesture()
 {
-        type = SCREEN_TYPE;
+    saveSurface();
     cout<<"left"<<endl;
 }
 
@@ -143,6 +140,7 @@ void AllInOneApp::handleTapGesture(){
 }
 
 void AllInOneApp::handleDoubleTapGesture(){
+
     frameNum = 0;
 }
 
@@ -173,11 +171,12 @@ void AllInOneApp::setup()
     type = SCREEN_TYPE;
 #if defined ( CINDER_MAC )
     hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
+    getWindow()->setTitle("All In One by eight_io");
 #else
-    hdrFormat.setInternalFormat(GL_FLOAT);
+    hdrFormat.setInternalFormat(GL_FLOAT);//half float 0x8D61
     setupTouches();
 #endif
-    getWindow()->setTitle("All In One by eight_io");
+
     mFont = Font( "Helvetica", 22.0f );
     gl::disableVerticalSync();
     gl::enableAlphaBlending();
@@ -207,21 +206,27 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
 #endif
 }
 
+void AllInOneApp::saveSurface(){
+    
+#if defined (CINDER_MAC)
+    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+    std::stringstream timestamp;
+    timestamp << now;
+    writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface32f );
+#elif defined (CINDER_COCOA_TOUCH)
+    cocoa::writeToSavedPhotosAlbum( mCumulativeSurface32f );
+#endif
+}
+
 void AllInOneApp::keyDown( KeyEvent event )
 {
     switch( event.getChar() ) {
         case 'f': setFullScreen( ! isFullScreen() ); break;
         case 'r':
-            //mCapture->isCapturing() ? mCapture->stop() : mCapture->start();
             doRecord = !doRecord;
             break;
 		case 's':
-        {
-            boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-            std::stringstream timestamp;
-            timestamp << now;
-            writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface32f );
-        }
+            saveSurface();
             break;
         case ' ':
             frameNum = 0;
@@ -389,6 +394,7 @@ void AllInOneApp::update()
             iosIt.b() = cumIt.b()*255;
         }
     }
+
     mAccumTexture = gl::Texture::create(iosSurface);
 #elif defined (CINDER_MAC)
     mAccumTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
@@ -410,7 +416,13 @@ void AllInOneApp::draw()
     if( mAccumTexture)
         gl::draw( mAccumTexture, flippedBounds );
     if (mRealTimeTexture){
-        gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
+        // draw the texture to the triangle
+        gl::scale( Vec2f(0.1, 0.1));
+        mRealTimeTexture->enableAndBind();
+        gl::drawSolidCircle(Vec2f(getWindowWidth()*0.5, getWindowHeight()*0.5), 100);
+        mRealTimeTexture->unbind();
+        
+        //gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
     }
 #else
     if( mAccumTexture)

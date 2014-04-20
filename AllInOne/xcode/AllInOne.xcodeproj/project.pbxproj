@@ -40,12 +40,9 @@
 		AF7CA22E18FF84930064BA77 /* CoreText.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22D18FF84930064BA77 /* CoreText.framework */; };
 		AF7CA23018FF95F20064BA77 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = AF7CA22F18FF95F20064BA77 /* Cocoa.framework */; };
 		E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED4190024F9005E2E66 /* CinderApp_ios.png */; };
-		E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED61900251D005E2E66 /* Default-568h@2x.png */; };
 		E633B9A01901A12D00F08016 /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = E633B99F1901A12D00F08016 /* AllInOneApp.icns */; };
 		E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E633B9A11901A14B00F08016 /* AllInOne_ios.png */; };
-		E6EE5344190331B900AA039F /* CocoaTouchGestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */; };
 		E6EE5345190331B900AA039F /* CocoaTouchGestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */; };
-		E6EE5346190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */; };
 		E6EE5347190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */; };
 /* End PBXBuildFile section */
 
@@ -66,7 +63,6 @@
 		AF7CA11718FF7ACC0064BA77 /* Avf.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Avf.mm; sourceTree = "<group>"; };
 		AF7CA11918FF7ACC0064BA77 /* AvfUtils.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvfUtils.mm; sourceTree = "<group>"; };
 		AF7CA11A18FF7ACC0064BA77 /* AvfWriter.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = AvfWriter.mm; sourceTree = "<group>"; };
-		AF7CA21018FF7B260064BA77 /* AllInOne_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AllInOne_Prefix.pch; sourceTree = "<group>"; };
 		AF7CA21118FF7C1A0064BA77 /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		AF7CA21418FF7C4E0064BA77 /* CoreMedia.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreMedia.framework; path = System/Library/Frameworks/CoreMedia.framework; sourceTree = SDKROOT; };
 		AF7CA21918FF83530064BA77 /* OpenGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenGL.framework; path = ../../../../../../../System/Library/Frameworks/OpenGL.framework; sourceTree = "<group>"; };
@@ -83,7 +79,6 @@
 		AF7CA22F18FF95F20064BA77 /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = ../../../../../../../System/Library/Frameworks/Cocoa.framework; sourceTree = "<group>"; };
 		E2F4825864554937BAC3BFEC /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
 		E613CED4190024F9005E2E66 /* CinderApp_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = CinderApp_ios.png; path = ../resources/CinderApp_ios.png; sourceTree = "<group>"; };
-		E613CED61900251D005E2E66 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "Default-568h@2x.png"; path = "../resources/Default-568h@2x.png"; sourceTree = "<group>"; };
 		E633B99F1901A12D00F08016 /* AllInOneApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = AllInOneApp.icns; path = ../resources/AllInOneApp.icns; sourceTree = "<group>"; };
 		E633B9A11901A14B00F08016 /* AllInOne_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AllInOne_ios.png; path = ../resources/AllInOne_ios.png; sourceTree = "<group>"; };
 		E6CCD509190066A90026DDFF /* Info-IOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-IOS.plist"; sourceTree = "<group>"; };
@@ -140,6 +135,7 @@
 		01B97315FEAEA392516A2CEA /* Blocks */ = {
 			isa = PBXGroup;
 			children = (
+				E6EE5311190331B900AA039F /* Cinder-CocoaTouchGestures-Block */,
 				AF7CA03218FF7ACB0064BA77 /* Cinder-AvfImpl */,
 			);
 			name = Blocks;
@@ -212,7 +208,6 @@
 		29B97315FDCFA39411CA2CEA /* Headers */ = {
 			isa = PBXGroup;
 			children = (
-				AF7CA21018FF7B260064BA77 /* AllInOne_Prefix.pch */,
 				E2F4825864554937BAC3BFEC /* Resources.h */,
 			);
 			name = Headers;
@@ -223,7 +218,6 @@
 			children = (
 				E633B9A11901A14B00F08016 /* AllInOne_ios.png */,
 				E6CCD509190066A90026DDFF /* Info-IOS.plist */,
-				E613CED61900251D005E2E66 /* Default-568h@2x.png */,
 				E613CED4190024F9005E2E66 /* CinderApp_ios.png */,
 				E633B99F1901A12D00F08016 /* AllInOneApp.icns */,
 				0A9463D9D12742F8BCC3801A /* Info.plist */,
@@ -243,7 +237,6 @@
 		AF7CA03218FF7ACB0064BA77 /* Cinder-AvfImpl */ = {
 			isa = PBXGroup;
 			children = (
-				E6EE5311190331B900AA039F /* Cinder-CocoaTouchGestures-Block */,
 				AF7CA03418FF7ACB0064BA77 /* include */,
 				AF7CA11618FF7ACC0064BA77 /* src */,
 			);
@@ -277,7 +270,7 @@
 				E6EE532B190331B900AA039F /* src */,
 			);
 			name = "Cinder-CocoaTouchGestures-Block";
-			path = "../Cinder-CocoaTouchGestures-Block";
+			path = "../../../blocks/Cinder-CocoaTouchGestures-Block";
 			sourceTree = "<group>";
 		};
 		E6EE532B190331B900AA039F /* src */ = {
@@ -374,7 +367,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */,
-				E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */,
 				E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,8 +382,6 @@
 				AF7CA1EE18FF7ACC0064BA77 /* AvfWriter.mm in Sources */,
 				180068EDD6C646C0B3F8308A /* AllInOneApp.cpp in Sources */,
 				AF7CA1EC18FF7ACC0064BA77 /* AvfUtils.mm in Sources */,
-				E6EE5344190331B900AA039F /* CocoaTouchGestures.mm in Sources */,
-				E6EE5346190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -423,7 +413,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = AllInOne_Prefix.pch;
+				GCC_PREFIX_HEADER = AllInOneIOS_Prefix.pch;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
 					"$(inherited)",
@@ -441,6 +431,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
 				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = AllInOneIOS;
 				SDKROOT = iphoneos;
 				SYMROOT = ./build;
@@ -461,7 +452,7 @@
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = AllInOne_Prefix.pch;
+				GCC_PREFIX_HEADER = AllInOneIOS_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = "Info-IOS.plist";
 				INSTALL_PATH = "$(HOME)/Applications";
@@ -476,6 +467,7 @@
 					"-lz",
 					"\"$(CINDER_PATH)/lib/libcinder-iphone-sim_d.a\"",
 				);
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = AllInOneIOS;
 				SDKROOT = iphoneos;
 				STRIP_INSTALLED_PRODUCT = YES;
@@ -491,6 +483,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
@@ -508,6 +501,7 @@
 					"\"$(SRCROOT)/../../../blocks/QuickTime/lib/msw\"",
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder_d.a\"";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = AllInOne;
 				SYMROOT = ./build;
 				WRAPPER_EXTENSION = app;
@@ -520,6 +514,7 @@
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -534,6 +529,7 @@
 					"\"$(SRCROOT)/../../../blocks/QuickTime/lib/msw\"",
 				);
 				OTHER_LDFLAGS = "\"$(CINDER_PATH)/lib/libcinder.a\"";
+				PRECOMPS_INCLUDE_HEADERS_FROM_BUILT_PRODUCTS_DIR = YES;
 				PRODUCT_NAME = AllInOne;
 				STRIP_INSTALLED_PRODUCT = YES;
 				SYMROOT = ./build;
@@ -552,7 +548,7 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../../../include ../../../src";
@@ -570,7 +566,8 @@
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
 				HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/boost\"";
-				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MACOSX_DEPLOYMENT_TARGET = 10.8;
+				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
 				USER_HEADER_SEARCH_PATHS = "\"$(CINDER_PATH)/include\" ../include ../../../include ../../../src";
 			};

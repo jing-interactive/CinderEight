@@ -1,11 +1,12 @@
-#ifdef __OBJC__
-    #import <Cocoa/Cocoa.h>
+#if defined( __OBJC__ )
+	#import <UIKit/UIKit.h>
+	#import <Foundation/Foundation.h>
 #endif
 
 #if defined( __cplusplus )
 	#include "cinder/Cinder.h"
 	
-	#include "cinder/app/AppBasic.h"
+	#include "cinder/app/AppCocoaTouch.h"
 	
 	#include "cinder/gl/gl.h"
 	
