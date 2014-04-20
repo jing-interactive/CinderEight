@@ -10,6 +10,10 @@
 
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/format.hpp>
+#include "CocoaTouchGestures.h"
+#if defined (CINDER_COCOA_TOUCH)
+
+#endif
 
 using namespace ci;
 using namespace ci::app;
@@ -30,6 +34,10 @@ public:
 	void draw();
     void fileDrop( ci::app::FileDropEvent event );
     void prepareSettings(Settings *settings);
+    
+    void	touchesBegan( TouchEvent event );
+	void	touchesMoved( TouchEvent event );
+	void	touchesEnded( TouchEvent event );
 	
 private:
 	CaptureRef		mCapture;
@@ -37,9 +45,9 @@ private:
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mPrevSurface;
 
-#if defined (CINDER_COCOA_TOUCH)
-    Surface iosSurface;
-#endif
+    std::vector<SwipeGestureRecognizerInfo *> swipeRecognizerInfos;
+    
+    void setupTouches();
     
     Surface32f      mCumulativeSurface32f;
     gl::Texture::Format hdrFormat;
@@ -56,11 +64,66 @@ private:
     void initScreen(bool reset = false);
     void computeScreen();
     
+    void toggleType(int newType);
     string getBlendMode();
+    
+    void handleSwipeLeftGesture();
+    void handleSwipeRightGesture();
 };
+
+void AllInOneApp::touchesBegan( TouchEvent event )
+{
+    console() << "Began: " << event << std::endl;
+
+	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
+        ;
+	}
+}
+
+void AllInOneApp::touchesMoved( TouchEvent event )
+{
+    console() << "Moved: " << event << std::endl;
+	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt )
+        ;
+}
+
+void AllInOneApp::touchesEnded( TouchEvent event )
+{
+    console() << "Ended: " << event << std::endl;
+
+	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
+        ;
+	}
+}
 
 void AllInOneApp::prepareSettings(Settings *settings){
     settings->disableFrameRate();
+#if defined (CINDER_COCOA_TOUCH)
+    //settings->enableMultiTouch();
+    settings->enableHighDensityDisplay();
+#endif
+}
+
+void AllInOneApp::setupTouches(){
+    GestureRecognizerCallBack left( boost::bind( &AllInOneApp::handleSwipeLeftGesture, this ) );
+    GestureRecognizerCallBack right( boost::bind( &AllInOneApp::handleSwipeRightGesture, this ) );
+    
+    swipeRecognizerInfos.push_back( new SwipeGestureRecognizerInfo( right, true ) );
+    swipeRecognizerInfos.push_back( new SwipeGestureRecognizerInfo( left, false, true ) );
+    
+    addSwipeGestures( swipeRecognizerInfos, getWindow() );
+}
+
+void AllInOneApp::handleSwipeLeftGesture()
+{
+        type = SCREEN_TYPE;
+    cout<<"left"<<endl;
+}
+
+void AllInOneApp::handleSwipeRightGesture()
+{
+        type = AVERAGE_TYPE;
+    cout << "right"<<endl;
 }
 
 void AllInOneApp::setup()
@@ -92,9 +155,10 @@ void AllInOneApp::setup()
     hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
 #else
     hdrFormat.setInternalFormat(GL_FLOAT);
+    setupTouches();
 #endif
     getWindow()->setTitle("All In One by eight_io");
-    mFont = Font( "Helvetica", 12.0f );
+    mFont = Font( "Helvetica", 22.0f );
     gl::disableVerticalSync();
     gl::enableAlphaBlending();
     
@@ -144,23 +208,28 @@ void AllInOneApp::keyDown( KeyEvent event )
         default:
             if (isdigit(event.getChar())){
                 int newType = toDigit(event.getChar());
-                if (newType != type && (newType >=AVERAGE_TYPE && newType <= SCREEN_TYPE)){
-                    type = newType;
-                    
-                    switch (type) {
-                        case AVERAGE_TYPE:
-                            initAverage();
-                            break;
-                        case SCREEN_TYPE:
-                            initScreen();
-                            break;
-                        default:
-                            break;
-                    }
-                }
+                toggleType(newType);
             }
             break;
 	}
+}
+
+void AllInOneApp::toggleType(int newType){
+    if (newType != type && (newType >=AVERAGE_TYPE && newType <= SCREEN_TYPE)){
+        type = newType;
+        
+        switch (type) {
+            case AVERAGE_TYPE:
+                initAverage();
+                break;
+            case SCREEN_TYPE:
+                initScreen();
+                break;
+            default:
+                break;
+        }
+    }
+
 }
 
 void AllInOneApp::initAverage(bool reset){
@@ -333,7 +402,7 @@ void AllInOneApp::draw()
 
 #endif
     
-    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 5.0f),Color::white(),mFont);
+    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 25.0f),Color::white(),mFont);
 
     glPopMatrix();
 }

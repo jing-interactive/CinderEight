@@ -43,7 +43,10 @@
 		E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = E613CED61900251D005E2E66 /* Default-568h@2x.png */; };
 		E633B9A01901A12D00F08016 /* AllInOneApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = E633B99F1901A12D00F08016 /* AllInOneApp.icns */; };
 		E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = E633B9A11901A14B00F08016 /* AllInOne_ios.png */; };
-		E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */ = {isa = PBXBuildFile; fileRef = E6CCD509190066A90026DDFF /* Info-IOS.plist */; };
+		E6EE5344190331B900AA039F /* CocoaTouchGestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */; };
+		E6EE5345190331B900AA039F /* CocoaTouchGestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */; };
+		E6EE5346190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */; };
+		E6EE5347190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */ = {isa = PBXBuildFile; fileRef = E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -56,7 +59,7 @@
 		51E14F2F763D45E9B230C81C /* AllInOneApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = AllInOneApp.cpp; path = ../src/AllInOneApp.cpp; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		8D1107320486CEB800E47090 /* AllInOne.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllInOne.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		AF7C9D5A18FF5F460064BA77 /* AllInOne copy.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "AllInOne copy.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		AF7C9D5A18FF5F460064BA77 /* AllInOneIOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AllInOneIOS.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AF7CA03518FF7ACB0064BA77 /* Avf.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Avf.h; sourceTree = "<group>"; };
 		AF7CA03718FF7ACB0064BA77 /* AvfUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfUtils.h; sourceTree = "<group>"; };
 		AF7CA03818FF7ACB0064BA77 /* AvfWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AvfWriter.h; sourceTree = "<group>"; };
@@ -84,6 +87,12 @@
 		E633B99F1901A12D00F08016 /* AllInOneApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = AllInOneApp.icns; path = ../resources/AllInOneApp.icns; sourceTree = "<group>"; };
 		E633B9A11901A14B00F08016 /* AllInOne_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = AllInOne_ios.png; path = ../resources/AllInOne_ios.png; sourceTree = "<group>"; };
 		E6CCD509190066A90026DDFF /* Info-IOS.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Info-IOS.plist"; sourceTree = "<group>"; };
+		E6EE532C190331B900AA039F /* CocoaTouchGestures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CocoaTouchGestures.h; sourceTree = "<group>"; };
+		E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = CocoaTouchGestures.mm; sourceTree = "<group>"; };
+		E6EE532E190331B900AA039F /* SwipeGestureRecognizerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SwipeGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		E6EE532F190331B900AA039F /* TapGestureRecognizerInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = TapGestureRecognizerInfo.h; sourceTree = "<group>"; };
+		E6EE5330190331B900AA039F /* UIView+UIView_Gestures.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIView+UIView_Gestures.h"; sourceTree = "<group>"; };
+		E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "UIView+UIView_Gestures.mm"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -182,7 +191,7 @@
 			isa = PBXGroup;
 			children = (
 				8D1107320486CEB800E47090 /* AllInOne.app */,
-				AF7C9D5A18FF5F460064BA77 /* AllInOne copy.app */,
+				AF7C9D5A18FF5F460064BA77 /* AllInOneIOS.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -234,6 +243,7 @@
 		AF7CA03218FF7ACB0064BA77 /* Cinder-AvfImpl */ = {
 			isa = PBXGroup;
 			children = (
+				E6EE5311190331B900AA039F /* Cinder-CocoaTouchGestures-Block */,
 				AF7CA03418FF7ACB0064BA77 /* include */,
 				AF7CA11618FF7ACC0064BA77 /* src */,
 			);
@@ -257,6 +267,28 @@
 				AF7CA11718FF7ACC0064BA77 /* Avf.mm */,
 				AF7CA11918FF7ACC0064BA77 /* AvfUtils.mm */,
 				AF7CA11A18FF7ACC0064BA77 /* AvfWriter.mm */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		E6EE5311190331B900AA039F /* Cinder-CocoaTouchGestures-Block */ = {
+			isa = PBXGroup;
+			children = (
+				E6EE532B190331B900AA039F /* src */,
+			);
+			name = "Cinder-CocoaTouchGestures-Block";
+			path = "../Cinder-CocoaTouchGestures-Block";
+			sourceTree = "<group>";
+		};
+		E6EE532B190331B900AA039F /* src */ = {
+			isa = PBXGroup;
+			children = (
+				E6EE532C190331B900AA039F /* CocoaTouchGestures.h */,
+				E6EE532D190331B900AA039F /* CocoaTouchGestures.mm */,
+				E6EE532E190331B900AA039F /* SwipeGestureRecognizerInfo.h */,
+				E6EE532F190331B900AA039F /* TapGestureRecognizerInfo.h */,
+				E6EE5330190331B900AA039F /* UIView+UIView_Gestures.h */,
+				E6EE5331190331B900AA039F /* UIView+UIView_Gestures.mm */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -297,7 +329,7 @@
 			name = AllInOneIOS;
 			productInstallPath = "$(HOME)/Applications";
 			productName = AllInOne;
-			productReference = AF7C9D5A18FF5F460064BA77 /* AllInOne copy.app */;
+			productReference = AF7C9D5A18FF5F460064BA77 /* AllInOneIOS.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -341,7 +373,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				E6CCD50A190066A90026DDFF /* Info-IOS.plist in Resources */,
 				E613CED5190024F9005E2E66 /* CinderApp_ios.png in Resources */,
 				E613CED71900251D005E2E66 /* Default-568h@2x.png in Resources */,
 				E633B9A21901A14B00F08016 /* AllInOne_ios.png in Resources */,
@@ -359,6 +390,8 @@
 				AF7CA1EE18FF7ACC0064BA77 /* AvfWriter.mm in Sources */,
 				180068EDD6C646C0B3F8308A /* AllInOneApp.cpp in Sources */,
 				AF7CA1EC18FF7ACC0064BA77 /* AvfUtils.mm in Sources */,
+				E6EE5344190331B900AA039F /* CocoaTouchGestures.mm in Sources */,
+				E6EE5346190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -370,6 +403,8 @@
 				AF7CA1EF18FF7ACC0064BA77 /* AvfWriter.mm in Sources */,
 				AF7C9D4C18FF5F460064BA77 /* AllInOneApp.cpp in Sources */,
 				AF7CA1ED18FF7ACC0064BA77 /* AvfUtils.mm in Sources */,
+				E6EE5345190331B900AA039F /* CocoaTouchGestures.mm in Sources */,
+				E6EE5347190331B900AA039F /* UIView+UIView_Gestures.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
