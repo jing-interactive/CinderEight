@@ -73,10 +73,12 @@ private:
     
     void handleTapGesture();
     void handleDoubleTapGesture();
+    
+    TapGestureRecognizerInfo* tapInfo;
+    TapGestureRecognizerInfo* doubleTapInfo;
 };
 
-void AllInOneApp::touchesBegan( TouchEvent event )
-{
+void AllInOneApp::touchesBegan( TouchEvent event ) {
     //console() << "Began: " << event << std::endl;
 
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
@@ -84,15 +86,13 @@ void AllInOneApp::touchesBegan( TouchEvent event )
 	}
 }
 
-void AllInOneApp::touchesMoved( TouchEvent event )
-{
+void AllInOneApp::touchesMoved( TouchEvent event ) {
     //console() << "Moved: " << event << std::endl;
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt )
         ;
 }
 
-void AllInOneApp::touchesEnded( TouchEvent event )
-{
+void AllInOneApp::touchesEnded( TouchEvent event ) {
     //console() << "Ended: " << event << std::endl;
 
 	for( vector<TouchEvent::Touch>::const_iterator touchIt = event.getTouches().begin(); touchIt != event.getTouches().end(); ++touchIt ) {
@@ -117,10 +117,12 @@ void AllInOneApp::setupTouches(){
     
     addSwipeGestures( swipeRecognizerInfos, getWindow() );
     
-    GestureRecognizerCallBack tap( boost::bind( &AllInOneApp::handleTapGesture, this ) );
-    GestureRecognizerCallBack doubleTap(boost::bind( &AllInOneApp::handleDoubleTapGesture, this));
+    TapGestureRecognizerCallBack tap( boost::bind( &AllInOneApp::handleTapGesture, this) );
+    TapGestureRecognizerCallBack doubleTap(boost::bind( &AllInOneApp::handleDoubleTapGesture, this));
 
-    addTapGestures(new TapGestureRecognizerInfo(tap), new TapGestureRecognizerInfo(doubleTap), getWindow());
+    tapInfo = new TapGestureRecognizerInfo(tap);
+    doubleTapInfo = new TapGestureRecognizerInfo(doubleTap);
+     addTapGestures(tapInfo, doubleTapInfo, getWindow());
 }
 
 void AllInOneApp::handleSwipeLeftGesture()
@@ -129,24 +131,21 @@ void AllInOneApp::handleSwipeLeftGesture()
     cout<<"left"<<endl;
 }
 
-void AllInOneApp::handleSwipeRightGesture()
-{
-        type = AVERAGE_TYPE;
-
+void AllInOneApp::handleSwipeRightGesture() {
+    type = AVERAGE_TYPE;
 }
 
 void AllInOneApp::handleTapGesture(){
-    type = type == AVERAGE_TYPE ? SCREEN_TYPE : AVERAGE_TYPE;
-}
-
-void AllInOneApp::handleDoubleTapGesture(){
-
+    cout<< tapInfo->x<< " "<< tapInfo->y<<endl;
     frameNum = 0;
 }
 
-void AllInOneApp::setup()
-{
-	// list out the devices
+void AllInOneApp::handleDoubleTapGesture(){
+    type = type == AVERAGE_TYPE ? SCREEN_TYPE : AVERAGE_TYPE;
+}
+
+void AllInOneApp::setup() {
+
 	vector<Capture::DeviceRef> devices( Capture::getDevices() );
 	for( vector<Capture::DeviceRef>::const_iterator deviceIt = devices.begin(); deviceIt != devices.end(); ++deviceIt ) {
 		Capture::DeviceRef device = *deviceIt;
@@ -242,7 +241,6 @@ void AllInOneApp::keyDown( KeyEvent event )
 void AllInOneApp::toggleType(int newType){
     if (newType != type && (newType >=AVERAGE_TYPE && newType <= SCREEN_TYPE)){
         type = newType;
-        
         switch (type) {
             case AVERAGE_TYPE:
                 initAverage();
@@ -347,7 +345,7 @@ void AllInOneApp::computeScreen(){
             mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + prevIter.b()*ONE_OVER_255) * oneOverFrameNum;
         }
     }
-    
+
     //retain current surface for next iteration
     mPrevSurface.copyFrom(mSurface, mSurface.getBounds());
 }
@@ -403,8 +401,8 @@ void AllInOneApp::update()
     if (doRecord)     frameNum++;
 }
 
-void AllInOneApp::draw()
-{
+void AllInOneApp::draw() {
+    //gl::enableAlphaBlending();
 	gl::clear( Color::black() );
 	gl::setMatricesWindow( getWindowWidth(), getWindowHeight() );
 #if defined( CINDER_COCOA_TOUCH )
@@ -415,14 +413,16 @@ void AllInOneApp::draw()
     Rectf flippedBounds( 0.0f, 0.0f, getWindowHeight(), getWindowWidth() );
     if( mAccumTexture)
         gl::draw( mAccumTexture, flippedBounds );
+    
+    gl::enableAlphaBlending();
+    glColor4f(0.5, 0.5, 0.5, 0.5f);
+    
+    gl::drawSolidRect(Rectf(getWindowHeight()-100, 0, getWindowHeight(), getWindowHeight()));
+    
+    gl::disableAlphaBlending();
+    
     if (mRealTimeTexture){
-        // draw the texture to the triangle
-        gl::scale( Vec2f(0.1, 0.1));
-        mRealTimeTexture->enableAndBind();
-        gl::drawSolidCircle(Vec2f(getWindowWidth()*0.5, getWindowHeight()*0.5), 100);
-        mRealTimeTexture->unbind();
-        
-        //gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
+        gl::draw(mRealTimeTexture,Rectf((getWindowHeight()-100), 200, getWindowHeight(),getWindowWidth()-200));
     }
 #else
     if( mAccumTexture)
@@ -431,11 +431,11 @@ void AllInOneApp::draw()
     if (mRealTimeTexture){
         gl::draw(mRealTimeTexture,Rectf((getWindowWidth() - 100), 0, getWindowWidth(),100/mAccumTexture->getAspectRatio()));
     }
-
 #endif
-    
-    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 25.0f),Color::white(),mFont);
 
+    gl::enableAlphaBlending();
+    gl::drawString(" FPS: "+ toString(getFrameRate())+"    Blend: "+getBlendMode()+ "    Record: "+(doRecord ? " Yes":" No"), Vec2f(5.0f, 25.0f),Color::white(),mFont);
+    gl::disableAlphaBlending();
     glPopMatrix();
 }
 
