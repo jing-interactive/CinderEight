@@ -63,7 +63,8 @@ private:
     void initScreen(bool reset = false);
     void computeScreen();
     
-    void saveSurface();
+    fs::path mMovieDirectory, mSnapshotPath;
+    void saveFrame(fs::path, bool);
     
     void toggleType(int newType);
     string getBlendMode();
@@ -76,6 +77,7 @@ private:
     
     TapGestureRecognizerInfo* tapInfo;
     TapGestureRecognizerInfo* doubleTapInfo;
+
 };
 
 void AllInOneApp::touchesBegan( TouchEvent event ) {
@@ -101,7 +103,7 @@ void AllInOneApp::touchesEnded( TouchEvent event ) {
 }
 
 void AllInOneApp::prepareSettings(Settings *settings){
-    settings->disableFrameRate();
+
 #if defined (CINDER_COCOA_TOUCH)
     //settings->enableMultiTouch();
     settings->enableHighDensityDisplay();
@@ -127,7 +129,7 @@ void AllInOneApp::setupTouches(){
 
 void AllInOneApp::handleSwipeLeftGesture()
 {
-    saveSurface();
+    saveFrame(mSnapshotPath, false);
     cout<<"left"<<endl;
 }
 
@@ -167,7 +169,7 @@ void AllInOneApp::setup() {
     }
     
     frameNum = 0;
-    type = SCREEN_TYPE;
+    type = AVERAGE_TYPE;
 #if defined ( CINDER_MAC )
     hdrFormat.setInternalFormat(GL_RGBA32F_ARB);
     getWindow()->setTitle("All In One by eight_io");
@@ -177,10 +179,14 @@ void AllInOneApp::setup() {
 #endif
 
     mFont = Font( "Helvetica", 22.0f );
-    gl::disableVerticalSync();
     gl::enableAlphaBlending();
     
     doRecord = true;
+    
+    mMovieDirectory = getFolderPath();
+    
+    mSnapshotPath = getHomeDirectory();// / (directory+timestamp.str()+".png")
+
 }
 
 void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
@@ -205,13 +211,19 @@ void AllInOneApp::fileDrop( ci::app::FileDropEvent event ){
 #endif
 }
 
-void AllInOneApp::saveSurface(){
+void AllInOneApp::saveFrame(fs::path directory, bool frames){
     
 #if defined (CINDER_MAC)
-    boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
-    std::stringstream timestamp;
-    timestamp << now;
-    writeImage( getHomeDirectory() / ("Desktop/AllInOne-"+timestamp.str()+".png"), mCumulativeSurface32f );
+    fs::path writePath;
+    if (frames) {
+        writePath = directory/(toString(getElapsedFrames())+".png");
+    } else {
+        boost::posix_time::ptime now = boost::posix_time::second_clock::local_time();
+        std::stringstream timestamp;
+        timestamp << now;
+        writePath = directory / (timestamp.str() +".png");
+    }
+    writeImage( writePath, mCumulativeSurface32f );
 #elif defined (CINDER_COCOA_TOUCH)
     cocoa::writeToSavedPhotosAlbum( mCumulativeSurface32f );
 #endif
@@ -225,7 +237,7 @@ void AllInOneApp::keyDown( KeyEvent event )
             doRecord = !doRecord;
             break;
 		case 's':
-            saveSurface();
+            saveFrame(mSnapshotPath, false);
             break;
         case ' ':
             frameNum = 0;
@@ -285,9 +297,9 @@ void AllInOneApp::computeAverage(){
     while( iter.line() && mCumulativeIter.line()) {
         while( iter.pixel() && mCumulativeIter.pixel()) {
             //avg(i) = (i-1)/i*avg(i-1) + x(i)/i;
-            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()*ONE_OVER_255) * oneOverFrameNum;
-            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()*ONE_OVER_255) * oneOverFrameNum;
-            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()*ONE_OVER_255) * oneOverFrameNum;
+            mCumulativeIter.r() = ((frameNum-1) * mCumulativeIter.r() + iter.r()*ONE_OVER_255) * oneOverFrameNum;//*0.995 + iter.r()*0.005*ONE_OVER_255;
+            mCumulativeIter.g() = ((frameNum-1) * mCumulativeIter.g() + iter.g()*ONE_OVER_255) * oneOverFrameNum;//*0.995 + iter.g()*0.005*ONE_OVER_255;
+            mCumulativeIter.b() = ((frameNum-1) * mCumulativeIter.b() + iter.b()*ONE_OVER_255) * oneOverFrameNum;//*0.995 + iter.b()*0.005*ONE_OVER_255;
         }
     }
 }
@@ -396,6 +408,8 @@ void AllInOneApp::update()
     mAccumTexture = gl::Texture::create(iosSurface);
 #elif defined (CINDER_MAC)
     mAccumTexture = gl::Texture::create (mCumulativeSurface32f, hdrFormat);
+    
+    saveFrame(mMovieDirectory, true);
 #endif
     
     if (doRecord)     frameNum++;
