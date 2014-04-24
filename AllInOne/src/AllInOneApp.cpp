@@ -334,6 +334,10 @@ void AllInOneApp::computeScreen(){
     }
     
     //apply screen blending to previous surface
+    float prevColor = mPrevSurface.areaAverage(mPrevSurface.getBounds()).lengthSquared();
+    float mColor = mSurface.areaAverage(mSurface.getBounds()).lengthSquared();
+    float deltaColor = (prevColor - mColor)/prevColor;
+    cout<<deltaColor<<endl;
     auto iter = mSurface.getIter( );
     auto prevIter = mPrevSurface.getIter();
     while( iter.line() && prevIter.line()) {
