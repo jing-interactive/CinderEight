@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>543122A9-2559-4A9B-ADC9-154A9C4F7164</string>
+	<string>E1709C71-3B39-44B9-B688-E2B062C2D404</string>
 	<key>IDESourceControlProjectName</key>
-	<string>imageToParticles</string>
+	<string>videoToFBO</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>B339FCA1-6B40-4359-BA68-14D541ED7B18</key>
+		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>gogolrevizor-audio-particles/xcode/imageToParticles.xcodeproj/project.xcworkspace</string>
+	<string>bedrunken-video-particles/xcode/videoToFBO.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>B339FCA1-6B40-4359-BA68-14D541ED7B18</key>
+		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>B339FCA1-6B40-4359-BA68-14D541ED7B18</string>
+	<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>B339FCA1-6B40-4359-BA68-14D541ED7B18</string>
+			<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CinderEight</string>
 		</dict>

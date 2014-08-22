@@ -42,11 +42,6 @@ private:
 	gl::TextureRef	mAccumTexture, mRealTimeTexture;
 	gl::TextureRef	mNameTexture;
 	Surface		    mSurface, mPrevSurface;
-
-    std::vector<SwipeGestureRecognizerInfo *> swipeRecognizerInfos;
-    std::vector<TapGestureRecognizerInfo*> tapRecognizerInfos;
-    
-    void setupTouches();
     
     Surface32f      mCumulativeSurface32f;
     gl::Texture::Format hdrFormat;
@@ -66,9 +61,14 @@ private:
     fs::path mMovieDirectory, mSnapshotPath;
     void saveFrame(fs::path, bool);
     
+    
+    std::vector<SwipeGestureRecognizerInfo *> swipeRecognizerInfos;
+    std::vector<TapGestureRecognizerInfo*> tapRecognizerInfos;
+    
     void toggleType(int newType);
     string getBlendMode();
     
+    void setupTouches();
     void handleSwipeLeftGesture();
     void handleSwipeRightGesture();
     

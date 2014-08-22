@@ -91,7 +91,7 @@ public:
         
         while(true){
             if (queue->try_pop(data)){
-                std::mutex::scoped_lock lock(mMutex);
+                boost::mutex::scoped_lock lock(mMutex);
                 exportDepthToObj(data.d, data.d2, data.t, data.t2);
                 lock.unlock();
                 mCondition.notify_one();

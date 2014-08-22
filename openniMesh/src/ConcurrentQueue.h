@@ -39,7 +39,7 @@ namespace ph {
         
         void push(Data const& data)
         {
-            std::mutex::scoped_lock lock(mMutex);
+            boost::mutex::scoped_lock lock(mMutex);
             mQueue.push(data);
             lock.unlock();
             mCondition.notify_one();

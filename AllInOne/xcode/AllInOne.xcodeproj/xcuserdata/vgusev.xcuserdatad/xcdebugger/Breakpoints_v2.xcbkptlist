@@ -14,7 +14,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "442"
-            endingLineNumber = "442">
+            endingLineNumber = "442"
+            landmarkName = "AllInOneApp::draw()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -28,7 +30,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "461"
-            endingLineNumber = "461">
+            endingLineNumber = "461"
+            landmarkName = "AllInOneApp::getBlendMode()"
+            landmarkType = "5">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -86,7 +90,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "468"
-            endingLineNumber = "468">
+            endingLineNumber = "468"
+            landmarkName = "AllInOneApp::getBlendMode()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -100,7 +106,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "466"
-            endingLineNumber = "466">
+            endingLineNumber = "466"
+            landmarkName = "AllInOneApp::getBlendMode()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -114,7 +122,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "472"
-            endingLineNumber = "472">
+            endingLineNumber = "472"
+            landmarkName = "AllInOneApp::getBlendMode()"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -129,7 +139,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "276"
             endingLineNumber = "276"
-            landmarkName = "AllInOneApp::computeAverage()"
+            landmarkName = "AllInOneApp::initAverage(bool reset)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -176,9 +186,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "368"
-            endingLineNumber = "368"
-            landmarkName = "AllInOneApp::update()"
-            landmarkType = "5">
+            endingLineNumber = "368">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -208,9 +216,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "144"
-            endingLineNumber = "144"
-            landmarkName = "AllInOneApp::handleDoubleTapGesture()"
-            landmarkType = "5">
+            endingLineNumber = "144">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -224,9 +230,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "140"
-            endingLineNumber = "140"
-            landmarkName = "AllInOneApp::handleTapGesture()"
-            landmarkType = "5">
+            endingLineNumber = "140">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -240,9 +244,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "139"
-            endingLineNumber = "139"
-            landmarkName = "AllInOneApp::handleTapGesture()"
-            landmarkType = "5">
+            endingLineNumber = "139">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -257,7 +259,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "216"
             endingLineNumber = "216"
-            landmarkName = "AllInOneApp::saveSurface()"
+            landmarkName = "AllInOneApp::saveFrame(fs::path directory, bool frames)"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
@@ -272,9 +274,7 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "130"
-            endingLineNumber = "130"
-            landmarkName = "AllInOneApp::handleSwipeLeftGesture()"
-            landmarkType = "5">
+            endingLineNumber = "130">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

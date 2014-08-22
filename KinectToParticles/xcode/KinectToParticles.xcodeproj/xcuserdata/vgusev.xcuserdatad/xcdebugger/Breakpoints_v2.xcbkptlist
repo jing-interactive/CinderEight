@@ -10,43 +10,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/KinectToParticlesApp.cpp"
-            timestampString = "413573514.952286"
+            timestampString = "430373824.42745"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "142"
-            endingLineNumber = "142"
-            landmarkName = "KinectToParticles::loadShaders()"
+            startingLineNumber = "326"
+            endingLineNumber = "326"
+            landmarkName = "KinectToParticles::keyDown( KeyEvent event)"
             landmarkType = "5">
-            <Locations>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "KinectToParticles::loadShaders()"
-                  moduleName = "KinectToParticles"
-                  urlString = "file://localhost/Users/vgusev/repos/Cinder/CinderEight/KinectToParticles/src/KinectToParticlesApp.cpp"
-                  timestampString = "413573789.760189"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "18">
-               </Location>
-               <Location
-                  shouldBeEnabled = "Yes"
-                  ignoreCount = "0"
-                  continueAfterRunningActions = "No"
-                  symbolName = "KinectToParticles::loadShaders()"
-                  moduleName = "KinectToParticles"
-                  urlString = "file://localhost/Users/vgusev/repos/Cinder/CinderEight/KinectToParticles/src/KinectToParticlesApp.cpp"
-                  timestampString = "413573789.760454"
-                  startingColumnNumber = "9223372036854775807"
-                  endingColumnNumber = "9223372036854775807"
-                  startingLineNumber = "143"
-                  endingLineNumber = "143"
-                  offsetFromSymbolStart = "183">
-               </Location>
-            </Locations>
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>
