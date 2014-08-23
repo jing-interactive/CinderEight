@@ -27,6 +27,10 @@
 
 #include "cinder/Thread.h"
 #include <queue>
+#include <boost/thread/mutex.hpp>
+#include <boost/thread/recursive_mutex.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/condition_variable.hpp>
 
 namespace ph {
     
@@ -47,13 +51,13 @@ namespace ph {
         
         bool empty() const
         {
-            std::mutex::scoped_lock lock(mMutex);
+            boost::mutex::scoped_lock lock(mMutex);
             return mQueue.empty();
         }
         
         bool try_pop(Data& popped_value)
         {
-            std::mutex::scoped_lock lock(mMutex);
+            boost::mutex::scoped_lock lock(mMutex);
             if(mQueue.empty())
             {
                 return false;
@@ -66,7 +70,7 @@ namespace ph {
         
         void wait_and_pop(Data& popped_value)
         {
-            std::mutex::scoped_lock lock(mMutex);
+            boost::mutex::scoped_lock lock(mMutex);
             while(mQueue.empty())
             {
                 mCondition.wait(lock);
@@ -77,9 +81,9 @@ namespace ph {
         }
         std::size_t size() const { return mQueue.size(); }
     private:
-        std::queue<Data>		mQueue;
-        mutable std::mutex		mMutex;
-        std::condition_variable	mCondition;
+        std::queue<Data>			mQueue;
+        mutable boost::mutex		mMutex;
+        boost::condition_variable	mCondition;
     };
     
 } // namespace ph

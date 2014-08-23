@@ -5,20 +5,28 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>C1782987-B1F6-44B3-AFAE-61D3F08D0E5E</string>
+	<string>39EAAA63-E2D0-4AA2-96EE-7893E83333CC</string>
 	<key>IDESourceControlProjectName</key>
-	<string>GpGpuWaveVideo</string>
+	<string>KinectToParticles</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
+		<key>5449222E-399A-48FB-AE03-E6475EB0E6ED</key>
+		<string>https://github.com/astellato/Cinder-Syphon.git</string>
+		<key>B5C3E3CD-354B-42B7-835C-938AC001F46D</key>
+		<string>https://github.com/cinder/Cinder-Kinect.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>GpGpuWaveVideo/xcode/GpGpuWaveVideo.xcodeproj/project.xcworkspace</string>
+	<string>KinectToParticles/xcode/KinectToParticles.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>../../../..</string>
+		<key>5449222E-399A-48FB-AE03-E6475EB0E6ED</key>
+		<string>../../../../../blocks/Cinder-Syphon</string>
+		<key>B5C3E3CD-354B-42B7-835C-938AC001F46D</key>
+		<string>../../../../../blocks/Cinder-Freenect</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/eighteight/CinderEight.git</string>
@@ -28,6 +36,22 @@
 	<string>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B5C3E3CD-354B-42B7-835C-938AC001F46D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Cinder-Freenect</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>5449222E-399A-48FB-AE03-E6475EB0E6ED</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Cinder-Syphon</string>
+		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>

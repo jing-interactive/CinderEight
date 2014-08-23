@@ -109,7 +109,7 @@ private:
     std::vector<XnPoint3D*> depthQueue, depthQueue2;
     std::vector<Vertex> indV, indV2;
 
-    mutable std::mutex		mMutex;
+    mutable boost::mutex		mMutex;
     std::condition_variable	mCondition;
     
     boost::unordered_map<Vertex, size_t, VertexHash> vrtxMap;
