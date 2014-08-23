@@ -9,7 +9,6 @@
 #ifndef openniMesh_ObjExporter_h
 #define openniMesh_ObjExporter_h
 
-#include "cinder/app/AppBasic.h"
 #include "ConcurrentQueue.h"
 #include "cinder/ip/Flip.h"
 #include "boost/unordered/unordered_map.hpp"
