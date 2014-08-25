@@ -5,52 +5,44 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>11DFFB5B-B6AA-44DD-85A8-DB0F6F105775</string>
+	<string>EBB7A460-3186-4223-94C4-3826CA5F9A3C</string>
 	<key>IDESourceControlProjectName</key>
-	<string>openniMesh</string>
+	<string>CinderProject</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</key>
-		<string>https://github.com/pixelnerve/BlockOpenNI.git</string>
 		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
-		<key>5449222E-399A-48FB-AE03-E6475EB0E6ED</key>
-		<string>https://github.com/astellato/Cinder-Syphon.git</string>
+		<key>432B27BC-008E-4E0F-AF1F-7A0E892D88B3</key>
+		<string>https://github.com/cinder/Cinder.git</string>
+		<key>7C83E6C7-1971-412A-ABD1-5FF5BBE14517</key>
+		<string>ssh://github.com/cinder/Cinder-OpenCV.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>openniMesh/xcode/openniMesh.xcodeproj/project.xcworkspace</string>
+	<string>CinderEight/CinderProject/xcode/CinderProject.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</key>
-		<string>../../../../../blocks/BlockOpenNI</string>
 		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>../../../..</string>
-		<key>5449222E-399A-48FB-AE03-E6475EB0E6ED</key>
-		<string>../../../../../blocks/Cinder-Syphon</string>
+		<key>432B27BC-008E-4E0F-AF1F-7A0E892D88B3</key>
+		<string>../../../../..</string>
+		<key>7C83E6C7-1971-412A-ABD1-5FF5BBE14517</key>
+		<string>../../../../../blocks/OpenCV</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/eighteight/CinderEight.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</string>
+	<string>432B27BC-008E-4E0F-AF1F-7A0E892D88B3</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>05EA67FA-3AB2-4F36-8DC3-D7891DAEC443</string>
+			<string>432B27BC-008E-4E0F-AF1F-7A0E892D88B3</string>
 			<key>IDESourceControlWCCName</key>
-			<string>BlockOpenNI</string>
-		</dict>
-		<dict>
-			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
-			<string>public.vcs.git</string>
-			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>5449222E-399A-48FB-AE03-E6475EB0E6ED</string>
-			<key>IDESourceControlWCCName</key>
-			<string>Cinder-Syphon</string>
+			<string>Cinder</string>
 		</dict>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
@@ -59,6 +51,14 @@
 			<string>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CinderEight</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>7C83E6C7-1971-412A-ABD1-5FF5BBE14517</string>
+			<key>IDESourceControlWCCName</key>
+			<string>OpenCV</string>
 		</dict>
 	</array>
 </dict>
