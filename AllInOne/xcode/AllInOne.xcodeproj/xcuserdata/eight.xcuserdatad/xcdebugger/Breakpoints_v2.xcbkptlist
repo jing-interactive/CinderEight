@@ -14,7 +14,9 @@
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "94"
-            endingLineNumber = "94">
+            endingLineNumber = "94"
+            landmarkName = "AllInOneApp::touchesMoved( TouchEvent event )"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -29,7 +31,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "87"
             endingLineNumber = "87"
-            landmarkName = "AllInOneApp::setup()"
+            landmarkName = "AllInOneApp::touchesBegan( TouchEvent event )"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

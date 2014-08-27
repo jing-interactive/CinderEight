@@ -305,7 +305,7 @@
 					"-lcurl",
 				);
 				PRODUCT_NAME = imageToParticles;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
@@ -336,7 +336,7 @@
 					"-lcurl",
 				);
 				PRODUCT_NAME = imageToParticles;
-				SDKROOT = macosx10.7;
+				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
 			};

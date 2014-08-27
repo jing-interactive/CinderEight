@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>5787B980-909B-498B-A67F-286BC8998ECF</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ocvEdgeDetect</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>327979ED-4D73-4D49-BF25-3986F713A557</key>
+		<string>https://github.com/eighteight/CinderEight.git</string>
+		<key>B1CDE1B6-4ECD-4BDD-990B-9709395EA355</key>
+		<string>https://github.com/cinder/Cinder-OpenCV.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ocvEdgeDetect/xcode/ocvEdgeDetect.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>327979ED-4D73-4D49-BF25-3986F713A557</key>
+		<string>../../../..</string>
+		<key>B1CDE1B6-4ECD-4BDD-990B-9709395EA355</key>
+		<string>../../../../../blocks/Cinder-OpenCV</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/eighteight/CinderEight.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>327979ED-4D73-4D49-BF25-3986F713A557</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>B1CDE1B6-4ECD-4BDD-990B-9709395EA355</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Cinder-OpenCV</string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>327979ED-4D73-4D49-BF25-3986F713A557</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CinderEight</string>
+		</dict>
+	</array>
+</dict>
+</plist>
