@@ -5,36 +5,40 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
+<<<<<<< HEAD
 	<string>A76C6FAC-1AFC-4B19-ADB7-2A99A7B8F289</string>
+=======
+	<string>543122A9-2559-4A9B-ADC9-154A9C4F7164</string>
+>>>>>>> eb5ef58c82c42bdc1e85be2b29dea5db3908cb11
 	<key>IDESourceControlProjectName</key>
 	<string>imageToParticles</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>D5A8483D-2192-4F21-A82F-1808AE7065D7</key>
-		<string>https://github.com/num3ric/gpuPS.git</string>
+		<key>B339FCA1-6B40-4359-BA68-14D541ED7B18</key>
+		<string>https://github.com/eighteight/CinderEight.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>xcode/imageToParticles.xcodeproj/project.xcworkspace</string>
+	<string>gogolrevizor-audio-particles/xcode/imageToParticles.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>D5A8483D-2192-4F21-A82F-1808AE7065D7</key>
-		<string>../../..</string>
+		<key>B339FCA1-6B40-4359-BA68-14D541ED7B18</key>
+		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
 	<string>https://github.com/eighteight/CinderEight.git</string>
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>D5A8483D-2192-4F21-A82F-1808AE7065D7</string>
+	<string>B339FCA1-6B40-4359-BA68-14D541ED7B18</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D5A8483D-2192-4F21-A82F-1808AE7065D7</string>
+			<string>B339FCA1-6B40-4359-BA68-14D541ED7B18</string>
 			<key>IDESourceControlWCCName</key>
-			<string>gogolrevizor-audio-particles</string>
+			<string>CinderEight</string>
 		</dict>
 	</array>
 </dict>

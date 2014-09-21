@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>DA4191FB-E259-4E33-A46B-3FB8E43D1E65</string>
+	<string>C1782987-B1F6-44B3-AFAE-61D3F08D0E5E</string>
 	<key>IDESourceControlProjectName</key>
 	<string>GpGpuWaveVideo</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
+		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>GpGpuWaveVideo/xcode/GpGpuWaveVideo.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>3CB8F21D-D675-4E9E-876F-30B7638D2D35</key>
+		<key>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
+	<string>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>3CB8F21D-D675-4E9E-876F-30B7638D2D35</string>
+			<string>1ED21AE4-F7F0-4981-8CD4-FA79FB69F0E2</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CinderEight</string>
 		</dict>

@@ -223,8 +223,8 @@ void openniMesh::shutdown()
 //	mSurfaces->cancel();
 
     if (mServerThreadRef){
-    mServerThreadRef->interrupt();
-	mServerThreadRef->join();
+//        mServerThreadRef->interrupt();
+        mServerThreadRef->join();
     }
 }
 
@@ -509,7 +509,7 @@ void openniMesh::draw(){
     if (show2){
         drawTexture(mDepthTex2, rotate2, translate2);
     }
-    params::InterfaceGl::draw();
+    mParams.draw();
 }
 
 void openniMesh::mouseDrag(MouseEvent event)

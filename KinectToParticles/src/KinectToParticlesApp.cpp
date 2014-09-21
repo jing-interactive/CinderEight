@@ -18,8 +18,6 @@
 
 #include "Resources.h"
 
-#include "OscListener.h"
-
 #include "CinderFreenect.h"
 
 using namespace ci;
@@ -78,8 +76,6 @@ private:
 	
 	syphonClient m_clientSyphon; //our syphon client
 	syphonServer m_srvSyphon;
-	
-	osc::Listener m_listener;
 	
 	float m_parts_speed;
 	float m_parts_direction;
@@ -212,7 +208,7 @@ void KinectToParticles::setup()
 	gl::Texture::Format tFormatSmall;
 //	tFormat.setInternalFormat(GL_RGBA8);
 	
-	m_texSprite = gl::Texture(loadImage(loadResource("cross2.png")), tFormatSmall);
+	m_texSprite = gl::Texture(loadImage(loadResource("point.png")), tFormatSmall);
 	
 	GLenum interp = GL_NEAREST;
 	
@@ -288,14 +284,11 @@ void KinectToParticles::setup()
     
 	// in order for this to work, you must run simple server which is a syphon test application
     // feel free to change the app and server name for your specific case
-    m_clientSyphon.set("qtz1", "Quartz Composer");
+    m_clientSyphon.set("", "Texture Output");
     
     m_clientSyphon.bind();
 	
 	m_srvSyphon.setName("parts");
-	
-	
-	m_listener.setup(5991);
 	
 	m_parts_speed = .0f;
 	
@@ -336,60 +329,6 @@ void KinectToParticles::keyDown( KeyEvent event)
 
 void KinectToParticles::update()
 {
-	
-	// OSC
-	
-	while( m_listener.hasWaitingMessages() )
-	{
-		osc::Message message;
-		m_listener.getNextMessage( &message );
-
-		for (int i = 0; i < message.getNumArgs(); i++)
-		{
-			if( message.getArgType(i) == osc::TYPE_INT32 ) {
-				try {
-					if (message.getAddress().compare("/FromVDMX/reload_shaders") == 0)
-					{
-						loadShaders();
-						console() << "------ value: "<< message.getArgAsInt32(i) << std::endl;
-					}
-					
-					
-				}
-				catch (...) {
-				}
-			}
-			else if( message.getArgType(i) == osc::TYPE_FLOAT ) {
-				try {
-					//console() << "------ value: " << message.getArgAsFloat(i) << std::endl;
-					
-					if (message.getAddress().compare("/FromVDMX/parts_speed") == 0)
-					{
-						m_parts_speed = message.getArgAsFloat(i);
-					}
-					else if (message.getAddress().compare("/FromVDMX/parts_size") == 0)
-					{
-						m_parts_size = message.getArgAsFloat(i);
-					}
-					else if (message.getAddress().compare("/FromVDMX/parts_direction") == 0)
-					{
-						m_parts_direction = message.getArgAsFloat(i);
-					}
-					else if (message.getAddress().compare("/FromVDMX/parts_rotspeed") == 0)
-					{
-						m_parts_rotspeed = message.getArgAsFloat(i);
-					}
-					else if (message.getAddress().compare("/FromVDMX/parts_numparts") == 0)
-					{
-						m_parts_numparts = message.getArgAsFloat(i);
-					}
-				}
-				catch (...) {
-				}
-			}
-		}
-	}
-	
 	///////
 	
 	// we don't need to update the kinect every frame, it doesn't make much difference in appearance
@@ -471,7 +410,7 @@ void KinectToParticles::draw()
 		gl::color(ColorA(1.f, 1.f, 1.f, 1.f));
 		
 		m_clientSyphon.bind();
-		gl::TextureRef sytex;// = m_clientSyphon.getTexture();
+		gl::TextureRef sytex = m_clientSyphon.getTextureRef();
 		sytex->bind(0);
 		
 		m_shdrDbg.bind();
@@ -552,7 +491,7 @@ void KinectToParticles::draw()
 	}
 		
 	// we could uncomment this to show the FPS, but drawing the text itself costs some performance
-//	drawText();
+	drawText();
 	
 	if (getElapsedFrames() % 60 == 0)
 		console() << "FPS: " << getAverageFps() << std::endl;

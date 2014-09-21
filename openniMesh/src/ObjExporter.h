@@ -9,7 +9,6 @@
 #ifndef openniMesh_ObjExporter_h
 #define openniMesh_ObjExporter_h
 
-#include "cinder/app/AppBasic.h"
 #include "ConcurrentQueue.h"
 #include "cinder/ip/Flip.h"
 #include "boost/unordered/unordered_map.hpp"
@@ -91,7 +90,7 @@ public:
         
         while(true){
             if (queue->try_pop(data)){
-                std::mutex::scoped_lock lock(mMutex);
+                boost::mutex::scoped_lock lock(mMutex);
                 exportDepthToObj(data.d, data.d2, data.t, data.t2);
                 lock.unlock();
                 mCondition.notify_one();
@@ -109,7 +108,7 @@ private:
     std::vector<XnPoint3D*> depthQueue, depthQueue2;
     std::vector<Vertex> indV, indV2;
 
-    mutable std::mutex		mMutex;
+    mutable boost::mutex		mMutex;
     std::condition_variable	mCondition;
     
     boost::unordered_map<Vertex, size_t, VertexHash> vrtxMap;
