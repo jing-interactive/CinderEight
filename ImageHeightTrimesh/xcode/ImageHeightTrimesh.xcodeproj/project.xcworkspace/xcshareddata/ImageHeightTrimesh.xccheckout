@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>F61ECF92-BB43-4CB6-88F2-F4E81BD440A2</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ImageHeightTrimesh</string>
+	<key>IDESourceControlProjectPath</key>
+	<string>ImageHeightTrimesh/xcode/ImageHeightTrimesh.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</key>
+		<string>../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/cinder/Cinder.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</string>
+			<key>IDESourceControlWCCName</key>
+			<string>eight</string>
+		</dict>
+	</array>
+</dict>
+</plist>

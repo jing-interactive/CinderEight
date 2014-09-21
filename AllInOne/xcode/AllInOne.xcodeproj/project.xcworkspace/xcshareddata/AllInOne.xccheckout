@@ -10,37 +10,49 @@
 	<string>AllInOne</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>06F334A0-B290-4F01-ABBD-0CDEAF31D0BD</key>
-		<string>https://github.com/calebjohnston/Cinder-AvfImpl.git</string>
-		<key>54742128-9B0B-457A-B6B3-2BFE7CDC8A8E</key>
+		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
-		<key>D6AFF645-9DA6-4B07-B7A2-2A349097FCD2</key>
+		<key>AD4B458D0D225ED63FAE0155615993B7D3ECE020</key>
+		<string>https://github.com/cinder/Cinder.git</string>
+		<key>CF1A3423C5CC58C7BBBC85F1DBE1A257BDE696F9</key>
 		<string>https://github.com/eighteight/Cinder-CocoaTouchGestures-Block.git</string>
+		<key>E7FAB476A88A455C0E40E91DC4DA09BCE63295BE</key>
+		<string>https://github.com/calebjohnston/Cinder-AvfImpl.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>AllInOne/xcode/AllInOne.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>06F334A0-B290-4F01-ABBD-0CDEAF31D0BD</key>
-		<string>../../../../../blocks/Cinder-AvfImpl</string>
-		<key>54742128-9B0B-457A-B6B3-2BFE7CDC8A8E</key>
+		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>
 		<string>../../../..</string>
-		<key>D6AFF645-9DA6-4B07-B7A2-2A349097FCD2</key>
+		<key>AD4B458D0D225ED63FAE0155615993B7D3ECE020</key>
+		<string>../../../../..</string>
+		<key>CF1A3423C5CC58C7BBBC85F1DBE1A257BDE696F9</key>
 		<string>../../../../../blocks/Cinder-CocoaTouchGestures-Block</string>
+		<key>E7FAB476A88A455C0E40E91DC4DA09BCE63295BE</key>
+		<string>../../../../../blocks/Cinder-AvfImpl</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/cinder/Cinder.git</string>
+	<string>https://github.com/eighteight/CinderEight.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>54742128-9B0B-457A-B6B3-2BFE7CDC8A8E</string>
+	<string>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>06F334A0-B290-4F01-ABBD-0CDEAF31D0BD</string>
+			<string>AD4B458D0D225ED63FAE0155615993B7D3ECE020</string>
+			<key>IDESourceControlWCCName</key>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>E7FAB476A88A455C0E40E91DC4DA09BCE63295BE</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Cinder-AvfImpl</string>
 		</dict>
@@ -48,7 +60,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>D6AFF645-9DA6-4B07-B7A2-2A349097FCD2</string>
+			<string>CF1A3423C5CC58C7BBBC85F1DBE1A257BDE696F9</string>
 			<key>IDESourceControlWCCName</key>
 			<string>Cinder-CocoaTouchGestures-Block</string>
 		</dict>
@@ -56,7 +68,7 @@
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>54742128-9B0B-457A-B6B3-2BFE7CDC8A8E</string>
+			<string>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CinderEight</string>
 		</dict>

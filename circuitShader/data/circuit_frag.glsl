@@ -2,14 +2,8 @@
 uniform vec3      iResolution;           // viewport resolution (in pixels)
 uniform float     iGlobalTime;           // shader playback time (in seconds)
 uniform vec3      iChannelResolution[4]; // channel resolution (in pixels)
-uniform sampler2D iChannel0;          // sound
-uniform float zoomm;
-//uniform sampler2D iChannel1;          // palette
-
-uniform sampler2DRect iChannel1;
-uniform vec3      iMouse;
-    
-//    vec4 color= texture2DRect( iChannel0, gl_TexCoord[0].st * vec2( iResolution.x, iResolution.y ) );
+uniform sampler2D iChannel0;          // input channel. XX = 2D/Cube
+uniform sampler2D iChannel1;          // input channel. XX = 2D/Cube
 
 #define time iGlobalTime*.02
 
@@ -17,7 +11,6 @@ uniform vec3      iMouse;
 #define width .005
 float zoom = .18;
 float curvtr = 1.0;
-int itrtns = 40;
 
 float shape=0.;
 vec3 color=vec3(0.),randcol;
@@ -37,14 +30,9 @@ void formula(vec2 z, float c) {
 	float w=width*minit*2.;
 	float circ=pow(max(0.,w-ot2)/w,6.);
 	shape+=max(pow(max(0.,w-ot)/w,.25),circ);
-	
-    //vec3 col=normalize(.1+texture2D(iChannel1,vec2(minit*.1)).rgb);
-    vec3 col=normalize(.1+texture2DRect(iChannel1,gl_TexCoord[0].st * vec2( iResolution.x, iResolution.y )).rgb);
-    
+	vec3 col=normalize(.1+texture2D(iChannel1,vec2(minit*.1)).rgb);
 	color+=col*(.4+mod(minit/9.-time*10.+ot2*2.,1.)*1.6);
 	color+=vec3(1.,.7,.3)*circ*(10.-minit)*3.*smoothstep(0.,.5,.15+texture2D(iChannel0,vec2(.0,1.)).x-.5);
-    //color+=vec3(1.,.7,.3)*circ*(10.-minit)*3.*smoothstep(0.,.5,.15+zoomm-.5);
-
 }
 
 
@@ -61,23 +49,18 @@ void main(void)
 	float b=a*5.48535;
     //	zoom*=1.+sin(time*3.758123)*.8;
     
-//	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //rotate
-//	uv+=vec2(sin(a),cos(a*.5))*8.;           //move
-  
-    //uv+=vec2(0., 1.0)*8.;           //move
-
+	uv*=mat2(cos(b),sin(b),-sin(b),cos(b));  //mov
+	uv+=vec2(sin(a),cos(a*.5))*8.;           //rotate
 	uv*=zoom;                                //zoom
 	float pix=.5/iResolution.x*zoom/sph;
 	float dof=max(1.,(10.-mod(time,1.)/.01));
 	float c=1.5+mod(floor(time),6.)*.125;
-	for (int aa=0; aa<itrtns; aa++) {
+	for (int aa=0; aa<36; aa++) {
 		vec2 aauv=floor(vec2(float(aa)/6.,mod(float(aa),6.)));
 		formula(uv+aauv*pix*dof,c);
 	}
-	shape/=float(itrtns); color/= float(itrtns);
+	shape/=36.; color/=36.;
 	vec3 colo=mix(vec3(.15),color,shape)*(1.-length(pos))*min(1.,abs(.5-mod(time+.5,1.))*10.);
 	colo*=vec3(1.2,1.1,1.0);
-    vec3 debug = colo;
-    debug.b = zoom;
 	gl_FragColor = vec4(colo,1.0);
 }

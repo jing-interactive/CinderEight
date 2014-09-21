@@ -5,19 +5,19 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>C5E8FAC4-EEDA-43AD-8DA2-BDCB8407421C</string>
+	<string>093A61AE-2A84-4CE4-990D-0FC726484928</string>
 	<key>IDESourceControlProjectName</key>
 	<string>BritneysSpaceship</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
-		<key>80E730E9-D8B3-44E8-9759-3996A70F5A1A</key>
+		<key>0FF8DEA8-09DB-4FE5-8ED4-F5E9A175F5FB</key>
 		<string>https://github.com/eighteight/CinderEight.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
 	<string>BritneysSpaceship/xcode/BritneysSpaceship.xcodeproj/project.xcworkspace</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>80E730E9-D8B3-44E8-9759-3996A70F5A1A</key>
+		<key>0FF8DEA8-09DB-4FE5-8ED4-F5E9A175F5FB</key>
 		<string>../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
@@ -25,14 +25,14 @@
 	<key>IDESourceControlProjectVersion</key>
 	<integer>110</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>80E730E9-D8B3-44E8-9759-3996A70F5A1A</string>
+	<string>0FF8DEA8-09DB-4FE5-8ED4-F5E9A175F5FB</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>80E730E9-D8B3-44E8-9759-3996A70F5A1A</string>
+			<string>0FF8DEA8-09DB-4FE5-8ED4-F5E9A175F5FB</string>
 			<key>IDESourceControlWCCName</key>
 			<string>CinderEight</string>
 		</dict>
