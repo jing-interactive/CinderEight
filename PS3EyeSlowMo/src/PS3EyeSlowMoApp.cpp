@@ -6,6 +6,9 @@
 #include "cinder/params/Params.h"
 #include "ConcurrentQueue.h"
 #include "CinderVideoStreamServer.h"
+#include "cinder/gl/Fbo.h"
+#include "cinder/ImageIo.h"
+#include "cinder/DataSource.h"
 
 using namespace ci;
 using namespace ci::app;
@@ -72,6 +75,7 @@ public:
     void draw();
     void shutdown();
     void setGain();
+    void	keyDown( KeyEvent event );
     
     void eyeUpdateThreadFn();
     
@@ -104,6 +108,12 @@ public:
     bool running;
     void prepareSettings( Settings *settings );
     uint32_t currentFrame;
+    int mSkippedFrames;
+    
+    
+    //fbo
+    gl::FboRef			mFbo, mAccumFbo;
+    
     
 };
 
@@ -127,9 +137,16 @@ void PS3EyeSlowMoApp::prepareSettings( Settings *settings )
     settings->setFrameRate( 60.0f );
 }
 
+void PS3EyeSlowMoApp::keyDown( KeyEvent event ){
+    if (event.getChar() == 'r'){
+        surfaceVector.clear();
+    }
+}
+
 void PS3EyeSlowMoApp::setup()
 {
     currentFrame = 0;
+    mSkippedFrames = 1;
     using namespace ps3eye;
     
     mShouldQuit = false;
@@ -150,8 +167,7 @@ void PS3EyeSlowMoApp::setup()
         bool res = eye->init(640, 480, 60);
         console() << "init eye result " << res << std::endl;
         eye->start();
-        
-        
+
         frame_bgra = new uint8_t[eye->getWidth()*eye->getHeight()*4];
         mFrame = Surface(frame_bgra, eye->getWidth(), eye->getHeight(), eye->getWidth()*4, SurfaceChannelOrder::BGRA);
         memset(frame_bgra, 0, eye->getWidth()*eye->getHeight()*4);
@@ -165,28 +181,14 @@ void PS3EyeSlowMoApp::setup()
     mParams->addParam( "Framerate", &mFrameRate, "", true );
     mParams->addParam( "Queue", &mQueueSize, "", true);
     mParams->addSeparator();
+    mParams->addParam( "Skip", &mSkippedFrames).min( 1 ).step( 1 );
     mParams->addParam( "Auto gain", &isAutoGain );
     mParams->addParam( "Auto WB", &isAutoWB );
-    //mParams->addParam( "Gain", std::bind( &CinderPS3EyeApp::setGain, this ) ).min( 0 ).max( 450 ).step( 1 );
-    
-    
-    //        eyeFpsLab = new eyeFPS(CI_UI_FONT_MEDIUM);
-    
-    //        gui->addWidgetDown(new ciUIToggle(gh, gh, false, "auto gain"));
-    //        gui->addWidgetRight(new ciUIToggle(gh, gh, false, "auto white balance"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 63, eye->getGain(), "gain"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 63, eye->getSharpness(), "sharpness"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getExposure(), "exposure"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getBrightness(), "brightness"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getContrast(), "contrast"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getHue(), "hue"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getBlueBalance(), "blue balance"));
-    //        gui->addWidgetDown(new ciUISlider(slw, gh, 0, 255, eye->getRedBalance(), "red balance"));
-    
-    //gui->registerUIEvents(this, &PS3EYECaptureApp::guiEvent);
 
-        surfaceQueue = new ph::ConcurrentQueue<Surface*>();
-    
+    //surfaceQueue = new ph::ConcurrentQueue<Surface*>();
+
+    mAccumFbo = gl::Fbo::create( getWindowWidth(), getWindowHeight(),
+                                gl::Fbo::Format().colorTexture( gl::Texture::Format().internalFormat( GL_RGB16F ) ).disableDepth() );
     
 }
 
@@ -228,7 +230,22 @@ void PS3EyeSlowMoApp::update()
         if(isNewFrame)
         {
             yuv422_to_rgba(eye->getLastFramePointer(), eye->getRowBytes(), frame_bgra, mFrame.getWidth(), mFrame.getHeight());
-            surfaceVector.push_back(mFrame.clone());
+            
+            Surface source = mFrame.clone();
+            
+            OStreamMemRef os = OStreamMem::create();
+            
+            DataTargetRef target = DataTargetStream::createRef( os );
+            
+            writeImage( target, source, ImageTarget::Options(), "jpeg" );
+
+            const void *data = os->getBuffer();
+            
+            size_t dataSize = os->tell();
+
+            Buffer buf( dataSize );
+            memcpy(buf.getData(), data, dataSize);
+            surfaceVector.push_back(Surface( loadImage( DataSourceBuffer::create(buf)), SurfaceConstraintsDefault(), false ));
         }
         mCamFrameCount += isNewFrame ? 1 : 0;
         double now = mTimer.getSeconds();
@@ -248,8 +265,6 @@ void PS3EyeSlowMoApp::update()
 
 void PS3EyeSlowMoApp::draw()
 {
-    
-    if ((currentFrame % 5 ) == 0) return;
     gl::clear( Color::black() );
     gl::disableDepthRead();
     gl::disableDepthWrite();
@@ -260,7 +275,7 @@ void PS3EyeSlowMoApp::draw()
 //    //surfaceQueue->try_pop(currentSur);
 //    currentSur = surfaceVector[0];
 
-    if (!surfaceVector.empty()){
+    if (!surfaceVector.empty() && ( currentFrame % mSkippedFrames == 0 )){
         mTexture = gl::Texture::create(surfaceVector.front());
         surfaceVector.erase(surfaceVector.begin());
     }

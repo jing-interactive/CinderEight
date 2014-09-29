@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		002DFC830FA514B500E45AE0 /* warpdodec.obj in Resources */ = {isa = PBXBuildFile; fileRef = 002DFC820FA514B500E45AE0 /* warpdodec.obj */; };
 		002DFC8E0FA515AE00E45AE0 /* shader.frag in Resources */ = {isa = PBXBuildFile; fileRef = 002DFC8C0FA515AE00E45AE0 /* shader.frag */; };
 		002DFC8F0FA515AE00E45AE0 /* shader.vert in Resources */ = {isa = PBXBuildFile; fileRef = 002DFC8D0FA515AE00E45AE0 /* shader.vert */; };
 		003A86ED1178F90100CAA603 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 003A86EC1178F90100CAA603 /* AudioToolbox.framework */; };
@@ -24,7 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		002DFC820FA514B500E45AE0 /* warpdodec.obj */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = warpdodec.obj; path = ../resources/warpdodec.obj; sourceTree = SOURCE_ROOT; };
 		002DFC8C0FA515AE00E45AE0 /* shader.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shader.frag; path = ../resources/shader.frag; sourceTree = SOURCE_ROOT; };
 		002DFC8D0FA515AE00E45AE0 /* shader.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; name = shader.vert; path = ../resources/shader.vert; sourceTree = SOURCE_ROOT; };
 		003A86EC1178F90100CAA603 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = /System/Library/Frameworks/AudioToolbox.framework; sourceTree = "<absolute>"; };
@@ -142,7 +140,6 @@
 				AF48B6101435B433000B7619 /* scifi_texture_ground.jpg */,
 				002DFC8C0FA515AE00E45AE0 /* shader.frag */,
 				002DFC8D0FA515AE00E45AE0 /* shader.vert */,
-				002DFC820FA514B500E45AE0 /* warpdodec.obj */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -210,7 +207,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				002DFC830FA514B500E45AE0 /* warpdodec.obj in Resources */,
 				002DFC8E0FA515AE00E45AE0 /* shader.frag in Resources */,
 				002DFC8F0FA515AE00E45AE0 /* shader.vert in Resources */,
 				AF48B60E1435B415000B7619 /* scifi_texture_2048.jpg in Resources */,
