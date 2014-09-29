@@ -231,13 +231,13 @@ void PS3EyeSlowMoApp::update()
         {
             yuv422_to_rgba(eye->getLastFramePointer(), eye->getRowBytes(), frame_bgra, mFrame.getWidth(), mFrame.getHeight());
             
-            Surface source = mFrame.clone();
+            //Surface source = mFrame.clone();
             
             OStreamMemRef os = OStreamMem::create();
             
             DataTargetRef target = DataTargetStream::createRef( os );
             
-            writeImage( target, source, ImageTarget::Options(), "jpeg" );
+            writeImage( target, mFrame, ImageTarget::Options(), "jpeg" );
 
             const void *data = os->getBuffer();
             
