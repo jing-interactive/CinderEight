@@ -34,12 +34,12 @@ class PerspectiveApp : public AppBasic {
 	double quadZ;
 	Color quadC;
     
-	Vec3f objPos[10];
+	vec3 objPos[10];
 	Color colors[10][4];
     
 	Capture mCapture;
     
-    gl::Texture mTexture;
+    gl::TextureRef mTexture;
     
 	bool bVideo, bBoxes, bCircles, bFloor, bGrid, bHelp;
     
@@ -67,7 +67,7 @@ void PerspectiveApp::setup()
 		double _y = Rand::randFloat( 3.0f, 13.0f );
 		double _z = Rand::randFloat( 3.0f, 13.0f );
         
-		objPos[i] = Vec3f(_x,_y,_z);
+		objPos[i] = vec3(_x,_y,_z);
         
 		for(int j = 0; j < 4; j++) {
 			Color _color;
@@ -91,31 +91,31 @@ void PerspectiveApp::update()
 	if(rY > 360.0) rY -= 360.0;
     
     if( mCapture && mCapture.checkNewFrame() ) {
-		mTexture = gl::Texture( mCapture.getSurface() );
+        mTexture = gl::Texture::create( mCapture.getSurface() );
 	}
 }
 
 void PerspectiveApp::drawFloor(double _x, double _z, double _size, Color _clr) {
 	double _y = -1.0;
-	glColor3f(_clr.r, _clr.g, _clr.b);
+    gl::color(_clr.r, _clr.g, _clr.b);
 	glBegin(GL_QUADS);
-    glVertex3f(_x,		 _y,	_z);
-    glVertex3f(_x+_size, _y,	_z);
-    glVertex3f(_x+_size, _y,	_z+_size);
-    glVertex3f(_x,		 _y,	_z+_size);
+    gl::vertex(_x,		 _y,	_z);
+    gl::vertex(_x+_size, _y,	_z);
+    gl::vertex(_x+_size, _y,	_z+_size);
+    gl::vertex(_x,		 _y,	_z+_size);
 	glEnd();
-	glColor3f((_clr*1.2).r, (_clr*1.2).g, (_clr*1.2).b);
+	gl::color((_clr*1.2).r, (_clr*1.2).g, (_clr*1.2).b);
 	glBegin(GL_QUADS);
-    glVertex3f(_x,		 _y,	_z);
-    glVertex3f(_x+_size, _y,	_z);
-    glVertex3f(_x+_size, _y,	_z+_size);
-    glVertex3f(_x,		 _y,	_z+_size);
+    gl::vertex(_x,		 _y,	_z);
+    gl::vertex(_x+_size, _y,	_z);
+    gl::vertex(_x+_size, _y,	_z+_size);
+    gl::vertex(_x,		 _y,	_z+_size);
 	glEnd();
 }
 
 void PerspectiveApp::beginProjection(){ 
         
-        glMatrixMode(GL_PROJECTION);  
+        gl:MatrixMode(GL_PROJECTION);
         glPushMatrix();  
         glMatrixMode(GL_MODELVIEW);  
         glPushMatrix(); 
@@ -162,27 +162,27 @@ void PerspectiveApp::drawGrid(){
 			glColor4i(160,255,160,80);  
 		} else {
 			glLineWidth(1);
-			glColor4i(255,255,255,80);  
+			gl::color(255,255,255,80);
 		}
         	gl::pushMatrices();  
 		{  
             gl::translate(.0f, .0f, i * -0.1f);  
-            gl::drawLine(Vec2f(-frameW, -frameH), Vec2f(frameW, -frameH));  
-            gl::drawLine(Vec2f(frameW, -frameH), Vec2f(frameW,  frameH));  
-            gl::drawLine(Vec2f(frameW,  frameH), Vec2f(-frameW,  frameH));  
-			gl::drawLine(Vec2f(-frameW,  frameH), Vec2f(-frameW, -frameH));
+            gl::drawLine(vec2(-frameW, -frameH), vec2(frameW, -frameH));
+            gl::drawLine(vec2(frameW, -frameH), vec2(frameW,  frameH));
+            gl::drawLine(vec2(frameW,  frameH), vec2(-frameW,  frameH));
+			gl::drawLine(vec2(-frameW,  frameH), vec2(-frameW, -frameH));
 		}  
 			gl::popMatrices();  
 	}  
-	glColor4i(255,255,255,80);  
+    gl::color(255,255,255,80);
 	glLineWidth(1);
 	for (int i = 0; i < nbOfSteps*2; i++) {  
 		double _x = frameW/(double)nbOfSteps*(double)i-1.0;
 		double _y = frameH/(double)nbOfSteps*(double)i-1.0;
-		gl::drawLine(Vec3f(-_x, -frameH, 0.0), Vec3f(-_x, -frameH, -1.0));  
-		gl::drawLine(Vec3f( _x,  frameH, 0.0),Vec3f( _x,  frameH, -1.0));  
-		gl::drawLine(Vec3f( frameW, -_y, 0.0), Vec3f(frameW, -_y, -1.0));  
-		gl::drawLine(Vec3f(-frameW,  _y, 0.0), Vec3f(-frameW,  _y, -1.0));
+		gl::drawLine(vec3(-_x, -frameH, 0.0), vec3(-_x, -frameH, -1.0));  
+		gl::drawLine(vec3( _x,  frameH, 0.0),vec3( _x,  frameH, -1.0));  
+		gl::drawLine(vec3( frameW, -_y, 0.0), vec3(frameW, -_y, -1.0));  
+		gl::drawLine(vec3(-frameW,  _y, 0.0), vec3(-frameW,  _y, -1.0));
 	}  
 	//ofPopStyle();
 }
@@ -213,10 +213,10 @@ void PerspectiveApp::drawCircles() {
 	glLineWidth(3);
 	for(int i = 0; i < 10; i++) {
 		for(int j = 0; j < 4; j++) {
-			glColor4f(colors[i][j]);
-            gl::drawSolidCircle(Vec2f(objPos[i].x, objPos[i].y), 0.2-0.04*(double)j);
-			glColor4f(255,255,0,255);
-            gl::drawLine(objPos[i], Vec3f(objPos[i].x, objPos[i].y, objPos[i].z + 1.0));
+			gl::color(colors[i][j]);
+            gl::drawSolidCircle(vec2(objPos[i].x, objPos[i].y), 0.2-0.04*(double)j);
+			gl::color(255,255,0,255);
+            gl::drawLine(objPos[i], vec3(objPos[i].x, objPos[i].y, objPos[i].z + 1.0));
 		}
 	}
 	glLineWidth(1);
@@ -245,28 +245,28 @@ void PerspectiveApp::ofBox(float size){
 	float h = size * .5;
 	
 	vertexData.clear();
-		Vec3f vertices[] = {
-			Vec3f(+h,+h,+h),
-			Vec3f(+h,+h,-h),
-			Vec3f(+h,-h,+h),
-			Vec3f(+h,-h,-h),
-			Vec3f(-h,+h,+h),
-			Vec3f(-h,+h,-h),
-			Vec3f(-h,-h,+h),
-			Vec3f(-h,-h,-h)
+		vec3 vertices[] = {
+			vec3(+h,+h,+h),
+			vec3(+h,+h,-h),
+			vec3(+h,-h,+h),
+			vec3(+h,-h,-h),
+			vec3(-h,+h,+h),
+			vec3(-h,+h,-h),
+			vec3(-h,-h,+h),
+			vec3(-h,-h,-h)
 		};
 		vertexData.addVertices(vertices,8);
 		
 		static float n = sqrtf(3);
-		static Vec3f normals[] = {
-			Vec3f(+n,+n,+n),
-			Vec3f(+n,+n,-n),
-			Vec3f(+n,-n,+n),
-			Vec3f(+n,-n,-n),
-			Vec3f(-n,+n,+n),
-			Vec3f(-n,+n,-n),
-			Vec3f(-n,-n,+n),
-			Vec3f(-n,-n,-n)
+		static vec3 normals[] = {
+			vec3(+n,+n,+n),
+			vec3(+n,+n,-n),
+			vec3(+n,-n,+n),
+			vec3(+n,-n,-n),
+			vec3(-n,+n,+n),
+			vec3(-n,+n,-n),
+			vec3(-n,-n,+n),
+			vec3(-n,-n,-n)
 		};
 		vertexData.addNormals(normals,8);
         
