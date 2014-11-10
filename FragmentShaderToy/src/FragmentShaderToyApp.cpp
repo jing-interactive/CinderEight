@@ -54,7 +54,7 @@ void FragmentShaderToyApp::setup()
     loadShader( getAssetPath( "default.fs" ) );
     // create a rectangle to be drawn with our shader program
     // default is from -0.5 to 0.5, so we scale by 2 to get -1.0 to 1.0
-    mMesh = gl::VboMesh::create( geom::Rect().scale( vec2( 2.0f, 2.0f ) ) );
+    mMesh = gl::VboMesh::create( geom::Rect()/*.scale( vec2( 2.0f, 2.0f ) )*/ );
     
     // load a new shader on file drop
     getWindow()->getSignalFileDrop().connect( [this]( FileDropEvent &event )
