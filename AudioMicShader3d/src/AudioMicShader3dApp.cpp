@@ -205,7 +205,7 @@ void AudioVisualizerApp::setup()
             // add texture coordinates
             // note: we only want to draw the lower part of the frequency bands,
             //  so we scale the coordinates a bit
-            const float part = 0.5f;
+            const float part = .0f;//0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
             coords.push_back( Vec2f(part - part * s, t) );
@@ -235,7 +235,7 @@ void AudioVisualizerApp::setup()
     vector<Vec3f> positions;
     vector<Vec2f> texCoords;
     std::vector<Colorf>     clrs;
-    Vec2f mResolution(kWidth*.035f,kHeight*.035f);
+    Vec2f mResolution(kWidth*.35f,kHeight*.35f);
     // Mesh dimensions
     float halfHeight	= (float)mResolution.x * 0.5f;
     float halfWidth		= (float)mResolution.y * 0.5f;
@@ -243,7 +243,8 @@ void AudioVisualizerApp::setup()
     Vec3f scale( unit, 0.5f, unit );
     scale *= 100.;
     Vec3f offset( halfHeight, 0.f, halfWidth );
-    
+    offset = Vec3f::zero();
+    indices.clear();
     // Iterate through rows and columns using segment count
     for ( int32_t y = 0; y < mResolution.y; y++ ) {
         for ( int32_t x = 0; x < mResolution.x; x++ ) {
@@ -276,7 +277,7 @@ void AudioVisualizerApp::setup()
             float t = y / float(kHeight-1);
             
             // add vertex colors
-            clrs.push_back( Color(CM_HSV, s, 0.5f, 0.75f) );
+            clrs.push_back( Color(CM_HSV, s, 0.5f, 0.5f) );
         }
     }
     
@@ -291,45 +292,14 @@ void AudioVisualizerApp::setup()
     }
     
     // Use the MeshHelper to create a VboMesh from our vectors
-    mIcosahedron = gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) );
-        //mIcosahedron.bufferColorsRGB(clrs);
-    //////////////////////
+    mIcosahedron = gl::VboMesh(positions.size(), indices.size(), layout, GL_TRIANGLES);
+    ;//gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) , layout);
     
-    // play audio using the Cinder FMOD block
-//    FMOD::System_Create( &mFMODSystem );
+    mIcosahedron.bufferPositions(positions);
+    mIcosahedron.bufferIndices(indices);
+    mIcosahedron.bufferTexCoords2d(0, texCoords);
+    mIcosahedron.bufferColorsRGB(clrs);
 
-
-    //mFMODSystem->init( 32, FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, NULL );
-//    if ( mFMODSystem->init( 32, FMOD_INIT_NORMAL, 0 ) != FMOD_OK ){
-//        console() << "Unable to initialize system. deviceid " << endl;
-//    }
-//    mFMODSystem->setDriver(0);
-//    
-//    mFMODSystem->getRecordNumDrivers(&numdrivers);
-//    
-//    for (int count=0; count < numdrivers; count++)
-//    {
-//        char name[256];
-//        
-//        mFMODSystem->getRecordDriverInfo(count, name, 256, 0);
-//
-//        
-//        printf("%d : %s\n", count + 1, name);
-//    }
-//    
-//    int mDeviceID = 0;
-//    if(mDeviceID != -1)
-//        mFMODSystem->setDriver(mDeviceID);
-//    if ( mFMODSystem->init( 32, FMOD_INIT_NORMAL, 0 ) != FMOD_OK ) {
-//        console() << "Unable to initialize system. deviceid " << mDeviceID << endl;
-//    }
-    
-    
-//    mFMODSound = nullptr;
-//    mFMODChannel = nullptr;
-    
-//    playAudio( findAudio( mAudioPath ) );
-    
     mIsMouseDown = false;
     mMouseUpDelay = 5.0;
     mMouseUpTime = getElapsedSeconds() - mMouseUpDelay;
@@ -344,61 +314,62 @@ void AudioVisualizerApp::setup()
 
 void AudioVisualizerApp::shutdown()
 {
-    
-//    if(mFMODSystem)
-//    mFMODSystem->release();
+
 }
 
 void AudioVisualizerApp::update()
 {
-    
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-    // update FMOD so it can notify us of events
-//    mFMODSystem->update();
     
-    // reset FMOD signals
     signalChannelEnd= false;
     
     // get spectrum for left and right channels and copy it into our channels
+    
     float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     float* pDataRight = mChannelRight.getData() + kBands * mOffset;
-    
+
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
-    
-//    mFMODSystem->getSpectrum( pDataLeft, kBands, 0, FMOD_DSP_FFT_WINDOW_HANNING );
-//    mFMODSystem->getSpectrum( pDataRight, kBands, 1, FMOD_DSP_FFT_WINDOW_HANNING );
-    
+
+    //    mFMODSystem->getSpectrum( pDataLeft, kBands, 0, FMOD_DSP_FFT_WINDOW_HANNING );
+    //    mFMODSystem->getSpectrum( pDataRight, kBands, 1, FMOD_DSP_FFT_WINDOW_HANNING );
+
     // increment texture offset
     mOffset = (mOffset+1) % kHistory;
-    
+
     // clear the spectrum for this row to avoid old data from showing up
     pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     pDataRight = mChannelRight.getData() + kBands * mOffset;
+    
     memset( pDataLeft, 0, kBands * sizeof(float) );
     memset( pDataRight, 0, kBands * sizeof(float) );
-    
+
     // animate camera if mouse has not been down for more than 30 seconds
+    
     if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
     {
+        
         float t = float( getElapsedSeconds() );
         float x = 0.5f * math<float>::cos( t * 0.07f );
         float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
         float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
-
-        Vec3f eye = Vec3f(kWidth * x, kHeight * y, kHeight * z);
         
+        Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+
         x = 1.0f - x;
         y = -0.5f;
         z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
-        Vec3f interest = Vec3f(kWidth * x, kHeight * y, kHeight * z);
-        cout<<interest<<endl;
+        
+        Vec3f interest = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
+        
         mCamera.setEyePoint( eye.lerp(0.995f, mCamera.getEyePoint()) );
         mCamera.setCenterOfInterestPoint( interest.lerp(0.990f, mCamera.getCenterOfInterestPoint()) );
     }
 }
+
 
 void AudioVisualizerApp::draw()
 {
