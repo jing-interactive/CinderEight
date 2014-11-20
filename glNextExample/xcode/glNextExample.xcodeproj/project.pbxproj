@@ -19,7 +19,6 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		AFCE418019D7091400C32FFF /* Basic.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFCE417E19D7091400C32FFF /* Basic.frag */; };
-		AFCE418119D7091400C32FFF /* TemplateIcon2x.png in Resources */ = {isa = PBXBuildFile; fileRef = AFCE417F19D7091400C32FFF /* TemplateIcon2x.png */; };
 		AFCE418319D7093600C32FFF /* Basic.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFCE418219D7093600C32FFF /* Basic.vert */; };
 		F87D75894A7E4F548FE56EC6 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = 9B1A8B7F3BA34BD0898CA146 /* CinderApp.icns */; };
 /* End PBXBuildFile section */
@@ -42,7 +41,6 @@
 		8D1107320486CEB800E47090 /* glNextExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = glNextExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		9B1A8B7F3BA34BD0898CA146 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		AFCE417E19D7091400C32FFF /* Basic.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Basic.frag; path = ../assets/Basic.frag; sourceTree = "<group>"; };
-		AFCE417F19D7091400C32FFF /* TemplateIcon2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = TemplateIcon2x.png; path = ../assets/TemplateIcon2x.png; sourceTree = "<group>"; };
 		AFCE418219D7093600C32FFF /* Basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = Basic.vert; path = ../assets/Basic.vert; sourceTree = "<group>"; };
 		C853FA5380ED4196A2D60FAD /* glNextExample_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = glNextExample_Prefix.pch; sourceTree = "<group>"; };
 		DD5936B39B1B43AEB643EFF9 /* glNextExampleApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = glNextExampleApp.cpp; path = ../src/glNextExampleApp.cpp; sourceTree = "<group>"; };
@@ -81,7 +79,6 @@
 			children = (
 				DD5936B39B1B43AEB643EFF9 /* glNextExampleApp.cpp */,
 				AFCE417E19D7091400C32FFF /* Basic.frag */,
-				AFCE417F19D7091400C32FFF /* TemplateIcon2x.png */,
 				AFCE418219D7093600C32FFF /* Basic.vert */,
 			);
 			name = Source;
@@ -215,7 +212,6 @@
 			files = (
 				AFCE418019D7091400C32FFF /* Basic.frag in Resources */,
 				F87D75894A7E4F548FE56EC6 /* CinderApp.icns in Resources */,
-				AFCE418119D7091400C32FFF /* TemplateIcon2x.png in Resources */,
 				AFCE418319D7093600C32FFF /* Basic.vert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

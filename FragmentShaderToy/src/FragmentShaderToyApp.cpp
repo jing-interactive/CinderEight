@@ -5,6 +5,7 @@
 #include "cinder/gl/Context.h"
 #include "cinder/gl/VboMesh.h"
 #include "cinder/gl/gl.h"
+#include "cinder/params/Params.h"
 
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 
@@ -33,6 +34,7 @@ public:
     void update();
     void draw();
     void loadShader( const fs::path &fragment_path );
+    void resize();
 private:
     gl::GlslProgRef	mProg;
     gl::VboMeshRef	mMesh;
@@ -40,21 +42,34 @@ private:
     fs::path		mCurrentShaderPath;
     
     bool			mDoSave = false;
+    
+    float mFrameRate;
+    ci::params::InterfaceGl		mParams;
 };
+
+void FragmentShaderToyApp::resize(){
+
+}
 
 void FragmentShaderToyApp::prepareSettings( Settings *settings )
 {
-    settings->setWindowSize( 800, 450 ); // 16:9 display
+    settings->setWindowSize( 1920, 1080 ); // 16:9 display
 }
 
 void FragmentShaderToyApp::setup()
 {
+    mFrameRate			= 0.0f;
+    mParams = params::InterfaceGl( "ShaderToy", vec2( 200, 100 ) );
+	mParams.addParam( "Frame rate",		&mFrameRate,									"", true									);
+
+    
     // load fragment shader from the provided path
     // we always use the same vertex shader, so it isn't specified
-    loadShader( getAssetPath( "default.fs" ) );
+    loadShader( getAssetPath( "moon-surface.fs" ) );
     // create a rectangle to be drawn with our shader program
     // default is from -0.5 to 0.5, so we scale by 2 to get -1.0 to 1.0
-    mMesh = gl::VboMesh::create( geom::Rect()/*.scale( vec2( 2.0f, 2.0f ) )*/ );
+    mMesh = gl::VboMesh::create( geom::Rect(Rectf (-1.f, -1.f, 1.0f, 1.0f))/*.scale( vec2( 2, 2 ) )*/);
+    geom::Plane();
     
     // load a new shader on file drop
     getWindow()->getSignalFileDrop().connect( [this]( FileDropEvent &event )
@@ -124,6 +139,7 @@ void FragmentShaderToyApp::loadShader( const fs::path &fragment_path )
 
 void FragmentShaderToyApp::update()
 {
+    mFrameRate = getAverageFps();
     // get the current time with second-level accuracy
     auto now = boost::posix_time::second_clock::local_time();
     auto date = now.date();
@@ -137,10 +153,13 @@ void FragmentShaderToyApp::update()
     { mProg->uniform( "iDate", vec4( date.year(), date.month(), date.day_number(), time.total_seconds() ) ); }
     if( map.find( "iMouse" ) != map.end() )
     { mProg->uniform( "iMouse", mMouseCoord ); }
+    if( map.find( "iResolution" ) != map.end() )
+    { mProg->uniform( "iResolution", vec3( getWindowWidth(), getWindowHeight(), 0.0f ) );}
 }
 
 void FragmentShaderToyApp::draw()
 {
+    gl::viewport(0, 0, getWindowBounds().x2, getWindowBounds().y2 );
     // clear out the window with black
     gl::clear( Color( 0, 0, 0 ) );
     // use our shader for this draw loop
@@ -158,6 +177,8 @@ void FragmentShaderToyApp::draw()
         catch( ci::Exception &exc )
         { console() << "Failed to save image: " << exc.what() << endl; }
     }
+    
+    mParams.draw();
 }
 
 CINDER_APP_NATIVE( FragmentShaderToyApp, RendererGl )

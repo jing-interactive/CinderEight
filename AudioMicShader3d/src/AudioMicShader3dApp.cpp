@@ -6,9 +6,9 @@
  the following conditions are met:
  
  * Redistributions of source code must retain the above copyright notice, this list of conditions and
-	the following disclaimer.
+ the following disclaimer.
  * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
-	the following disclaimer in the documentation and/or other materials provided with the distribution.
+ the following disclaimer in the documentation and/or other materials provided with the distribution.
  
  THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
  WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
@@ -34,11 +34,11 @@
 #include "cinder/audio/Device.h"
 #include "cinderSyphon.h"
 #include "MeshHelper.h"
+#include "cinder/gl/Light.h"
 #include "Resources.h"
-#include "FMOD.hpp"
+#include "cinder/Perlin.h"
+#include "cinder/params/Params.h"
 
-// Channel callback function used by FMOD to notify us of channel events
-FMOD_RESULT F_CALLBACK channelCallback(FMOD_CHANNEL *channel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2);
 #define INPUT_DEVICE "Scarlett 2i2 USB"
 
 using namespace ci;
@@ -58,10 +58,8 @@ public:
     void mouseDrag( MouseEvent event );
     void mouseUp( MouseEvent event );
     void keyDown( KeyEvent event );
+    void mouseWheel( MouseEvent event );
     void resize();
-
-    // play the audio file
-    void		playAudio( const fs::path& file );
     
 private:
     // width and height of our mesh
@@ -81,12 +79,8 @@ private:
     gl::TextureRef		mTextureRight;
     gl::Texture::Format	mTextureFormat;
     gl::VboMesh			mMesh;
-    	ci::gl::VboMesh				mIcosahedron;
+    ci::gl::VboMesh		mIcosahedron;
     uint32_t			mOffset;
-    
-//    FMOD::System*		mFMODSystem;
-//    FMOD::Sound*		mFMODSound;
-//    FMOD::Channel*		mFMODChannel;
     
     bool				mIsMouseDown;
     bool				mIsAudioPlaying;
@@ -99,8 +93,16 @@ private:
     audio::InputDeviceNodeRef		mInputDeviceNode;
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
-
+    Perlin					mPerlin;
+    
 	syphonServer mTextureSyphon;
+    
+    // Lighting
+	ci::gl::Light				*mLight;
+	bool						mLightEnabled;
+    float mFrameRate;
+    ci::params::InterfaceGl		mParams;
+    
     
 public:
     bool				signalChannelEnd;
@@ -112,8 +114,23 @@ void AudioVisualizerApp::prepareSettings(Settings* settings)
     settings->setWindowSize(1280, 720);
 }
 
+void AudioVisualizerApp::mouseWheel( MouseEvent event )
+{
+	// Zoom in/out with mouse wheel
+	Vec3f eye = mCamera.getEyePoint();
+	eye.z += event.getWheelIncrement();
+	mCamera.setEyePoint( eye );
+}
+
 void AudioVisualizerApp::setup()
 {
+    
+    mPerlin = Perlin( 4, 0 );
+    mFrameRate			= 0.0f;
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 320 ) );
+	mParams.addParam( "Frame rate",		&mFrameRate,									"", true									);
+    
+    
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -143,15 +160,16 @@ void AudioVisualizerApp::setup()
     
     getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
     //////
-
+    
     // initialize signals
     signalChannelEnd = false;
-
+    
     mIsAudioPlaying = false;
     
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
-    mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
+    //mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
+    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
     mCamera.setCenterOfInterestPoint( Vec3f(kWidth/4, -kHeight/8, kWidth/4) );
     
     // create channels from which we can construct our textures
@@ -165,8 +183,7 @@ void AudioVisualizerApp::setup()
     mTextureFormat.setWrapT( GL_REPEAT );
     mTextureFormat.setMinFilter( GL_LINEAR );
     mTextureFormat.setMagFilter( GL_LINEAR );
-    
-    // compile shader
+
     try {
         mShader = gl::GlslProg( loadResource( GLSL_VERT ), loadResource( GLSL_FRAG ) );
     }
@@ -205,7 +222,7 @@ void AudioVisualizerApp::setup()
             // add texture coordinates
             // note: we only want to draw the lower part of the frequency bands,
             //  so we scale the coordinates a bit
-            const float part = 0.5f;
+            const float part = .0f;//0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
             coords.push_back( Vec2f(part - part * s, t) );
@@ -226,16 +243,12 @@ void AudioVisualizerApp::setup()
     mMesh.bufferColorsRGB(colors);
     mMesh.bufferIndices(indices);
     mMesh.bufferTexCoords2d(0, coords);
-
     
-    ////////////////
-    // Declare vectors
-
     vector<Vec3f> normals;
     vector<Vec3f> positions;
     vector<Vec2f> texCoords;
     std::vector<Colorf>     clrs;
-    Vec2f mResolution(kWidth*.035f,kHeight*.035f);
+    Vec2f mResolution(kWidth,kHeight);
     // Mesh dimensions
     float halfHeight	= (float)mResolution.x * 0.5f;
     float halfWidth		= (float)mResolution.y * 0.5f;
@@ -243,7 +256,8 @@ void AudioVisualizerApp::setup()
     Vec3f scale( unit, 0.5f, unit );
     scale *= 100.;
     Vec3f offset( halfHeight, 0.f, halfWidth );
-    
+    offset = Vec3f::zero();
+    indices.clear();
     // Iterate through rows and columns using segment count
     for ( int32_t y = 0; y < mResolution.y; y++ ) {
         for ( int32_t x = 0; x < mResolution.x; x++ ) {
@@ -253,7 +267,8 @@ void AudioVisualizerApp::setup()
             texCoords.push_back( texCoord );
             
             // Use random value for Y position
-            float value = randFloat();
+            //float value = 2.0*randFloat();
+            float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
             
             // Set vertex position
             Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
@@ -272,11 +287,15 @@ void AudioVisualizerApp::setup()
             indices.push_back( ( x + xn ) + mResolution.x * ( y + yn ) );
             indices.push_back( x + mResolution.x * y );
             
-            float s = x / float(kWidth-1);
+            float s = x / float(mResolution.x-1);
+
             float t = y / float(kHeight-1);
             
             // add vertex colors
-            clrs.push_back( Color(CM_HSV, s, 0.5f, 0.75f) );
+            //clrs.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
+            clrs.push_back( Color(CM_RGB, s, s, s) );
+
+
         }
     }
     
@@ -291,44 +310,13 @@ void AudioVisualizerApp::setup()
     }
     
     // Use the MeshHelper to create a VboMesh from our vectors
-    mIcosahedron = gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) );
-        //mIcosahedron.bufferColorsRGB(clrs);
-    //////////////////////
+    mIcosahedron = gl::VboMesh(positions.size(), indices.size(), layout, GL_TRIANGLES);
+    //gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) , layout);
     
-    // play audio using the Cinder FMOD block
-//    FMOD::System_Create( &mFMODSystem );
-
-
-    //mFMODSystem->init( 32, FMOD_INIT_NORMAL | FMOD_INIT_ENABLE_PROFILE, NULL );
-//    if ( mFMODSystem->init( 32, FMOD_INIT_NORMAL, 0 ) != FMOD_OK ){
-//        console() << "Unable to initialize system. deviceid " << endl;
-//    }
-//    mFMODSystem->setDriver(0);
-//    
-//    mFMODSystem->getRecordNumDrivers(&numdrivers);
-//    
-//    for (int count=0; count < numdrivers; count++)
-//    {
-//        char name[256];
-//        
-//        mFMODSystem->getRecordDriverInfo(count, name, 256, 0);
-//
-//        
-//        printf("%d : %s\n", count + 1, name);
-//    }
-//    
-//    int mDeviceID = 0;
-//    if(mDeviceID != -1)
-//        mFMODSystem->setDriver(mDeviceID);
-//    if ( mFMODSystem->init( 32, FMOD_INIT_NORMAL, 0 ) != FMOD_OK ) {
-//        console() << "Unable to initialize system. deviceid " << mDeviceID << endl;
-//    }
-    
-    
-//    mFMODSound = nullptr;
-//    mFMODChannel = nullptr;
-    
-//    playAudio( findAudio( mAudioPath ) );
+    mIcosahedron.bufferPositions(positions);
+    mIcosahedron.bufferIndices(indices);
+    mIcosahedron.bufferTexCoords2d(0, texCoords);
+    mIcosahedron.bufferColorsRGB(clrs);
     
     mIsMouseDown = false;
     mMouseUpDelay = 5.0;
@@ -340,34 +328,68 @@ void AudioVisualizerApp::setup()
     mOffset = 0;
     
     mTextureSyphon.setName("Mic3d");
+    
+    // Set up OpenGL to work with default lighting
+//	glShadeModel( GL_SMOOTH );
+//	gl::enable( GL_POLYGON_SMOOTH );
+//	glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
+//	gl::enable( GL_NORMALIZE );
+//	gl::enableAlphaBlending();
+//	gl::enableDepthRead();
+//	gl::enableDepthWrite();
+//    
+//    
+//    // Set up the light
+	mLight = new gl::Light( gl::Light::DIRECTIONAL, 0 );
+//	mLight->setAmbient( ColorAf::white() );
+//	mLight->setDiffuse( ColorAf::white() );
+//	mLight->setDirection( Vec3f::one() );
+//	mLight->setPosition( Vec3f::one() * -1.0f );
+//	mLight->setSpecular( ColorAf::white() );
+//	mLight->enable();
+    mLightEnabled = false;
+    
+    //setFrameRate(30.0f);
+    
+    
+    //fog
+    
+//    GLfloat density = 0.01;
+//    
+//    GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
+//    
+//    glEnable (GL_DEPTH_TEST); //enable the depth testing
+//    
+//    glEnable (GL_FOG);
+//    
+//    glFogi (GL_FOG_MODE, GL_EXP2);
+//    
+//    glFogfv (GL_FOG_COLOR, fogColor);
+//    
+//    glFogf (GL_FOG_DENSITY, density);
+//    
+//    glHint (GL_FOG_HINT, GL_NICEST);
 }
 
 void AudioVisualizerApp::shutdown()
 {
     
-//    if(mFMODSystem)
-//    mFMODSystem->release();
 }
 
 void AudioVisualizerApp::update()
 {
-    
+    mFrameRate = getAverageFps();
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-    // update FMOD so it can notify us of events
-//    mFMODSystem->update();
     
-    // reset FMOD signals
     signalChannelEnd= false;
     
     // get spectrum for left and right channels and copy it into our channels
+    
     float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     float* pDataRight = mChannelRight.getData() + kBands * mOffset;
     
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
-    
-//    mFMODSystem->getSpectrum( pDataLeft, kBands, 0, FMOD_DSP_FFT_WINDOW_HANNING );
-//    mFMODSystem->getSpectrum( pDataRight, kBands, 1, FMOD_DSP_FFT_WINDOW_HANNING );
     
     // increment texture offset
     mOffset = (mOffset+1) % kHistory;
@@ -375,44 +397,57 @@ void AudioVisualizerApp::update()
     // clear the spectrum for this row to avoid old data from showing up
     pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     pDataRight = mChannelRight.getData() + kBands * mOffset;
+    
     memset( pDataLeft, 0, kBands * sizeof(float) );
     memset( pDataRight, 0, kBands * sizeof(float) );
     
     // animate camera if mouse has not been down for more than 30 seconds
-    if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
+    
+    if(false || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
     {
+        
         float t = float( getElapsedSeconds() );
         float x = 0.5f * math<float>::cos( t * 0.07f );
         float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
         float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
-
-        Vec3f eye = Vec3f(kWidth * x, kHeight * y, kHeight * z);
+        
+        Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
         
         x = 1.0f - x;
         y = -0.5f;
         z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
-        Vec3f interest = Vec3f(kWidth * x, kHeight * y, kHeight * z);
-        cout<<interest<<endl;
+        
+        Vec3f interest = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
+        
         mCamera.setEyePoint( eye.lerp(0.995f, mCamera.getEyePoint()) );
         mCamera.setCenterOfInterestPoint( interest.lerp(0.990f, mCamera.getCenterOfInterestPoint()) );
     }
+    
+    // Update light on every frame
+	mLight->update( mCamera );
 }
+
 
 void AudioVisualizerApp::draw()
 {
     gl::clear();
-
+    if ( mLightEnabled ) {
+        gl::enable( GL_LIGHTING );
+    }
     // use camera
     gl::pushMatrices();
     gl::setMatrices(mCamera);
     {
+
         // bind shader
         mShader.bind();
         mShader.uniform("uTexOffset", mOffset / float(kHistory));
         mShader.uniform("uLeftTex", 0);
         mShader.uniform("uRightTex", 1);
+        mShader.uniform("elTime", (float) getElapsedFrames());
         
         // create textures from our channels and bind them
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
@@ -423,20 +458,27 @@ void AudioVisualizerApp::draw()
         
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
+        //gl::enableDepthRead();
         gl::color( Color(1, 1, 1) );
         //gl::draw( mMesh );
         gl::draw(mIcosahedron);
         gl::disableAlphaBlending();
+        //gl::disableDepthRead();
         
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
         mShader.unbind();
     }
+
     gl::popMatrices();
-
+    if ( mLightEnabled ) {
+		gl::disable( GL_LIGHTING );
+	}
     mTextureSyphon.publishScreen();
-
+    
+    	mParams.draw();
+    
 }
 
 void AudioVisualizerApp::mouseDown( MouseEvent event )
@@ -446,6 +488,7 @@ void AudioVisualizerApp::mouseDown( MouseEvent event )
     
     mMayaCam.setCurrentCam(mCamera);
     mMayaCam.mouseDown( event.getPos() );
+    cout<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseDrag( MouseEvent event )
@@ -453,6 +496,7 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
     mCamera = mMayaCam.getCamera();
+    cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseUp( MouseEvent event )
@@ -468,28 +512,27 @@ void AudioVisualizerApp::keyDown( KeyEvent event )
     switch( event.getCode() )
     {
         case KeyEvent::KEY_ESCAPE:
-        quit();
-        break;
+            quit();
+            break;
         case KeyEvent::KEY_F4:
-        if( event.isAltDown() )
-        quit();
-        break;
+            if( event.isAltDown() )
+                quit();
+            break;
         case KeyEvent::KEY_LEFT:
-
-        break;
+            
+            break;
         case KeyEvent::KEY_RIGHT:
-        break;
+            break;
         case KeyEvent::KEY_f:
-        setFullScreen( !isFullScreen() );
-        break;
+            setFullScreen( !isFullScreen() );
+            break;
         case KeyEvent::KEY_o:
-        break;
+            break;
         case KeyEvent::KEY_p:
-        playAudio( mAudioPath );
-        break;
+            break;
         case KeyEvent::KEY_s:
-
-        break;
+            
+            break;
     }
 }
 
@@ -497,54 +540,6 @@ void AudioVisualizerApp::resize()
 {
     // handle resize
     mCamera.setAspectRatio( getWindowAspectRatio() );
-}
-
-void AudioVisualizerApp::playAudio(const fs::path& file)
-{
-//    FMOD_RESULT err;
-//    
-//    // ignore if this is not a file
-//    if(file.empty() || !fs::is_regular_file( file ))
-//    return;
-//    
-//    // if audio is already playing, stop it first
-//    stopAudio();
-//    
-//    // stream the audio
-//    err = mFMODSystem->createStream( file.string().c_str(), FMOD_SOFTWARE, NULL, &mFMODSound );
-//    err = mFMODSystem->playSound( FMOD_CHANNEL_FREE, mFMODSound, false, &mFMODChannel );
-//    
-//    // we want to be notified of channel events
-//    err = mFMODChannel->setCallback( channelCallback );
-//    
-//    // keep track of the audio file
-//    mAudioPath = file;
-//    mIsAudioPlaying = true;
-//    
-//    // 
-//    console() << "Now playing:" << mAudioPath.filename().string() << std::endl;
-}
-
-
-// Channel callback function used by FMOD to notify us of channel events
-FMOD_RESULT F_CALLBACK channelCallback(FMOD_CHANNEL *channel, FMOD_CHANNEL_CALLBACKTYPE type, void *commanddata1, void *commanddata2)
-{
-    // we first need access to the application instance
-    AudioVisualizerApp* pApp = static_cast<AudioVisualizerApp*>( App::get() );
-    
-    // now handle the callback
-    switch(type)
-    {
-        case FMOD_CHANNEL_CALLBACKTYPE_END:
-        // we can't call a function directly, because we are inside the FMOD thread,
-        // so let's notify the application instead by setting a boolean (which is thread safe).
-        pApp->signalChannelEnd = true;
-        break;
-        default:
-        break;
-    }
-    
-    return FMOD_OK;
 }
 
 CINDER_APP_NATIVE( AudioVisualizerApp, RendererGl )

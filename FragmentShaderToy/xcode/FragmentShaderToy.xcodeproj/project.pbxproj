@@ -19,6 +19,7 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
 		9B28209DB45E469F9031EB05 /* FragmentShaderToyApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14D1C9B8429F455D8C3C7F75 /* FragmentShaderToyApp.cpp */; };
+		E6D7C7391A1CFA7600BECEB2 /* moon-surface.fs in Resources */ = {isa = PBXBuildFile; fileRef = E6D7C7381A1CFA7600BECEB2 /* moon-surface.fs */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -42,6 +43,7 @@
 		AF07B75F1A0A3040005076C5 /* default.vs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = default.vs; sourceTree = "<group>"; };
 		AF07B7601A0A3040005076C5 /* ripple.fs */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.glsl; path = ripple.fs; sourceTree = "<group>"; };
 		B645D0BA838E4E28A56BAE5D /* Resources.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../include/Resources.h; sourceTree = "<group>"; };
+		E6D7C7381A1CFA7600BECEB2 /* moon-surface.fs */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = "moon-surface.fs"; sourceTree = "<group>"; };
 		F5CDB6A0359A48A2B35CAA79 /* FragmentShaderToy_Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = "\"\""; path = FragmentShaderToy_Prefix.pch; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -159,6 +161,7 @@
 		AF07B75D1A0A3040005076C5 /* assets */ = {
 			isa = PBXGroup;
 			children = (
+				E6D7C7381A1CFA7600BECEB2 /* moon-surface.fs */,
 				AF07B75E1A0A3040005076C5 /* default.fs */,
 				AF07B75F1A0A3040005076C5 /* default.vs */,
 				AF07B7601A0A3040005076C5 /* ripple.fs */,
@@ -220,6 +223,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				06E2B8EA4B9E449B86D3D87A /* CinderApp.icns in Resources */,
+				E6D7C7391A1CFA7600BECEB2 /* moon-surface.fs in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
