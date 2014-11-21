@@ -18,7 +18,7 @@
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
-		9B28209DB45E469F9031EB05 /* FragmentShaderToyApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14D1C9B8429F455D8C3C7F75 /* FragmentShaderToyApp.cpp */; };
+		9B28209DB45E469F9031EB05 /* InfiniteTerrainApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 14D1C9B8429F455D8C3C7F75 /* InfiniteTerrainApp.cpp */; };
 		E630D2D11A1DAD50008AB67B /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = E630D2CF1A1DAD50008AB67B /* spectrum.vert */; };
 		E630D2D21A1DAD50008AB67B /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = E630D2D01A1DAD50008AB67B /* spectrum2.frag */; };
 		E6D7C7391A1CFA7600BECEB2 /* moon-surface.fs in Resources */ = {isa = PBXBuildFile; fileRef = E6D7C7381A1CFA7600BECEB2 /* moon-surface.fs */; };
@@ -33,7 +33,7 @@
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
-		14D1C9B8429F455D8C3C7F75 /* FragmentShaderToyApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.cpp; name = FragmentShaderToyApp.cpp; path = ../src/FragmentShaderToyApp.cpp; sourceTree = "<group>"; };
+		14D1C9B8429F455D8C3C7F75 /* InfiniteTerrainApp.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; name = InfiniteTerrainApp.cpp; path = ../src/InfiniteTerrainApp.cpp; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
@@ -82,7 +82,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				14D1C9B8429F455D8C3C7F75 /* FragmentShaderToyApp.cpp */,
+				14D1C9B8429F455D8C3C7F75 /* InfiniteTerrainApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -242,7 +242,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				9B28209DB45E469F9031EB05 /* FragmentShaderToyApp.cpp in Sources */,
+				9B28209DB45E469F9031EB05 /* InfiniteTerrainApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

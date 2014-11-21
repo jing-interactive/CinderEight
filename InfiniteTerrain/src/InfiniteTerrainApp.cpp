@@ -59,7 +59,7 @@ void InfiniteTerrainApp::prepareSettings( Settings *settings )
 void InfiniteTerrainApp::setup()
 {
     mFrameRate			= 0.0f;
-    mParams = params::InterfaceGl( "ShaderToy", vec2( 200, 100 ) );
+    mParams = params::InterfaceGl( "InfiniteTerrain", vec2( 200, 100 ) );
 	mParams.addParam( "Frame rate",		&mFrameRate,									"", true									);
 
     
@@ -69,7 +69,7 @@ void InfiniteTerrainApp::setup()
     loadShader( getAssetPath( "moon-surface.fs" ) );
     // create a rectangle to be drawn with our shader program
     // default is from -0.5 to 0.5, so we scale by 2 to get -1.0 to 1.0
-    mMesh = gl::VboMesh::create( geom::Rect(Rectf (-1.f, -1.f, 1.0f, 1.0f))/*.scale( vec2( 2, 2 ) )*/);
+    mMesh = gl::VboMesh::create( geom::Rect(Rectf (-1.f, -1.f, 1.0f, 1.0f)));
     geom::Plane();
     
     // load a new shader on file drop
