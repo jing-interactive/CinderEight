@@ -248,7 +248,8 @@ void AudioVisualizerApp::setup()
     vector<Vec3f> positions;
     vector<Vec2f> texCoords;
     std::vector<Colorf>     clrs;
-    Vec2f mResolution(kWidth,kHeight);
+
+    Vec2f mResolution(kWidth*.35f,kHeight*.35f);
     // Mesh dimensions
     float halfHeight	= (float)mResolution.x * 0.5f;
     float halfWidth		= (float)mResolution.y * 0.5f;
@@ -295,7 +296,6 @@ void AudioVisualizerApp::setup()
             //clrs.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
             clrs.push_back( Color(CM_RGB, s, s, s) );
 
-
         }
     }
     
@@ -312,12 +312,13 @@ void AudioVisualizerApp::setup()
     // Use the MeshHelper to create a VboMesh from our vectors
     mIcosahedron = gl::VboMesh(positions.size(), indices.size(), layout, GL_TRIANGLES);
     //gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) , layout);
+
     
     mIcosahedron.bufferPositions(positions);
     mIcosahedron.bufferIndices(indices);
     mIcosahedron.bufferTexCoords2d(0, texCoords);
     mIcosahedron.bufferColorsRGB(clrs);
-    
+
     mIsMouseDown = false;
     mMouseUpDelay = 5.0;
     mMouseUpTime = getElapsedSeconds() - mMouseUpDelay;
@@ -373,12 +374,13 @@ void AudioVisualizerApp::setup()
 
 void AudioVisualizerApp::shutdown()
 {
-    
+
 }
 
 void AudioVisualizerApp::update()
 {
     mFrameRate = getAverageFps();
+
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
     
     signalChannelEnd= false;
@@ -387,32 +389,34 @@ void AudioVisualizerApp::update()
     
     float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     float* pDataRight = mChannelRight.getData() + kBands * mOffset;
-    
+
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
-    
+
     // increment texture offset
     mOffset = (mOffset+1) % kHistory;
-    
+
     // clear the spectrum for this row to avoid old data from showing up
     pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     pDataRight = mChannelRight.getData() + kBands * mOffset;
     
     memset( pDataLeft, 0, kBands * sizeof(float) );
     memset( pDataRight, 0, kBands * sizeof(float) );
-    
+
     // animate camera if mouse has not been down for more than 30 seconds
     
-    if(false || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
+
+    if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
     {
         
         float t = float( getElapsedSeconds() );
         float x = 0.5f * math<float>::cos( t * 0.07f );
         float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
         float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
-        
+       
         Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
-        
+
+
         x = 1.0f - x;
         y = -0.5f;
         z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
