@@ -318,7 +318,7 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = /Users/vgusev/repos/cinder_0.8.6_mac;
+				CINDER_PATH = /Users/eight/repos/cinder_0.8.6_mac;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
@@ -336,9 +336,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/ios,
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/macosx,
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/msw,
+					/Users/eight/repos/Cinder/blocks/FMOD/lib/macosx,
 				);
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder_d.a\"",
@@ -353,7 +351,7 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = /Users/vgusev/repos/cinder_0.8.6_mac;
+				CINDER_PATH = /Users/eight/repos/cinder_0.8.6_mac;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
@@ -372,9 +370,7 @@
 				INSTALL_PATH = "$(HOME)/Applications";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/ios,
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/macosx,
-					/Users/vgusev/repos/Cinder/blocks/FMOD/lib/msw,
+					/Users/eight/repos/Cinder/blocks/FMOD/lib/macosx,
 				);
 				OTHER_LDFLAGS = (
 					"\"$(CINDER_PATH)/lib/libcinder.a\"",

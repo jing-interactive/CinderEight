@@ -93,7 +93,9 @@ private:
     audio::InputDeviceNodeRef		mInputDeviceNode;
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
-    Perlin					mPerlin;
+    Perlin				mPerlin;
+    vector<Vec3f>       positions;
+    Vec2f               mResolution;
     
 	syphonServer mTextureSyphon;
     
@@ -102,10 +104,7 @@ private:
 	bool						mLightEnabled;
     float mFrameRate;
     ci::params::InterfaceGl		mParams;
-    
-    
-public:
-    bool				signalChannelEnd;
+
 };
 
 void AudioVisualizerApp::prepareSettings(Settings* settings)
@@ -128,9 +127,8 @@ void AudioVisualizerApp::setup()
     mPerlin = Perlin( 4, 0 );
     mFrameRate			= 0.0f;
     mParams = params::InterfaceGl( "Params", Vec2i( 200, 320 ) );
-	mParams.addParam( "Frame rate",		&mFrameRate,									"", true									);
-    
-    
+	mParams.addParam( "Frame rate",	&mFrameRate,"", true);
+
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -162,14 +160,13 @@ void AudioVisualizerApp::setup()
     //////
     
     // initialize signals
-    signalChannelEnd = false;
     
     mIsAudioPlaying = false;
     
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
-    //mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
+    //mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
     mCamera.setCenterOfInterestPoint( Vec3f(kWidth/4, -kHeight/8, kWidth/4) );
     
     // create channels from which we can construct our textures
@@ -245,11 +242,11 @@ void AudioVisualizerApp::setup()
     mMesh.bufferTexCoords2d(0, coords);
     
     vector<Vec3f> normals;
-    vector<Vec3f> positions;
+
     vector<Vec2f> texCoords;
     std::vector<Colorf>     clrs;
 
-    Vec2f mResolution(kWidth*.35f,kHeight*.35f);
+    mResolution = Vec2f(kWidth*.35f,kHeight*.35f);
     // Mesh dimensions
     float halfHeight	= (float)mResolution.x * 0.5f;
     float halfWidth		= (float)mResolution.y * 0.5f;
@@ -293,8 +290,8 @@ void AudioVisualizerApp::setup()
             float t = y / float(kHeight-1);
             
             // add vertex colors
-            //clrs.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
-            clrs.push_back( Color(CM_RGB, s, s, s) );
+            clrs.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
+            //clrs.push_back( Color(CM_RGB, s, s, s) );
 
         }
     }
@@ -341,7 +338,7 @@ void AudioVisualizerApp::setup()
 //    
 //    
 //    // Set up the light
-	mLight = new gl::Light( gl::Light::DIRECTIONAL, 0 );
+//	mLight = new gl::Light( gl::Light::DIRECTIONAL, 0 );
 //	mLight->setAmbient( ColorAf::white() );
 //	mLight->setDiffuse( ColorAf::white() );
 //	mLight->setDirection( Vec3f::one() );
@@ -383,8 +380,6 @@ void AudioVisualizerApp::update()
 
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
     
-    signalChannelEnd= false;
-    
     // get spectrum for left and right channels and copy it into our channels
     
     float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
@@ -404,7 +399,6 @@ void AudioVisualizerApp::update()
     memset( pDataRight, 0, kBands * sizeof(float) );
 
     // animate camera if mouse has not been down for more than 30 seconds
-    
 
     if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
     {
@@ -415,7 +409,6 @@ void AudioVisualizerApp::update()
         float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
        
         Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
-
 
         x = 1.0f - x;
         y = -0.5f;
@@ -431,7 +424,30 @@ void AudioVisualizerApp::update()
     }
     
     // Update light on every frame
-	mLight->update( mCamera );
+	//mLight->update( mCamera );
+    
+    
+    return;
+    positions.clear();
+    float halfHeight	= (float)mResolution.x * 0.5f;
+    float halfWidth		= (float)mResolution.y * 0.5f;
+    float unit			= 3.0f / (float)mResolution.x;
+    Vec3f scale( unit, 0.5f, unit );
+    Vec3f offset( halfHeight, 0.f, halfWidth );
+    for ( int32_t y = 0; y < mResolution.y; y++ ) {
+        for ( int32_t x = 0; x < mResolution.x; x++ ) {
+            
+            // Use random value for Y position
+            //float value = 2.0*randFloat();
+            float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
+            
+            // Set vertex position
+            Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
+            positions.push_back( position * scale + offset );
+            
+        }
+    }
+        mIcosahedron.bufferPositions(positions);
 }
 
 
@@ -464,8 +480,8 @@ void AudioVisualizerApp::draw()
         gl::enableAdditiveBlending();
         //gl::enableDepthRead();
         gl::color( Color(1, 1, 1) );
-        //gl::draw( mMesh );
-        gl::draw(mIcosahedron);
+        gl::draw( mMesh );
+        //gl::draw(mIcosahedron);
         gl::disableAlphaBlending();
         //gl::disableDepthRead();
         
@@ -492,7 +508,7 @@ void AudioVisualizerApp::mouseDown( MouseEvent event )
     
     mMayaCam.setCurrentCam(mCamera);
     mMayaCam.mouseDown( event.getPos() );
-    cout<<mMayaCam.getCamera().getEyePoint()<<endl;
+    //cout<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseDrag( MouseEvent event )
@@ -500,7 +516,7 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
     mCamera = mMayaCam.getCamera();
-    cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
+    //cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseUp( MouseEvent event )

@@ -443,7 +443,7 @@ fs::path AudioVisualizerApp::openAudio(const fs::path& directory)
 //    
 //    setFullScreen( wasFullScreen );
     
-    return fs::path("/Users/eight/Desktop/nadne/solnce.mp3");
+    return fs::path("/Users/eight/Desktop/solnce.mp3");
     //return file;
 }
 
