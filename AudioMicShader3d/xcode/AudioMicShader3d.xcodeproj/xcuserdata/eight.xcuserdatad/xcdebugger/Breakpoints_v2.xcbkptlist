@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/AudioMicShader3dApp.cpp"
-            timestampString = "438500264.954644"
+            timestampString = "438504311.67084"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "314"
-            endingLineNumber = "314"
-            landmarkName = "AudioVisualizerApp::setup()"
-            landmarkType = "5">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "../src/AudioMicShader3dApp.cpp"
-            timestampString = "438500389.361103"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "251"
-            endingLineNumber = "251"
-            landmarkName = "AudioVisualizerApp::setup()"
+            startingLineNumber = "413"
+            endingLineNumber = "413"
+            landmarkName = "AudioVisualizerApp::update()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
