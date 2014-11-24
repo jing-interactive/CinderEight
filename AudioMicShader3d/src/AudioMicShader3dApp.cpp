@@ -94,6 +94,7 @@ private:
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
     Perlin				mPerlin;
+    uint32              mPerlinMove;
     vector<Vec3f>       positions;
     Vec2f               mResolution;
     
@@ -125,8 +126,9 @@ void AudioVisualizerApp::setup()
 {
     
     mPerlin = Perlin( 4, 0 );
+    mPerlinMove = 0;
     mFrameRate			= 0.0f;
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 320 ) );
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
 	mParams.addParam( "Frame rate",	&mFrameRate,"", true);
 
     auto ctx = audio::Context::master();
@@ -256,6 +258,7 @@ void AudioVisualizerApp::setup()
     Vec3f offset( halfHeight, 0.f, halfWidth );
     offset = Vec3f::zero();
     indices.clear();
+    layout.setDynamicPositions();
     // Iterate through rows and columns using segment count
     for ( int32_t y = 0; y < mResolution.y; y++ ) {
         for ( int32_t x = 0; x < mResolution.x; x++ ) {
@@ -270,6 +273,7 @@ void AudioVisualizerApp::setup()
             
             // Set vertex position
             Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
+                    cout<<(position * scale + offset)<<endl;
             positions.push_back( position * scale + offset );
             
             // Add a default normal for now (we'll calculate this down below)
@@ -308,13 +312,27 @@ void AudioVisualizerApp::setup()
     
     // Use the MeshHelper to create a VboMesh from our vectors
     mIcosahedron = gl::VboMesh(positions.size(), indices.size(), layout, GL_TRIANGLES);
-    //gl::VboMesh( MeshHelper::create( indices, positions, normals, texCoords ) , layout);
-
-    
-    mIcosahedron.bufferPositions(positions);
+    //mIcosahedron.bufferPositions(positions);
     mIcosahedron.bufferIndices(indices);
     mIcosahedron.bufferTexCoords2d(0, texCoords);
     mIcosahedron.bufferColorsRGB(clrs);
+    
+    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
+    int x = 0;
+    int y = 0;
+    cout<<"-------------------------"<<endl;
+    for( int idx = 0; idx < mIcosahedron.getNumVertices(); ++idx ) {
+        float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
+        Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
+        cout<<(position * scale + offset)<<endl;
+        iter.setPosition( position * scale + offset  );
+        ++iter;
+        ++x;
+        if ( x == (int)mResolution.x){
+            x = 0;
+            y++;
+        }
+    }
 
     mIsMouseDown = false;
     mMouseUpDelay = 5.0;
@@ -426,28 +444,43 @@ void AudioVisualizerApp::update()
     // Update light on every frame
 	//mLight->update( mCamera );
     
-    
-    return;
     positions.clear();
     float halfHeight	= (float)mResolution.x * 0.5f;
     float halfWidth		= (float)mResolution.y * 0.5f;
     float unit			= 3.0f / (float)mResolution.x;
     Vec3f scale( unit, 0.5f, unit );
+        scale *= 100.;
     Vec3f offset( halfHeight, 0.f, halfWidth );
-    for ( int32_t y = 0; y < mResolution.y; y++ ) {
-        for ( int32_t x = 0; x < mResolution.x; x++ ) {
-            
-            // Use random value for Y position
-            //float value = 2.0*randFloat();
-            float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
-            
-            // Set vertex position
-            Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
-            positions.push_back( position * scale + offset );
-            
+        offset = Vec3f::zero();
+    mPerlinMove++;
+//    for ( int32_t y = 0; y < mResolution.y; y++ ) {
+//        for ( int32_t x = 0; x < mResolution.x; x++ ) {
+//
+//            float value = 2.0f*mPerlin.fBm(Vec3f(float(x+mPerlinMove), float(y), 0.f)* 0.005f);
+//            
+//            Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
+//            positions.push_back( position * scale + offset );
+//            
+//        }
+//    }
+    
+    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
+    int x = 0;
+    int y = 0;
+    for( int idx = 0; idx < mIcosahedron.getNumVertices(); ++idx ) {
+        float value = 2.0f*mPerlin.fBm(Vec3f(float(x+mPerlinMove), float(y), 0.f)* 0.005f);
+        Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
+        
+        iter.setPosition( position * scale + offset  );
+        ++iter;
+        ++x;
+        if ( x == (int)mResolution.x){
+            x = 0;
+            y++;
         }
+        
     }
-        mIcosahedron.bufferPositions(positions);
+    //    mIcosahedron.bufferPositions(positions);
 }
 
 
@@ -463,32 +496,32 @@ void AudioVisualizerApp::draw()
     {
 
         // bind shader
-        mShader.bind();
-        mShader.uniform("uTexOffset", mOffset / float(kHistory));
-        mShader.uniform("uLeftTex", 0);
-        mShader.uniform("uRightTex", 1);
-        mShader.uniform("elTime", (float) getElapsedFrames());
+//        mShader.bind();
+//        mShader.uniform("uTexOffset", mOffset / float(kHistory));
+//        mShader.uniform("uLeftTex", 0);
+//        mShader.uniform("uRightTex", 1);
+//        mShader.uniform("elTime", (float) getElapsedFrames());
         
         // create textures from our channels and bind them
-        mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
-        mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
-        
-        mTextureLeft->enableAndBind();
-        mTextureRight->bind(1);
+//        mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
+//        mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
+//        
+//        mTextureLeft->enableAndBind();
+//        mTextureRight->bind(1);
         
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
         //gl::enableDepthRead();
         gl::color( Color(1, 1, 1) );
-        gl::draw( mMesh );
-        //gl::draw(mIcosahedron);
+        //gl::draw( mMesh );
+        gl::draw(mIcosahedron);
         gl::disableAlphaBlending();
         //gl::disableDepthRead();
         
         // unbind textures and shader
-        mTextureRight->unbind();
-        mTextureLeft->unbind();
-        mShader.unbind();
+//        mTextureRight->unbind();
+//        mTextureLeft->unbind();
+//        mShader.unbind();
     }
 
     gl::popMatrices();
