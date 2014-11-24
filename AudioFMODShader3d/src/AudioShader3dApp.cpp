@@ -161,7 +161,7 @@ void AudioVisualizerApp::setup()
     
     // compile shader
     try {
-        mShader = gl::GlslProg( loadAsset("shaders/spectrum.vert"), loadAsset("shaders/spectrum2.frag") );
+        mShader = gl::GlslProg( loadAsset("shaders/spectrum.vert"), loadAsset("shaders/spectrum.frag") );
     }
     catch( const std::exception& e ) {
         console() << e.what() << std::endl;

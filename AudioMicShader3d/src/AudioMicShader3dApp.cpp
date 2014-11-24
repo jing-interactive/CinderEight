@@ -33,7 +33,6 @@
 #include "cinder/audio/MonitorNode.h"
 #include "cinder/audio/Device.h"
 #include "cinderSyphon.h"
-#include "MeshHelper.h"
 #include "cinder/gl/Light.h"
 #include "Resources.h"
 #include "cinder/Perlin.h"
@@ -63,8 +62,8 @@ public:
     
 private:
     // width and height of our mesh
-    static const int kWidth = 512;
-    static const int kHeight = 512;
+    static const int kWidth = 256;
+    static const int kHeight = 256;
     
     // number of frequency bands of our spectrum
     static const int kBands = 1024;
@@ -79,7 +78,7 @@ private:
     gl::TextureRef		mTextureRight;
     gl::Texture::Format	mTextureFormat;
     gl::VboMesh			mMesh;
-    ci::gl::VboMesh		mIcosahedron;
+
     uint32_t			mOffset;
     
     bool				mIsMouseDown;
@@ -88,15 +87,13 @@ private:
     double				mMouseUpDelay;
     
     vector<string>		mAudioExtensions;
-    fs::path			mAudioPath;
     
     audio::InputDeviceNodeRef		mInputDeviceNode;
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
     Perlin				mPerlin;
     uint32              mPerlinMove;
-    vector<Vec3f>       positions;
-    Vec2f               mResolution;
+    std::vector<Vec3f>      mVertices;
     
 	syphonServer mTextureSyphon;
     
@@ -193,7 +190,7 @@ void AudioVisualizerApp::setup()
     }
     
     // create static mesh (all animation is done in the vertex shader)
-    std::vector<Vec3f>      vertices;
+
     std::vector<Colorf>     colors;
     std::vector<Vec2f>      coords;
     std::vector<uint32_t>	indices;
@@ -202,10 +199,11 @@ void AudioVisualizerApp::setup()
     {
         for(size_t w=0;w<kWidth;++w)
         {
+
             // add polygon indices
             if(h < kHeight-1 && w < kWidth-1)
             {
-                size_t offset = vertices.size();
+                size_t offset = mVertices.size();
                 
                 indices.push_back(offset);
                 indices.push_back(offset+kWidth);
@@ -216,18 +214,19 @@ void AudioVisualizerApp::setup()
             }
             
             // add vertex
-            vertices.push_back( Vec3f(float(w), 0, float(h)) );
+            float value = 20.0f*mPerlin.fBm(Vec3f(float(h), float(w), 0.f)* 0.005f);
+            mVertices.push_back( Vec3f(float(w), value, float(h)) );
             
             // add texture coordinates
             // note: we only want to draw the lower part of the frequency bands,
             //  so we scale the coordinates a bit
-            const float part = .0f;//0.5f;
+            const float part = 0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
             coords.push_back( Vec2f(part - part * s, t) );
             
             // add vertex colors
-            colors.push_back( Color(CM_HSV, s, 0.5f, 0.75f) );
+            colors.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
         }
     }
     
@@ -237,100 +236,21 @@ void AudioVisualizerApp::setup()
     layout.setStaticIndices();
     layout.setStaticTexCoords2d();
     
-    mMesh = gl::VboMesh(vertices.size(), indices.size(), layout, GL_TRIANGLES);
-    mMesh.bufferPositions(vertices);
+    mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
+    mMesh.bufferPositions(mVertices);
     mMesh.bufferColorsRGB(colors);
     mMesh.bufferIndices(indices);
     mMesh.bufferTexCoords2d(0, coords);
     
     vector<Vec3f> normals;
-
-    vector<Vec2f> texCoords;
-    std::vector<Colorf>     clrs;
-
-    mResolution = Vec2f(kWidth*.35f,kHeight*.35f);
-    // Mesh dimensions
-    float halfHeight	= (float)mResolution.x * 0.5f;
-    float halfWidth		= (float)mResolution.y * 0.5f;
-    float unit			= 3.0f / (float)mResolution.x;
-    Vec3f scale( unit, 0.5f, unit );
-    scale *= 100.;
-    Vec3f offset( halfHeight, 0.f, halfWidth );
-    offset = Vec3f::zero();
-    indices.clear();
-    //layout.setDynamicPositions();
-    // Iterate through rows and columns using segment count
-    for ( int32_t y = 0; y < mResolution.y; y++ ) {
-        for ( int32_t x = 0; x < mResolution.x; x++ ) {
-            
-            // Set texture coordinate in [ 0 - 1, 0 - 1 ] range
-            Vec2f texCoord( (float)x / (float)mResolution.x, (float)y / (float)mResolution.y );
-            texCoords.push_back( texCoord );
-            
-            // Use random value for Y position
-            //float value = 2.0*randFloat();
-            float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
-            
-            // Set vertex position
-            Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
-                    cout<<(position * scale + offset)<<endl;
-            positions.push_back( position * scale + offset );
-            
-            // Add a default normal for now (we'll calculate this down below)
-            normals.push_back( Vec3f::zero() );
-            
-            // Add indices to form quad from two triangles
-            int32_t xn = x + 1 >= mResolution.x ? 0 : 1;
-            int32_t yn = y + 1 >= mResolution.y ? 0 : 1;
-            indices.push_back( x + mResolution.x * y );
-            indices.push_back( ( x + xn ) + mResolution.x * y);
-            indices.push_back( ( x + xn ) + mResolution.x * ( y + yn ) );
-            indices.push_back( x + mResolution.x * ( y + yn ) );
-            indices.push_back( ( x + xn ) + mResolution.x * ( y + yn ) );
-            indices.push_back( x + mResolution.x * y );
-            
-            float s = x / float(mResolution.x-1);
-
-            float t = y / float(kHeight-1);
-            
-            // add vertex colors
-            //clrs.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
-            clrs.push_back( Color(CM_RGB, s, s, s) );
-
-        }
-    }
     
     // Iterate through again to set normals
-    for ( int32_t y = 0; y < mResolution.y - 1; y++ ) {
-        for ( int32_t x = 0; x < mResolution.x - 1; x++ ) {
-            Vec3f vert0 = positions[ indices[ ( x + mResolution.x * y ) * 6 ] ];
-            Vec3f vert1 = positions[ indices[ ( ( x + 1 ) + mResolution.x * y ) * 6 ] ];
-            Vec3f vert2 = positions[ indices[ ( ( x + 1 ) + mResolution.x * ( y + 1 ) ) * 6 ] ];
-            normals[ x + mResolution.x * y ] = Vec3f( ( vert1 - vert0 ).cross( vert1 - vert2 ).normalized() );
-        }
-    }
-    
-    // Use the MeshHelper to create a VboMesh from our vectors
-    mIcosahedron = gl::VboMesh(positions.size(), indices.size(), layout, GL_TRIANGLES);
-    mIcosahedron.bufferPositions(positions);
-    mIcosahedron.bufferIndices(indices);
-    mIcosahedron.bufferTexCoords2d(0, texCoords);
-    mIcosahedron.bufferColorsRGB(clrs);
-    
-//    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
-//    int x = 0;
-//    int y = 0;
-//    cout<<"-------------------------"<<endl;
-//    for( int idx = 0; idx < mIcosahedron.getNumVertices(); ++idx ) {
-//        float value = 2.0f*mPerlin.fBm(Vec3f(float(x), float(y), 0.f)* 0.005f);
-//        Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
-//        cout<<(position * scale + offset)<<endl;
-//        iter.setPosition( position * scale + offset  );
-//        ++iter;
-//        ++x;
-//        if ( x == (int)mResolution.x){
-//            x = 0;
-//            y++;
+//    for ( int32_t y = 0; y < mResolution.y - 1; y++ ) {
+//        for ( int32_t x = 0; x < mResolution.x - 1; x++ ) {
+//            Vec3f vert0 = positions[ indices[ ( x + mResolution.x * y ) * 6 ] ];
+//            Vec3f vert1 = positions[ indices[ ( ( x + 1 ) + mResolution.x * y ) * 6 ] ];
+//            Vec3f vert2 = positions[ indices[ ( ( x + 1 ) + mResolution.x * ( y + 1 ) ) * 6 ] ];
+//            normals[ x + mResolution.x * y ] = Vec3f( ( vert1 - vert0 ).cross( vert1 - vert2 ).normalized() );
 //        }
 //    }
 
@@ -443,28 +363,22 @@ void AudioVisualizerApp::update()
     
     // Update light on every frame
 	//mLight->update( mCamera );
-    
-    positions.clear();
-    float halfHeight	= (float)mResolution.x * 0.5f;
-    float halfWidth		= (float)mResolution.y * 0.5f;
-    float unit			= 3.0f / (float)mResolution.x;
-    Vec3f scale( unit, 0.5f, unit );
-        scale *= 100.;
-    Vec3f offset( halfHeight, 0.f, halfWidth );
-        offset = Vec3f::zero();
     mPerlinMove++;
-    for ( int32_t y = 0; y < mResolution.y; y++ ) {
-        for ( int32_t x = 0; x < mResolution.x; x++ ) {
+    mVertices.clear();
+    double clear = getElapsedSeconds();
 
-            float value = 2.0f*mPerlin.fBm(Vec3f(float(x+mPerlinMove), float(y), 0.f)* 0.005f);
-            
-            Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
-            positions.push_back( position * scale + offset );
-            
+    for(size_t h=0;h<kHeight;++h)
+    {
+        for(size_t w=0;w<kWidth;++w)
+        {
+            float value = 40.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+            mVertices.push_back( Vec3f(float(w), value, float(h)) );
         }
     }
-    mIcosahedron.bufferPositions(positions);
-    
+    double updt = getElapsedSeconds();
+
+    mMesh.bufferPositions(mVertices);
+
 //    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
 //    int x = 0;
 //    int y = 0;
@@ -491,6 +405,8 @@ void AudioVisualizerApp::draw()
     if ( mLightEnabled ) {
         gl::enable( GL_LIGHTING );
     }
+//    gl::enableDepthRead();
+//    gl::enableDepthWrite();
     // use camera
     gl::pushMatrices();
     gl::setMatrices(mCamera);
@@ -498,10 +414,11 @@ void AudioVisualizerApp::draw()
 
         // bind shader
         mShader.bind();
-        mShader.uniform("uTexOffset", mOffset / float(kHistory));
+        float offSt = mOffset / float(kHistory);
+        mShader.uniform("uTexOffset", offSt);
         mShader.uniform("uLeftTex", 0);
         mShader.uniform("uRightTex", 1);
-        mShader.uniform("elTime", (float) getElapsedFrames());
+        //mShader.uniform("elTime", (float) getElapsedFrames());
         
         // create textures from our channels and bind them
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
@@ -512,13 +429,12 @@ void AudioVisualizerApp::draw()
         
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
-        //gl::enableDepthRead();
+
         gl::color( Color(1, 1, 1) );
-        //gl::draw( mMesh );
-        gl::draw(mIcosahedron);
+        gl::draw( mMesh );
+
         gl::disableAlphaBlending();
-        //gl::disableDepthRead();
-        
+
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
@@ -526,12 +442,14 @@ void AudioVisualizerApp::draw()
     }
 
     gl::popMatrices();
+//    gl::disableDepthRead();
+//    gl::disableDepthWrite();
     if ( mLightEnabled ) {
 		gl::disable( GL_LIGHTING );
 	}
     mTextureSyphon.publishScreen();
     
-    	mParams.draw();
+    mParams.draw();
     
 }
 

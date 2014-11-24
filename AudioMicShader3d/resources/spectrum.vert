@@ -3,7 +3,7 @@
 uniform float		uTexOffset;
 uniform sampler2D	uLeftTex;
 uniform sampler2D	uRightTex;
-const float logBase10 = 0.30102999566398;
+const float tenLogBase10 = 3.0102999566398;
 void main(void)
 {	
 	// retrieve texture coordinate and offset it to scroll the texture
@@ -13,7 +13,7 @@ void main(void)
 	float fft = max(0.0001, mix( texture2D( uLeftTex, coord ).r, texture2D( uRightTex, coord ).r, 0.5));
 
 	// convert to decibels
-	float decibels = 10.0 * log( fft ) * logBase10;
+	float decibels = log( fft ) * tenLogBase10;
 
 	// offset the vertex based on the decibels
 	vec4 vertex = gl_Vertex;
