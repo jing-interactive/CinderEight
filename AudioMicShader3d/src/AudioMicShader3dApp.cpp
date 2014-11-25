@@ -92,7 +92,7 @@ private:
     vector<float>					mMagSpectrum;
     Perlin				mPerlin;
     uint32              mPerlinMove;
-    std::deque<Vec3f>      mVertices;
+    std::vector<Vec3f>      mVertices;
     
 	syphonServer mTextureSyphon;
     
@@ -230,17 +230,25 @@ void AudioVisualizerApp::setup()
     
     gl::VboMesh::Layout layout;
     layout.setStaticPositions();
+//    layout.setDynamicPositions();
     layout.setStaticColorsRGB();
     layout.setStaticIndices();
     layout.setStaticTexCoords2d();
     
     mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
-    vector<Vec3f> vertices(mVertices.size());
-    vertices.assign(mVertices.begin(), mVertices.end());
-    mMesh.bufferPositions(vertices);
+ 
+    mMesh.bufferPositions(mVertices);
     mMesh.bufferColorsRGB(colors);
     mMesh.bufferIndices(indices);
     mMesh.bufferTexCoords2d(0, coords);
+    
+//    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
+//    for( int idx = 0; idx < mMesh.getNumVertices(); ++idx ) {
+//        iter.setPosition(mVertices [idx]);
+//        ++iter;
+//    }
+    
+    
     
     vector<Vec3f> normals;
     
@@ -285,10 +293,9 @@ void AudioVisualizerApp::setup()
 //	mLight->enable();
     mLightEnabled = false;
     
-    setFrameRate(30.0f);
+    //setFrameRate(30.0f);
 
     //fog
-    
     GLfloat density = 0.1;
     GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
     glEnable (GL_DEPTH_TEST); //enable the depth testing
@@ -297,6 +304,7 @@ void AudioVisualizerApp::setup()
     glFogfv (GL_FOG_COLOR, fogColor);
     glFogf (GL_FOG_DENSITY, density);
     glHint (GL_FOG_HINT, GL_NICEST);
+
 }
 
 void AudioVisualizerApp::shutdown()
@@ -356,35 +364,38 @@ void AudioVisualizerApp::update()
     // Update light on every frame
 	//mLight->update( mCamera );
     mPerlinMove++;
-    mVertices.clear();
 
     for(size_t h = 0 ; h < kHeight; ++h) {
         for(size_t w = 0 ; w < kWidth; ++w) {
-            float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
-            mVertices.push_back( Vec3f(float(w), value, float(h)) );
+            size_t i = h * kWidth + w;
+            if (w < kWidth -1) {
+                mVertices [i].y = mVertices [i+1].y;
+            } else {
+                float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+                mVertices[i].y = value;//( Vec3f(float(w), value, float(h)) );
+            }
         }
     }
-    vector<Vec3f> vertices(mVertices.size());
-    vertices.assign(mVertices.begin(), mVertices.end());
-    mMesh.bufferPositions(vertices);
 
-//    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
-//    int x = 0;
-//    int y = 0;
-//    for( int idx = 0; idx < mIcosahedron.getNumVertices(); ++idx ) {
-//        float value = 2.0f*mPerlin.fBm(Vec3f(float(x+mPerlinMove), float(y), 0.f)* 0.005f);
-//        Vec3f position( (float)x - halfWidth, value, (float)y - halfHeight );
-//        
-//        iter.setPosition( position * scale + offset  );
-//        ++iter;
-//        ++x;
-//        if ( x == (int)mResolution.x){
-//            x = 0;
-//            y++;
+    mMesh.bufferPositions(mVertices);
+
+//    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
+//    int w = 0;
+//    int h = 0;
+//    for( int idx = 0; idx < mMesh.getNumVertices(); ++idx ) {
+//        if (w < kWidth -1) {
+//            iter.setPosition(w,mVertices [idx+1].y, h);
+//        } else {
+//            float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+//            iter.setPosition( w,value, h);
 //        }
-//        
+//        ++iter;
+//        ++w;
+//        if ( w == kWidth){
+//            w = 0;
+//            h++;
+//        }
 //    }
-
 }
 
 
