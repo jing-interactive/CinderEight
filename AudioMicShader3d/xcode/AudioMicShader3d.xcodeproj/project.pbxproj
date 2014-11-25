@@ -303,13 +303,13 @@
 		C01FCF4B08A954540054247B /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = /Users/vgusev/repos/cinder_0.8.6_mac;
+				CINDER_PATH = /Users/eight/repos/cinder_0.8.6_mac;
 				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
 				DEAD_CODE_STRIPPING = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/vgusev/repos/Cinder/blocks/Cinder-Syphon/lib",
+					"../../../../../repos/Cinder/blocks/Cinder-Syphon/lib",
 				);
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_INLINES_ARE_PRIVATE_EXTERN = YES;
@@ -334,13 +334,13 @@
 		C01FCF4C08A954540054247B /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				CINDER_PATH = /Users/vgusev/repos/cinder_0.8.6_mac;
+				CINDER_PATH = /Users/eight/repos/cinder_0.8.6_mac;
 				COMBINE_HIDPI_IMAGES = YES;
 				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"/Users/vgusev/repos/Cinder/blocks/Cinder-Syphon/lib",
+					"../../../../../repos/Cinder/blocks/Cinder-Syphon/lib",
 				);
 				GCC_FAST_MATH = YES;
 				GCC_GENERATE_DEBUGGING_SYMBOLS = NO;

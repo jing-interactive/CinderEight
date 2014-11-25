@@ -12,6 +12,6 @@ void main(void)
     float strips = clamp(width / d, 0.0, 1.0);
     
     // calculate output color
-    gl_FragColor.rgb = gl_Color.rgb * strips;
+    gl_FragColor.rgb = gl_Color.rgb;// * strips;
     gl_FragColor.a = 1.0;
 }

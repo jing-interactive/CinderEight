@@ -1,5 +1,5 @@
 #version 110
-const float resolution = 256.0;
+uniform float	resolution;
 const float center = 0.5;
 const float width = 0.02;
 void main(void)
@@ -15,6 +15,6 @@ void main(void)
 
 	// calculate output color
 
-    gl_FragColor.rgb = gl_Color.rgb; //* strips;// * fade;
+    gl_FragColor.rgb = gl_Color.rgb;// * strips;//*/ * fade;
 	gl_FragColor.a = 1.0;
 }

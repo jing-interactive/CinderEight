@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "413"
             endingLineNumber = "413"
-            landmarkName = "AudioVisualizerApp::update()"
+            landmarkName = "AudioVisualizerApp::draw()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>

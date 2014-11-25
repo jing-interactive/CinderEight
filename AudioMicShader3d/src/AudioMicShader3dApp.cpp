@@ -73,7 +73,8 @@ private:
     Channel32f			mChannelRight;
     CameraPersp			mCamera;
     MayaCamUI			mMayaCam;
-    gl::GlslProg		mShader;
+    vector<gl::GlslProg>		mShader;
+    int mShaderNum;
     gl::TextureRef			mTextureLeft;
     gl::TextureRef		mTextureRight;
     gl::Texture::Format	mTextureFormat;
@@ -86,14 +87,12 @@ private:
     double				mMouseUpTime;
     double				mMouseUpDelay;
     
-    vector<string>		mAudioExtensions;
-    
     audio::InputDeviceNodeRef		mInputDeviceNode;
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
     Perlin				mPerlin;
     uint32              mPerlinMove;
-    std::vector<Vec3f>      mVertices;
+    std::deque<Vec3f>      mVertices;
     
 	syphonServer mTextureSyphon;
     
@@ -124,10 +123,11 @@ void AudioVisualizerApp::setup()
     
     mPerlin = Perlin( 4, 0 );
     mPerlinMove = 0;
-    mFrameRate			= 0.0f;
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
+    mFrameRate	= 0.0f;
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 50 ) );
 	mParams.addParam( "Frame rate",	&mFrameRate,"", true);
-
+	mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
+    
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -146,7 +146,7 @@ void AudioVisualizerApp::setup()
     
     // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
     // an increase in resolution of the resulting spectrum data.
-    auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( 2048 ).windowSize( 1024 );
+    auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( 1024 ).windowSize( 512 );
     mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
     
     mInputDeviceNode >> mMonitorSpectralNode;
@@ -156,17 +156,14 @@ void AudioVisualizerApp::setup()
     ctx->enable();
     
     getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
-    //////
-    
-    // initialize signals
     
     mIsAudioPlaying = false;
     
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
     mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    //mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
-    mCamera.setCenterOfInterestPoint( Vec3f(kWidth/4, -kHeight/8, kWidth/4) );
+    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     // create channels from which we can construct our textures
     mChannelLeft = Channel32f(kBands, kHistory);
@@ -180,16 +177,18 @@ void AudioVisualizerApp::setup()
     mTextureFormat.setMinFilter( GL_LINEAR );
     mTextureFormat.setMagFilter( GL_LINEAR );
 
+    mShaderNum = 0;
     try {
-        mShader = gl::GlslProg( loadResource( GLSL_VERT ), loadResource( GLSL_FRAG ) );
+        mShader.push_back(gl::GlslProg( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
+        mShader.push_back(gl::GlslProg( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
+        mShader.push_back(gl::GlslProg( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
+        mShader.push_back(gl::GlslProg( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
     }
     catch( const std::exception& e ) {
         console() << e.what() << std::endl;
         quit();
         return;
     }
-    
-    // create static mesh (all animation is done in the vertex shader)
 
     std::vector<Colorf>     colors;
     std::vector<Vec2f>      coords;
@@ -199,12 +198,11 @@ void AudioVisualizerApp::setup()
     {
         for(size_t w=0;w<kWidth;++w)
         {
-
             // add polygon indices
             if(h < kHeight-1 && w < kWidth-1)
             {
                 size_t offset = mVertices.size();
-                
+
                 indices.push_back(offset);
                 indices.push_back(offset+kWidth);
                 indices.push_back(offset+kWidth+1);
@@ -214,7 +212,7 @@ void AudioVisualizerApp::setup()
             }
             
             // add vertex
-            float value = 20.0f*mPerlin.fBm(Vec3f(float(h), float(w), 0.f)* 0.005f);
+            float value = 80.0f * mPerlin.fBm(Vec3f(float(h), float(w), 0.f) * 0.005f);
             mVertices.push_back( Vec3f(float(w), value, float(h)) );
             
             // add texture coordinates
@@ -226,7 +224,7 @@ void AudioVisualizerApp::setup()
             coords.push_back( Vec2f(part - part * s, t) );
             
             // add vertex colors
-            colors.push_back( Color(CM_HSV, s, 1.0f, 1.0f) );
+            colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
         }
     }
     
@@ -237,7 +235,9 @@ void AudioVisualizerApp::setup()
     layout.setStaticTexCoords2d();
     
     mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
-    mMesh.bufferPositions(mVertices);
+    vector<Vec3f> vertices(mVertices.size());
+    vertices.assign(mVertices.begin(), mVertices.end());
+    mMesh.bufferPositions(vertices);
     mMesh.bufferColorsRGB(colors);
     mMesh.bufferIndices(indices);
     mMesh.bufferTexCoords2d(0, coords);
@@ -285,26 +285,18 @@ void AudioVisualizerApp::setup()
 //	mLight->enable();
     mLightEnabled = false;
     
-    //setFrameRate(30.0f);
-    
-    
+    setFrameRate(30.0f);
+
     //fog
     
-//    GLfloat density = 0.01;
-//    
-//    GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
-//    
-//    glEnable (GL_DEPTH_TEST); //enable the depth testing
-//    
-//    glEnable (GL_FOG);
-//    
-//    glFogi (GL_FOG_MODE, GL_EXP2);
-//    
-//    glFogfv (GL_FOG_COLOR, fogColor);
-//    
-//    glFogf (GL_FOG_DENSITY, density);
-//    
-//    glHint (GL_FOG_HINT, GL_NICEST);
+    GLfloat density = 0.1;
+    GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
+    glEnable (GL_DEPTH_TEST); //enable the depth testing
+    glEnable (GL_FOG);
+    glFogi (GL_FOG_MODE, GL_EXP2);
+    glFogfv (GL_FOG_COLOR, fogColor);
+    glFogf (GL_FOG_DENSITY, density);
+    glHint (GL_FOG_HINT, GL_NICEST);
 }
 
 void AudioVisualizerApp::shutdown()
@@ -365,19 +357,16 @@ void AudioVisualizerApp::update()
 	//mLight->update( mCamera );
     mPerlinMove++;
     mVertices.clear();
-    double clear = getElapsedSeconds();
 
-    for(size_t h=0;h<kHeight;++h)
-    {
-        for(size_t w=0;w<kWidth;++w)
-        {
-            float value = 40.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+    for(size_t h = 0 ; h < kHeight; ++h) {
+        for(size_t w = 0 ; w < kWidth; ++w) {
+            float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
             mVertices.push_back( Vec3f(float(w), value, float(h)) );
         }
     }
-    double updt = getElapsedSeconds();
-
-    mMesh.bufferPositions(mVertices);
+    vector<Vec3f> vertices(mVertices.size());
+    vertices.assign(mVertices.begin(), mVertices.end());
+    mMesh.bufferPositions(vertices);
 
 //    gl::VboMesh::VertexIter iter = mIcosahedron.mapVertexBuffer();
 //    int x = 0;
@@ -413,11 +402,12 @@ void AudioVisualizerApp::draw()
     {
 
         // bind shader
-        mShader.bind();
+        mShader[mShaderNum].bind();
         float offSt = mOffset / float(kHistory);
-        mShader.uniform("uTexOffset", offSt);
-        mShader.uniform("uLeftTex", 0);
-        mShader.uniform("uRightTex", 1);
+        mShader[mShaderNum].uniform("uTexOffset", offSt);
+        mShader[mShaderNum].uniform("uLeftTex", 0);
+        mShader[mShaderNum].uniform("uRightTex", 1);
+        mShader[mShaderNum].uniform("resolution", 0.5f*(float)kWidth);
         //mShader.uniform("elTime", (float) getElapsedFrames());
         
         // create textures from our channels and bind them
@@ -438,7 +428,7 @@ void AudioVisualizerApp::draw()
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
-        mShader.unbind();
+        mShader[mShaderNum].unbind();
     }
 
     gl::popMatrices();
