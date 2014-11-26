@@ -293,7 +293,7 @@ void AudioVisualizerApp::setup()
 //	mLight->enable();
     mLightEnabled = false;
     
-    //setFrameRate(30.0f);
+    setFrameRate(30.0f);
 
     //fog
     GLfloat density = 0.1;
@@ -356,9 +356,15 @@ void AudioVisualizerApp::update()
         //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
+        //cout<<0.995f*(1.0 + 0.1*mMonitorSpectralNode->getVolume())<<endl;
+        float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
+        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
+        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
         
-        mCamera.setEyePoint( eye.lerp(0.995f, mCamera.getEyePoint()) );
-        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f, mCamera.getCenterOfInterestPoint()) );
+        
+        if (mMonitorSpectralNode->getVolume() < 0.001f){
+            mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
+        }
     }
     
     // Update light on every frame

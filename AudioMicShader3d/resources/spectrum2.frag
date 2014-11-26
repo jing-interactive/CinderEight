@@ -1,9 +1,8 @@
 #version 110
-
+uniform float	resolution;
 void main(void)
 {
     // calculate glowing line strips based on texture coordinate
-    const float resolution = 64.0;
     const float center = 0.5;
     const float width = 0.02;
     
@@ -12,6 +11,6 @@ void main(void)
     float strips = clamp(width / d, 0.0, 1.0);
     
     // calculate output color
-    gl_FragColor.rgb = gl_Color.rgb;// * strips;
+    gl_FragColor.rgb = gl_Color.rgb * strips;
     gl_FragColor.a = 1.0;
 }
