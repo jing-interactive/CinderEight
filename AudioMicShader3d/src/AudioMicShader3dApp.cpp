@@ -95,11 +95,9 @@ private:
     std::vector<Vec3f>      mVertices;
     
 	syphonServer mTextureSyphon;
-    
-    // Lighting
-	ci::gl::Light				*mLight;
-	bool						mLightEnabled;
+
     float mFrameRate;
+    bool  mAutomaticSwitch;
     ci::params::InterfaceGl		mParams;
 
 };
@@ -124,9 +122,10 @@ void AudioVisualizerApp::setup()
     mPerlin = Perlin( 4, 0 );
     mPerlinMove = 0;
     mFrameRate	= 0.0f;
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 50 ) );
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
 	mParams.addParam( "Frame rate",	&mFrameRate,"", true);
 	mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
+    mParams.addParam( "Auto switch", &mAutomaticSwitch);
     
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
@@ -162,7 +161,7 @@ void AudioVisualizerApp::setup()
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
     mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    //mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
     mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     // create channels from which we can construct our textures
@@ -247,9 +246,7 @@ void AudioVisualizerApp::setup()
 //        iter.setPosition(mVertices [idx]);
 //        ++iter;
 //    }
-    
-    
-    
+
     vector<Vec3f> normals;
     
     // Iterate through again to set normals
@@ -272,27 +269,7 @@ void AudioVisualizerApp::setup()
     mOffset = 0;
     
     mTextureSyphon.setName("Mic3d");
-    
-    // Set up OpenGL to work with default lighting
-//	glShadeModel( GL_SMOOTH );
-//	gl::enable( GL_POLYGON_SMOOTH );
-//	glHint( GL_POLYGON_SMOOTH_HINT, GL_NICEST );
-//	gl::enable( GL_NORMALIZE );
-//	gl::enableAlphaBlending();
-//	gl::enableDepthRead();
-//	gl::enableDepthWrite();
-//    
-//    
-//    // Set up the light
-//	mLight = new gl::Light( gl::Light::DIRECTIONAL, 0 );
-//	mLight->setAmbient( ColorAf::white() );
-//	mLight->setDiffuse( ColorAf::white() );
-//	mLight->setDirection( Vec3f::one() );
-//	mLight->setPosition( Vec3f::one() * -1.0f );
-//	mLight->setSpecular( ColorAf::white() );
-//	mLight->enable();
-    mLightEnabled = false;
-    
+
     setFrameRate(30.0f);
 
     //fog
@@ -362,23 +339,21 @@ void AudioVisualizerApp::update()
         mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
-        if (mMonitorSpectralNode->getVolume() < 0.001f){
+        if (mAutomaticSwitch &&  mMonitorSpectralNode->getVolume() < 0.001f){
             mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
         }
     }
-    
-    // Update light on every frame
-	//mLight->update( mCamera );
+
     mPerlinMove++;
 
     for(size_t h = 0 ; h < kHeight; ++h) {
         for(size_t w = 0 ; w < kWidth; ++w) {
             size_t i = h * kWidth + w;
-            if (w < kWidth -1) {
+            if (w < kWidth - 1) {
                 mVertices [i].y = mVertices [i+1].y;
             } else {
                 float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
-                mVertices[i].y = value;//( Vec3f(float(w), value, float(h)) );
+                mVertices[i].y = value;
             }
         }
     }
@@ -408,9 +383,6 @@ void AudioVisualizerApp::update()
 void AudioVisualizerApp::draw()
 {
     gl::clear();
-    if ( mLightEnabled ) {
-        gl::enable( GL_LIGHTING );
-    }
 //    gl::enableDepthRead();
 //    gl::enableDepthWrite();
     // use camera
@@ -451,9 +423,7 @@ void AudioVisualizerApp::draw()
     gl::popMatrices();
 //    gl::disableDepthRead();
 //    gl::disableDepthWrite();
-    if ( mLightEnabled ) {
-		gl::disable( GL_LIGHTING );
-	}
+
     mTextureSyphon.publishScreen();
     
     mParams.draw();
