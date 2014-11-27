@@ -7,7 +7,7 @@ const float tenLogBase10 = 3.0102999566398;
 void main(void)
 {	
 	// retrieve texture coordinate and offset it to scroll the texture
-	vec2 coord = gl_MultiTexCoord0.st + vec2(0.0, uTexOffset);
+	vec2 coord = gl_MultiTexCoord0.st + vec2(0.0, uTexOffset+100.0);
 
 	// retrieve the FFT from left and right texture and average it
 	float fft = max(0.0001, mix( texture2D( uLeftTex, coord ).r, texture2D( uRightTex, coord ).r, 0.5));

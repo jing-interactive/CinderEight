@@ -83,7 +83,6 @@ private:
     uint32_t			mOffset;
     
     bool				mIsMouseDown;
-    bool				mIsAudioPlaying;
     double				mMouseUpTime;
     double				mMouseUpDelay;
     
@@ -145,7 +144,7 @@ void AudioVisualizerApp::setup()
     
     // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
     // an increase in resolution of the resulting spectrum data.
-    auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( 1024 ).windowSize( 512 );
+    auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( kBands ).windowSize( kBands / 2 );
     mMonitorSpectralNode = ctx->makeNode( new audio::MonitorSpectralNode( monitorFormat ) );
     
     mInputDeviceNode >> mMonitorSpectralNode;
@@ -156,12 +155,10 @@ void AudioVisualizerApp::setup()
     
     getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
     
-    mIsAudioPlaying = false;
-    
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
     mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    //mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
     mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     // create channels from which we can construct our textures
@@ -296,22 +293,21 @@ void AudioVisualizerApp::update()
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
     
     // get spectrum for left and right channels and copy it into our channels
-    
     float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
     float* pDataRight = mChannelRight.getData() + kBands * mOffset;
 
-    std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
+    std::reverse_copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
     std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
 
     // increment texture offset
     mOffset = (mOffset+1) % kHistory;
 
     // clear the spectrum for this row to avoid old data from showing up
-    pDataLeft = mChannelLeft.getData() + kBands * mOffset;
-    pDataRight = mChannelRight.getData() + kBands * mOffset;
-    
-    memset( pDataLeft, 0, kBands * sizeof(float) );
-    memset( pDataRight, 0, kBands * sizeof(float) );
+    ////NOT SURE THIS IS NEEDED -- the texture will be overwritten completely next time by data
+//    pDataLeft = mChannelLeft.getData() + kBands * mOffset;
+//    pDataRight = mChannelRight.getData() + kBands * mOffset;
+//    memset( pDataLeft, 0, kBands * sizeof(float) );
+//    memset( pDataRight, 0, kBands * sizeof(float) );
 
     // animate camera if mouse has not been down for more than 30 seconds
 
@@ -333,13 +329,12 @@ void AudioVisualizerApp::update()
         //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
-        //cout<<0.995f*(1.0 + 0.1*mMonitorSpectralNode->getVolume())<<endl;
         float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
         mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
         mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
-        if (mAutomaticSwitch &&  mMonitorSpectralNode->getVolume() < 0.001f){
+        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
             mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
         }
     }
