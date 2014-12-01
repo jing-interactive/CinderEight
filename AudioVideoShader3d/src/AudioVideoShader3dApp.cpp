@@ -32,13 +32,18 @@
 #include "cinder/Rand.h"
 #include "cinder/audio/MonitorNode.h"
 #include "cinder/audio/Device.h"
-#include "cinderSyphon.h"
-#include "cinder/gl/Light.h"
+#include "cinder/gl/Batch.h"
+#include "cinder/app/RendererGl.h"
+
 #include "Resources.h"
 #include "cinder/Perlin.h"
 #include "cinder/params/Params.h"
+#include "cinder/Capture.h"
 
 #define INPUT_DEVICE "Scarlett 2i2 USB"
+
+
+const float MAX_RADIUS		= 300;
 
 using namespace ci;
 using namespace ci::app;
@@ -78,7 +83,6 @@ private:
     gl::TextureRef			mTextureLeft;
     gl::TextureRef		mTextureRight;
     gl::Texture::Format	mTextureFormat;
-    gl::VboMesh			mMesh;
 
     uint32_t			mOffset;
     
@@ -91,13 +95,16 @@ private:
     vector<float>					mMagSpectrum;
     Perlin				mPerlin;
     uint32              mPerlinMove;
-    std::vector<Vec3f>      mVertices;
-    
-	syphonServer mTextureSyphon;
+    std::vector<vec3>      mVertices;
+
 
     float mFrameRate;
     bool  mAutomaticSwitch;
     ci::params::InterfaceGl		mParams;
+    
+    CaptureRef mCapture;
+    gl::TextureRef mTexture;
+    gl::BatchRef mBatch;
 
 };
 
@@ -110,18 +117,21 @@ void AudioVisualizerApp::prepareSettings(Settings* settings)
 void AudioVisualizerApp::mouseWheel( MouseEvent event )
 {
 	// Zoom in/out with mouse wheel
-	Vec3f eye = mCamera.getEyePoint();
+	vec3 eye = mCamera.getEyePoint();
 	eye.z += event.getWheelIncrement();
 	mCamera.setEyePoint( eye );
 }
 
 void AudioVisualizerApp::setup()
 {
+    mCapture = Capture::create(  640, 480 );
+    mCapture->start();
+    
     
     mPerlin = Perlin( 4, 0 );
     mPerlinMove = 0;
     mFrameRate	= 0.0f;
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
+    mParams = params::InterfaceGl( "Params", vec2( 200, 100 ) );
 	mParams.addParam( "Frame rate",	&mFrameRate,"", true);
 	mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
     mParams.addParam( "Auto switch", &mAutomaticSwitch);
@@ -153,13 +163,13 @@ void AudioVisualizerApp::setup()
     mInputDeviceNode->enable();
     ctx->enable();
     
-    getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
+    //getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
     
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
-    mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
-    mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
+    mCamera.setEyePoint( vec3(-kWidth/2, kHeight/2, -kWidth/8) );
+    mCamera.setEyePoint( vec3(10239.3,7218.58,-7264.48));
+    mCamera.setCenterOfInterestPoint( vec3(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     // create channels from which we can construct our textures
     mChannelLeft = Channel32f(kBands, kHistory);
@@ -168,7 +178,7 @@ void AudioVisualizerApp::setup()
     memset(	mChannelRight.getData(), 0, mChannelRight.getRowBytes() * kHistory );
     
     // create texture format (wrap the y-axis, clamp the x-axis)
-    mTextureFormat.setWrapS( GL_CLAMP );
+    //mTextureFormat.setWrapS( GL_CLAMP );
     mTextureFormat.setWrapT( GL_REPEAT );
     mTextureFormat.setMinFilter( GL_LINEAR );
     mTextureFormat.setMagFilter( GL_LINEAR );
@@ -176,18 +186,69 @@ void AudioVisualizerApp::setup()
     mShaderNum = 0;
     try {
         mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
+//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
+//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
+//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
     }
     catch( const std::exception& e ) {
-        console() << e.what() << std::endl;
-        quit();
+        cout << e.what() << std::endl;
         return;
     }
+    
+    
+    Rectf boundingBox( - MAX_RADIUS, - MAX_RADIUS, MAX_RADIUS, MAX_RADIUS );
+    
+    TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ) );
+    for(size_t h=0;h<kHeight;++h)
+    {
+        for(size_t w=0;w<kWidth;++w)
+        {
+            // add polygon indices
+            if(h < kHeight-1 && w < kWidth-1)
+            {
+                size_t offset = mVertices.size();
+                
+                mesh.appendTriangle( offset, offset+kWidth, offset+kWidth + 1 );
+                mesh.appendTriangle( offset, offset+kWidth+1, offset+1 );
+            }
+            
+            // add vertex
+            float value = 80.0f * mPerlin.fBm(vec3(float(h), float(w), 0.f) * 0.005f);
+            mVertices.push_back( vec3(float(w), value, float(h)) );
+            mesh.appendVertex( vec3(float(w), value, float(h)));
+            // add texture coordinates
+            // note: we only want to draw the lower part of the frequency bands,
+            //  so we scale the coordinates a bit
+            const float part = 0.5f;
+            float s = w / float(kWidth-1);
+            float t = h / float(kHeight-1);
+            mesh.appendTexCoord( vec2(part - part * s, t) );
+            
+            // add vertex colors
+            //colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
+        }
+    }
 
+//    mesh.appendVertex( boundingBox.getUpperLeft() );
+//    mesh.appendTexCoord( vec2( -1, -1 ) );
+//    
+//    mesh.appendVertex( boundingBox.getLowerLeft() );
+//    mesh.appendTexCoord( vec2( -1, 1 ) );
+//    
+//    mesh.appendVertex( boundingBox.getUpperRight() );
+//    mesh.appendTexCoord( vec2( 1, -1 ) );
+//    
+//    mesh.appendVertex( boundingBox.getLowerRight() );
+//    mesh.appendTexCoord( vec2( 1, 1 ) );
+//    
+//    mesh.appendTriangle( 0, 1, 2 );
+//    mesh.appendTriangle( 2, 1, 3 );
+
+    
+    mBatch = gl::Batch::create(mesh, mShader[0]);
+    
     std::vector<Colorf>     colors;
-    std::vector<Vec2f>      coords;
+    std::vector<vec2>      coords;
     std::vector<uint32_t>	indices;
     
     for(size_t h=0;h<kHeight;++h)
@@ -208,8 +269,8 @@ void AudioVisualizerApp::setup()
             }
             
             // add vertex
-            float value = 80.0f * mPerlin.fBm(Vec3f(float(h), float(w), 0.f) * 0.005f);
-            mVertices.push_back( Vec3f(float(w), value, float(h)) );
+            float value = 80.0f * mPerlin.fBm(vec3(float(h), float(w), 0.f) * 0.005f);
+            mVertices.push_back( vec3(float(w), value, float(h)) );
             
             // add texture coordinates
             // note: we only want to draw the lower part of the frequency bands,
@@ -217,26 +278,26 @@ void AudioVisualizerApp::setup()
             const float part = 0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
-            coords.push_back( Vec2f(part - part * s, t) );
+            coords.push_back( vec2(part - part * s, t) );
             
             // add vertex colors
             colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
         }
     }
     
-    gl::VboMesh::Layout layout;
-    layout.setStaticPositions();
-//    layout.setDynamicPositions();
-    layout.setStaticColorsRGB();
-    layout.setStaticIndices();
-    layout.setStaticTexCoords2d();
-    
-    mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
- 
-    mMesh.bufferPositions(mVertices);
-    mMesh.bufferColorsRGB(colors);
-    mMesh.bufferIndices(indices);
-    mMesh.bufferTexCoords2d(0, coords);
+//    gl::VboMesh::Layout layout;
+//    layout.setStaticPositions();
+////    layout.setDynamicPositions();
+//    layout.setStaticColorsRGB();
+//    layout.setStaticIndices();
+//    layout.setStaticTexCoords2d();
+//    
+//    mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
+// 
+//    mMesh.bufferPositions(mVertices);
+//    mMesh.bufferColorsRGB(colors);
+//    mMesh.bufferIndices(indices);
+//    mMesh.bufferTexCoords2d(0, coords);
     
 //    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
 //    for( int idx = 0; idx < mMesh.getNumVertices(); ++idx ) {
@@ -244,15 +305,15 @@ void AudioVisualizerApp::setup()
 //        ++iter;
 //    }
 
-    vector<Vec3f> normals;
+    vector<vec3> normals;
     
     // Iterate through again to set normals
 //    for ( int32_t y = 0; y < mResolution.y - 1; y++ ) {
 //        for ( int32_t x = 0; x < mResolution.x - 1; x++ ) {
-//            Vec3f vert0 = positions[ indices[ ( x + mResolution.x * y ) * 6 ] ];
-//            Vec3f vert1 = positions[ indices[ ( ( x + 1 ) + mResolution.x * y ) * 6 ] ];
-//            Vec3f vert2 = positions[ indices[ ( ( x + 1 ) + mResolution.x * ( y + 1 ) ) * 6 ] ];
-//            normals[ x + mResolution.x * y ] = Vec3f( ( vert1 - vert0 ).cross( vert1 - vert2 ).normalized() );
+//            vec3 vert0 = positions[ indices[ ( x + mResolution.x * y ) * 6 ] ];
+//            vec3 vert1 = positions[ indices[ ( ( x + 1 ) + mResolution.x * y ) * 6 ] ];
+//            vec3 vert2 = positions[ indices[ ( ( x + 1 ) + mResolution.x * ( y + 1 ) ) * 6 ] ];
+//            normals[ x + mResolution.x * y ] = vec3( ( vert1 - vert0 ).cross( vert1 - vert2 ).normalized() );
 //        }
 //    }
 
@@ -264,21 +325,9 @@ void AudioVisualizerApp::setup()
     //  1) it tells us where to upload the next spectrum data
     //  2) we use it to offset the texture coordinates in the shader for the scrolling effect
     mOffset = 0;
-    
-    mTextureSyphon.setName("Mic3d");
+
 
     setFrameRate(30.0f);
-
-    //fog
-    GLfloat density = 0.1;
-    GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
-    glEnable (GL_DEPTH_TEST); //enable the depth testing
-    glEnable (GL_FOG);
-    glFogi (GL_FOG_MODE, GL_EXP2);
-    glFogfv (GL_FOG_COLOR, fogColor);
-    glFogf (GL_FOG_DENSITY, density);
-    glHint (GL_FOG_HINT, GL_NICEST);
-
 }
 
 void AudioVisualizerApp::shutdown()
@@ -288,6 +337,10 @@ void AudioVisualizerApp::shutdown()
 
 void AudioVisualizerApp::update()
 {
+    if( mCapture && mCapture->checkNewFrame() ) {
+        mTexture = gl::Texture::create( mCapture->getSurface() );
+    }
+    
     mFrameRate = getAverageFps();
 
     mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
@@ -319,19 +372,19 @@ void AudioVisualizerApp::update()
         float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
         float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
        
-        Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        vec3 eye = vec3(kWidth * x, kHeight * y*0.1f, kHeight * z);
 
         x = 1.0f - x;
         y = -0.5f;
         z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
         
-        Vec3f interest = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        vec3 interest = vec3(kWidth * x, kHeight * y*0.1f, kHeight * z);
         //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
         float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
-        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
-        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
+//        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
+//        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
         if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
@@ -341,19 +394,19 @@ void AudioVisualizerApp::update()
 
     mPerlinMove++;
 
-    for(size_t h = 0 ; h < kHeight; ++h) {
-        for(size_t w = 0 ; w < kWidth; ++w) {
-            size_t i = h * kWidth + w;
-            if (w < kWidth - 1) {
-                mVertices [i].y = mVertices [i+1].y;
-            } else {
-                float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
-                mVertices[i].y = value;
-            }
-        }
-    }
+//    for(size_t h = 0 ; h < kHeight; ++h) {
+//        for(size_t w = 0 ; w < kWidth; ++w) {
+//            size_t i = h * kWidth + w;
+//            if (w < kWidth - 1) {
+//                mVertices [i].y = mVertices [i+1].y;
+//            } else {
+//                float value = 80.0f*mPerlin.fBm(vec3(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+//                mVertices[i].y = value;
+//            }
+//        }
+//    }
 
-    mMesh.bufferPositions(mVertices);
+//    mMesh.bufferPositions(mVertices);
 
 //    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
 //    int w = 0;
@@ -362,7 +415,7 @@ void AudioVisualizerApp::update()
 //        if (w < kWidth -1) {
 //            iter.setPosition(w,mVertices [idx+1].y, h);
 //        } else {
-//            float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+//            float value = 80.0f*mPerlin.fBm(vec3(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
 //            iter.setPosition( w,value, h);
 //        }
 //        ++iter;
@@ -372,12 +425,49 @@ void AudioVisualizerApp::update()
 //            h++;
 //        }
 //    }
+
 }
 
 
 void AudioVisualizerApp::draw()
 {
-    gl::clear();
+    if (!mTexture) return;
+    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
+    gl::setMatrices( mCamera );
+    gl::enableAdditiveBlending();
+    if( false && mTexture ) {
+        gl::pushMatrices();
+        gl::draw( mTexture );
+        gl::popMatrices();
+    }
+
+    {
+        gl::ScopedGlslProg glslProgScope( mShader[0] );
+        float offSt = mOffset / float(kHistory);
+        mBatch->getGlslProg()->uniform("uTexOffset", offSt);
+        mBatch->getGlslProg()->uniform("resolution", 0.5f*(float)kWidth);
+        mBatch->getGlslProg()->uniform("uLeftTex", 0);
+        mBatch->getGlslProg()->uniform("uRightTex", 1);
+        mBatch->getGlslProg()->uniform("uVideoTex", 2);
+        
+       // gl::ScopedModelMatrix scopeModel;
+       // gl::multModelMatrix(ci::translate(vec3(1,0,0)));
+        mShader[mShaderNum]->bind();
+        
+        mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
+        mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
+        mTextureLeft->bind(0);
+        mTextureRight->bind(1);
+        mTexture->bind(2);
+        
+        gl::draw(mBatch->getVboMesh());
+        mTextureRight->unbind();
+        mTextureLeft->unbind();
+        mTexture->unbind();
+    }
+    gl::disableAlphaBlending();
+    mParams.draw();
+    return;
     gl::enableDepthRead();
     gl::enableDepthWrite();
     // use camera
@@ -398,28 +488,26 @@ void AudioVisualizerApp::draw()
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
         mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
         
-        mTextureLeft->enableAndBind();
+//        mTextureLeft->enableAndBind();
         mTextureRight->bind(1);
         
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
 
         gl::color( Color(1, 1, 1) );
-        gl::draw( mMesh );
+//        gl::draw( mMesh );
 
         gl::disableAlphaBlending();
 
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
-        mShader[mShaderNum]->unbind();
+//        mShader[mShaderNum]->unbind();
     }
 
     gl::popMatrices();
     gl::disableDepthRead();
     gl::disableDepthWrite();
-
-    mTextureSyphon.publishScreen();
     
     mParams.draw();
     
@@ -446,7 +534,7 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
 void AudioVisualizerApp::mouseUp( MouseEvent event )
 {
     // handle mouse up
-    mMouseUpTime = getElapsedSeconds();
+    //mMouseUpTime = getElapsedSeconds();
     mIsMouseDown = false;
 }
 
@@ -456,11 +544,9 @@ void AudioVisualizerApp::keyDown( KeyEvent event )
     switch( event.getCode() )
     {
         case KeyEvent::KEY_ESCAPE:
-            quit();
             break;
         case KeyEvent::KEY_F4:
             if( event.isAltDown() )
-                quit();
             break;
         case KeyEvent::KEY_LEFT:
             
@@ -468,7 +554,7 @@ void AudioVisualizerApp::keyDown( KeyEvent event )
         case KeyEvent::KEY_RIGHT:
             break;
         case KeyEvent::KEY_f:
-            setFullScreen( !isFullScreen() );
+            //setFullScreen( !isFullScreen() );
             break;
         case KeyEvent::KEY_o:
             break;

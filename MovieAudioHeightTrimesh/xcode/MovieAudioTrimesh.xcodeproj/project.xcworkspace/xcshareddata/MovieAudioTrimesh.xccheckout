@@ -5,9 +5,9 @@
 	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
 	<false/>
 	<key>IDESourceControlProjectIdentifier</key>
-	<string>72889A8B-4B05-404C-9282-243F39392E56</string>
+	<string>28D2F0B9-F3AD-492D-A2C6-C6E78BFDE8C1</string>
 	<key>IDESourceControlProjectName</key>
-	<string>fractalCartoon</string>
+	<string>MovieAudioTrimesh</string>
 	<key>IDESourceControlProjectOriginsDictionary</key>
 	<dict>
 		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>
@@ -16,7 +16,7 @@
 		<string>git://github.com/cinder/Cinder.git</string>
 	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>fractalCartoon/xcode/fractalCartoon.xcodeproj</string>
+	<string>MovieAudioHeightTrimesh/xcode/MovieAudioTrimesh.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
 		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>

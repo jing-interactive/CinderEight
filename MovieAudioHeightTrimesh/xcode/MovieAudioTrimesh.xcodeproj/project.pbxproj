@@ -18,6 +18,11 @@
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
+		AFB0F25D1A27DA0900C896C6 /* CinderApp.icns in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F2581A27DA0900C896C6 /* CinderApp.icns */; };
+		AFB0F25E1A27DA0900C896C6 /* spectrum.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F2591A27DA0900C896C6 /* spectrum.frag */; };
+		AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25A1A27DA0900C896C6 /* spectrum.vert */; };
+		AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */; };
+		AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,12 +37,18 @@
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		32CA4F630368D1EE00C91783 /* ImageHeightTrimesh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ImageHeightTrimesh_Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* MovieAudioTrimesh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieAudioTrimesh_Prefix.pch; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* ImageHeightTrimesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ImageHeightTrimesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieAudioTrimesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		AFB0F2571A27D9F200C896C6 /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../src/Resources.h; sourceTree = "<group>"; };
+		AFB0F2581A27DA0900C896C6 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
+		AFB0F2591A27DA0900C896C6 /* spectrum.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.frag; path = ../resources/spectrum.frag; sourceTree = "<group>"; };
+		AFB0F25A1A27DA0900C896C6 /* spectrum.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.vert; path = ../resources/spectrum.vert; sourceTree = "<group>"; };
+		AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.frag; path = ../resources/spectrum2.frag; sourceTree = "<group>"; };
+		AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.vert; path = ../resources/spectrum2.vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +110,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* ImageHeightTrimesh.app */,
+				8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -119,7 +130,8 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
-				32CA4F630368D1EE00C91783 /* ImageHeightTrimesh_Prefix.pch */,
+				AFB0F2571A27D9F200C896C6 /* Resources.h */,
+				32CA4F630368D1EE00C91783 /* MovieAudioTrimesh_Prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -127,6 +139,11 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				AFB0F2581A27DA0900C896C6 /* CinderApp.icns */,
+				AFB0F2591A27DA0900C896C6 /* spectrum.frag */,
+				AFB0F25A1A27DA0900C896C6 /* spectrum.vert */,
+				AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */,
+				AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */,
 				8D1107310486CEB800E47090 /* Info.plist */,
 			);
 			name = Resources;
@@ -144,9 +161,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* ImageHeightTrimesh */ = {
+		8D1107260486CEB800E47090 /* MovieAudioTrimesh */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ImageHeightTrimesh" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieAudioTrimesh" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -156,10 +173,10 @@
 			);
 			dependencies = (
 			);
-			name = ImageHeightTrimesh;
+			name = MovieAudioTrimesh;
 			productInstallPath = "$(HOME)/Applications";
 			productName = ImageHeightField;
-			productReference = 8D1107320486CEB800E47090 /* ImageHeightTrimesh.app */;
+			productReference = 8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -169,7 +186,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ImageHeightTrimesh" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MovieAudioTrimesh" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -180,7 +197,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* ImageHeightTrimesh */,
+				8D1107260486CEB800E47090 /* MovieAudioTrimesh */,
 			);
 		};
 /* End PBXProject section */
@@ -190,6 +207,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */,
+				AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */,
+				AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */,
+				AFB0F25E1A27DA0900C896C6 /* spectrum.frag in Resources */,
+				AFB0F25D1A27DA0900C896C6 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -220,12 +242,12 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ImageHeightTrimesh_Prefix.pch;
+				GCC_PREFIX_HEADER = MovieAudioTrimesh_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder_d.a";
-				PRODUCT_NAME = ImageHeightTrimesh;
+				PRODUCT_NAME = MovieAudioTrimesh;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -245,12 +267,12 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = ImageHeightTrimesh_Prefix.pch;
+				GCC_PREFIX_HEADER = MovieAudioTrimesh_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder.a";
-				PRODUCT_NAME = ImageHeightTrimesh;
+				PRODUCT_NAME = MovieAudioTrimesh;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -292,7 +314,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "ImageHeightTrimesh" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieAudioTrimesh" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -301,7 +323,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "ImageHeightTrimesh" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MovieAudioTrimesh" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

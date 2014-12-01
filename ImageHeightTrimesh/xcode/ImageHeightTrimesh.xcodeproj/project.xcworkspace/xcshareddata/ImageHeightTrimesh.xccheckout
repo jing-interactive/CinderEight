@@ -8,28 +8,45 @@
 	<string>F61ECF92-BB43-4CB6-88F2-F4E81BD440A2</string>
 	<key>IDESourceControlProjectName</key>
 	<string>ImageHeightTrimesh</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>
+		<string>https://github.com/eighteight/CinderEight.git</string>
+		<key>AD4B458D0D225ED63FAE0155615993B7D3ECE020</key>
+		<string>git://github.com/cinder/Cinder.git</string>
+	</dict>
 	<key>IDESourceControlProjectPath</key>
-	<string>ImageHeightTrimesh/xcode/ImageHeightTrimesh.xcodeproj/project.xcworkspace</string>
+	<string>ImageHeightTrimesh/xcode/ImageHeightTrimesh.xcodeproj</string>
 	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
 	<dict>
-		<key>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</key>
+		<key>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</key>
 		<string>../../../..</string>
+		<key>AD4B458D0D225ED63FAE0155615993B7D3ECE020</key>
+		<string>../../../../..</string>
 	</dict>
 	<key>IDESourceControlProjectURL</key>
-	<string>https://github.com/cinder/Cinder.git</string>
+	<string>https://github.com/eighteight/CinderEight.git</string>
 	<key>IDESourceControlProjectVersion</key>
-	<integer>110</integer>
+	<integer>111</integer>
 	<key>IDESourceControlProjectWCCIdentifier</key>
-	<string>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</string>
+	<string>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</string>
 	<key>IDESourceControlProjectWCConfigurations</key>
 	<array>
 		<dict>
 			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
 			<string>public.vcs.git</string>
 			<key>IDESourceControlWCCIdentifierKey</key>
-			<string>F6EFF466-570E-4FF1-AC8A-2807755E8ECB</string>
+			<string>AD4B458D0D225ED63FAE0155615993B7D3ECE020</string>
 			<key>IDESourceControlWCCName</key>
-			<string>eight</string>
+			<string></string>
+		</dict>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>0D595C21DFA5D4EC5221D6427FA56FF0E2C67E07</string>
+			<key>IDESourceControlWCCName</key>
+			<string>CinderEight</string>
 		</dict>
 	</array>
 </dict>
