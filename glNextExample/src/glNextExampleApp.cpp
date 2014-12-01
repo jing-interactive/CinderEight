@@ -27,7 +27,7 @@ void glNextExampleApp::setup()
     mCam.setPerspective(60, getWindowAspectRatio(), .01, 1000);
     mCam.lookAt(vec3(0,10,20), vec3(0,0,0));
     
-    mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("Basic.vert")).fragment(loadAsset("Basic.frag")));
+    //mGlsl = gl::GlslProg::create(gl::GlslProg::Format().vertex(loadAsset("Basic.vert")).fragment(loadAsset("Basic.frag")));
     mBatch = gl::Batch::create(geom::Cylinder().height(10.0f).radius(5.0f).subdivisionsAxis(60), gl::getStockShader(gl::ShaderDef().color()));
 }
 

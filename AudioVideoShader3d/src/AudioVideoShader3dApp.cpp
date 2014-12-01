@@ -22,6 +22,7 @@
 
 #include "cinder/app/AppNative.h"
 #include "cinder/gl/gl.h"
+#include "cinder/gl/Shader.h"
 #include "cinder/gl/GlslProg.h"
 #include "cinder/gl/Texture.h"
 #include "cinder/gl/Vbo.h"
@@ -166,10 +167,14 @@ void AudioVisualizerApp::setup()
     //getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
     
     // setup camera
-    mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
-    mCamera.setEyePoint( vec3(-kWidth/2, kHeight/2, -kWidth/8) );
-    mCamera.setEyePoint( vec3(10239.3,7218.58,-7264.48));
-    mCamera.setCenterOfInterestPoint( vec3(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
+//    mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
+//    mCamera.setEyePoint( vec3(-kWidth/2, kHeight/2, -kWidth/8) );
+//    mCamera.setEyePoint( vec3(10239.3,7218.58,-7264.48));
+    //mCamera.setCenterOfInterestPoint( vec3(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
+    
+    mCamera.setPerspective(60, getWindowAspectRatio(), .01, 1000);
+    mCamera.lookAt(vec3(1.885,   -1.540,    0.818), vec3(0,0,0));
+    mCamera.setEyePoint(vec3(1.885,   -1.540,    0.818));
     
     // create channels from which we can construct our textures
     mChannelLeft = Channel32f(kBands, kHistory);
@@ -183,22 +188,9 @@ void AudioVisualizerApp::setup()
     mTextureFormat.setMinFilter( GL_LINEAR );
     mTextureFormat.setMagFilter( GL_LINEAR );
 
-    mShaderNum = 0;
-    try {
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
-//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
-//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
-//        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
-    }
-    catch( const std::exception& e ) {
-        cout << e.what() << std::endl;
-        return;
-    }
-    
-    
     Rectf boundingBox( - MAX_RADIUS, - MAX_RADIUS, MAX_RADIUS, MAX_RADIUS );
     
-    TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ) );
+    TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ).colors( 3 ) );
     for(size_t h=0;h<kHeight;++h)
     {
         for(size_t w=0;w<kWidth;++w)
@@ -222,31 +214,43 @@ void AudioVisualizerApp::setup()
             const float part = 0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
-            mesh.appendTexCoord( vec2(part - part * s, t) );
+           //mesh.appendTexCoord( vec2(part - part * s, t) );
             
             // add vertex colors
             //colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
+            //mesh.appendColorRgb(Color(CM_HSV, s, 1.0f, 1.0f));
         }
     }
 
 //    mesh.appendVertex( boundingBox.getUpperLeft() );
-//    mesh.appendTexCoord( vec2( -1, -1 ) );
+    mesh.appendTexCoord( vec2( -1, -1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getLowerLeft() );
-//    mesh.appendTexCoord( vec2( -1, 1 ) );
+    mesh.appendTexCoord( vec2( -1, 1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getUpperRight() );
-//    mesh.appendTexCoord( vec2( 1, -1 ) );
+    mesh.appendTexCoord( vec2( 1, -1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getLowerRight() );
-//    mesh.appendTexCoord( vec2( 1, 1 ) );
+    mesh.appendTexCoord( vec2( 1, 1 ) );
 //    
 //    mesh.appendTriangle( 0, 1, 2 );
 //    mesh.appendTriangle( 2, 1, 3 );
 
-    
+    mShaderNum = 0;
+    try {
+                mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
+        //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
+        //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
+        //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
+        //mShader.push_back(gl::GlslProg::create( loadResource( GLSL_BASIC_VERT ), loadResource( GLSL_BASIC_FRAG ) ));
+    }
+    catch( const std::exception& e ) {
+        cout << e.what() << std::endl;
+        return;
+    }
     mBatch = gl::Batch::create(mesh, mShader[0]);
-    
+    //mBatch = gl::Batch::create(geom::Cylinder().height(10.0f).radius(5.0f).subdivisionsAxis(60), gl::getStockShader(gl::ShaderDef().color()));
     std::vector<Colorf>     colors;
     std::vector<vec2>      coords;
     std::vector<uint32_t>	indices;
@@ -432,17 +436,31 @@ void AudioVisualizerApp::update()
 void AudioVisualizerApp::draw()
 {
     if (!mTexture) return;
-    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
-    gl::setMatrices( mCamera );
+//    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
+//    gl::setMatrices( mCamera );
     gl::enableAdditiveBlending();
-    if( false && mTexture ) {
-        gl::pushMatrices();
-        gl::draw( mTexture );
-        gl::popMatrices();
-    }
+//    if( false && mTexture ) {
+//        gl::pushMatrices();
+//        gl::draw( mTexture );
+//        gl::popMatrices();
+//    }
+    
+    static float rotation = 0.0f;
+	gl::clear( Color( 0, 0, 0 ) );
+    gl::setMatrices(mCamera);
 
+    //gl::multViewMatrix(ci::rotate(rotation += 0.01, vec3(0,1,0)));
+    //gl::multViewMatrix(ci::rotate(1.65f, vec3(0,1,0)));
+
+//    {
+//    gl::ScopedModelMatrix scopeModel;
+//    gl::multModelMatrix(ci::translate(vec3(1,0,0)));
+//    mBatch->draw();
+//    }
+//    return;
+    
     {
-        gl::ScopedGlslProg glslProgScope( mShader[0] );
+        gl::ScopedModelMatrix scopeModel;
         float offSt = mOffset / float(kHistory);
         mBatch->getGlslProg()->uniform("uTexOffset", offSt);
         mBatch->getGlslProg()->uniform("resolution", 0.5f*(float)kWidth);
@@ -528,7 +546,8 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
     mCamera = mMayaCam.getCamera();
-    //cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
+    cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
+    cout<<"P "<<mMayaCam.getCamera().getCenterOfInterestPoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseUp( MouseEvent event )

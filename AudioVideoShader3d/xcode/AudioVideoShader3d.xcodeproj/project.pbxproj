@@ -23,6 +23,8 @@
 		AFE699F61A22CC6E006A9AA3 /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFE699F21A22CC6E006A9AA3 /* spectrum.vert */; };
 		AFE699F71A22CC6E006A9AA3 /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFE699F31A22CC6E006A9AA3 /* spectrum2.frag */; };
 		AFE699F81A22CC6E006A9AA3 /* spectrum2.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFE699F41A22CC6E006A9AA3 /* spectrum2.vert */; };
+		E6EF70D61A2CF6BF00B84AAE /* basic.frag in Resources */ = {isa = PBXBuildFile; fileRef = E6EF70D41A2CF6BF00B84AAE /* basic.frag */; };
+		E6EF70D71A2CF6BF00B84AAE /* basic.vert in Resources */ = {isa = PBXBuildFile; fileRef = E6EF70D51A2CF6BF00B84AAE /* basic.vert */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -60,6 +62,8 @@
 		AFE699F21A22CC6E006A9AA3 /* spectrum.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.vert; path = ../resources/spectrum.vert; sourceTree = "<group>"; };
 		AFE699F31A22CC6E006A9AA3 /* spectrum2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.frag; path = ../resources/spectrum2.frag; sourceTree = "<group>"; };
 		AFE699F41A22CC6E006A9AA3 /* spectrum2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.vert; path = ../resources/spectrum2.vert; sourceTree = "<group>"; };
+		E6EF70D41A2CF6BF00B84AAE /* basic.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.frag; path = ../resources/basic.frag; sourceTree = "<group>"; };
+		E6EF70D51A2CF6BF00B84AAE /* basic.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = basic.vert; path = ../resources/basic.vert; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -157,6 +161,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E6EF70D41A2CF6BF00B84AAE /* basic.frag */,
+				E6EF70D51A2CF6BF00B84AAE /* basic.vert */,
 				AFE699F11A22CC6E006A9AA3 /* spectrum.frag */,
 				AFE699F21A22CC6E006A9AA3 /* spectrum.vert */,
 				AFE699F31A22CC6E006A9AA3 /* spectrum2.frag */,
@@ -233,6 +239,8 @@
 				AFE699F61A22CC6E006A9AA3 /* spectrum.vert in Resources */,
 				AFE699F71A22CC6E006A9AA3 /* spectrum2.frag in Resources */,
 				AFE699F51A22CC6E006A9AA3 /* spectrum.frag in Resources */,
+				E6EF70D61A2CF6BF00B84AAE /* basic.frag in Resources */,
+				E6EF70D71A2CF6BF00B84AAE /* basic.vert in Resources */,
 				04F3D25807F047C3906E3895 /* CinderApp.icns in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
