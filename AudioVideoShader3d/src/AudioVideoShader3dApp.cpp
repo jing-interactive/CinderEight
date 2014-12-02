@@ -173,8 +173,8 @@ void AudioVisualizerApp::setup()
     //mCamera.setCenterOfInterestPoint( vec3(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     mCamera.setPerspective(60, getWindowAspectRatio(), .01, 1000);
-    mCamera.lookAt(vec3(1.885,   -1.540,    0.818), vec3(0,0,0));
-    mCamera.setEyePoint(vec3(1.885,   -1.540,    0.818));
+    mCamera.lookAt(vec3( 11.021,   -5.600,    7.338), vec3(-31.018,   25.341,  -13.460));
+    mCamera.setEyePoint(vec3(11.021,   -5.600,    7.338));
     
     // create channels from which we can construct our textures
     mChannelLeft = Channel32f(kBands, kHistory);
@@ -214,25 +214,27 @@ void AudioVisualizerApp::setup()
             const float part = 0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
-           //mesh.appendTexCoord( vec2(part - part * s, t) );
+           mesh.appendTexCoord( vec2(part - part * s, t) );
             
             // add vertex colors
             //colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
-            //mesh.appendColorRgb(Color(CM_HSV, s, 1.0f, 1.0f));
+            mesh.appendColorRgb(Color(CM_HSV, s, 1.0f, 1.0f));
         }
     }
+    
+    
 
 //    mesh.appendVertex( boundingBox.getUpperLeft() );
-    mesh.appendTexCoord( vec2( -1, -1 ) );
+//    mesh.appendTexCoord( vec2( -1, -1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getLowerLeft() );
-    mesh.appendTexCoord( vec2( -1, 1 ) );
+//    mesh.appendTexCoord( vec2( -1, 1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getUpperRight() );
-    mesh.appendTexCoord( vec2( 1, -1 ) );
+//    mesh.appendTexCoord( vec2( 1, -1 ) );
 //    
 //    mesh.appendVertex( boundingBox.getLowerRight() );
-    mesh.appendTexCoord( vec2( 1, 1 ) );
+//    mesh.appendTexCoord( vec2( 1, 1 ) );
 //    
 //    mesh.appendTriangle( 0, 1, 2 );
 //    mesh.appendTriangle( 2, 1, 3 );
@@ -450,7 +452,7 @@ void AudioVisualizerApp::draw()
     gl::setMatrices(mCamera);
 
     //gl::multViewMatrix(ci::rotate(rotation += 0.01, vec3(0,1,0)));
-    //gl::multViewMatrix(ci::rotate(1.65f, vec3(0,1,0)));
+   // gl::multViewMatrix(ci::rotate(0.f, vec3(0,1,0)));
 
 //    {
 //    gl::ScopedModelMatrix scopeModel;
@@ -461,6 +463,7 @@ void AudioVisualizerApp::draw()
     
     {
         gl::ScopedModelMatrix scopeModel;
+        gl::multModelMatrix(ci::translate(vec3(1,0,0)));
         float offSt = mOffset / float(kHistory);
         mBatch->getGlslProg()->uniform("uTexOffset", offSt);
         mBatch->getGlslProg()->uniform("resolution", 0.5f*(float)kWidth);

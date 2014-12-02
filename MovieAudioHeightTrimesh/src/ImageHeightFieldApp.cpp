@@ -317,13 +317,13 @@ void ImageHFApp::draw()
     gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
     gl::setMatricesWindow( getWindowWidth(), getWindowHeight() );
     
-    if( mTexture ) {
-        glPushMatrix();
-        gl::draw( mTexture );
-        glPopMatrix();
-    }
-    
-    return;
+//    if( mTexture ) {
+//        glPushMatrix();
+//        gl::draw( mTexture );
+//        glPopMatrix();
+//    }
+//    
+//    return;
     gl::enableDepthRead();
     gl::enableDepthWrite();
     

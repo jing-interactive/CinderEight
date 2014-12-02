@@ -6,16 +6,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            shouldBeEnabled = "Yes"
+            shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "../src/AudioVideoShader3dApp.cpp"
-            timestampString = "439103577.220818"
+            timestampString = "439192571.621208"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "201"
-            endingLineNumber = "201"
-            landmarkName = "AudioVisualizerApp::setup()"
+            startingLineNumber = "455"
+            endingLineNumber = "455"
+            landmarkName = "AudioVisualizerApp::draw()"
             landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
