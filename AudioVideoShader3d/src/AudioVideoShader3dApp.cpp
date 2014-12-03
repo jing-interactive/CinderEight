@@ -94,9 +94,12 @@ private:
     audio::InputDeviceNodeRef		mInputDeviceNode;
     audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
     vector<float>					mMagSpectrum;
+    float mVolumeMax;
+    
     Perlin				mPerlin;
     uint32              mPerlinMove;
     std::vector<vec3>      mVertices;
+    
 
 
     float mFrameRate;
@@ -121,6 +124,7 @@ void AudioVisualizerApp::mouseWheel( MouseEvent event )
 	vec3 eye = mCamera.getEyePoint();
 	eye.z += event.getWheelIncrement();
 	mCamera.setEyePoint( eye );
+    cout<<eye<<endl;
 }
 
 void AudioVisualizerApp::setup()
@@ -153,6 +157,8 @@ void AudioVisualizerApp::setup()
         mInputDeviceNode = ctx->createInputDeviceNode(dev);
     }
     
+    mVolumeMax = 0.f;
+    
     // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
     // an increase in resolution of the resulting spectrum data.
     auto monitorFormat = audio::MonitorSpectralNode::Format().fftSize( kBands ).windowSize( kBands / 2 );
@@ -172,9 +178,13 @@ void AudioVisualizerApp::setup()
 //    mCamera.setEyePoint( vec3(10239.3,7218.58,-7264.48));
     //mCamera.setCenterOfInterestPoint( vec3(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
-    mCamera.setPerspective(60, getWindowAspectRatio(), .01, 1000);
-    mCamera.lookAt(vec3( 11.021,   -5.600,    7.338), vec3(-31.018,   25.341,  -13.460));
-    mCamera.setEyePoint(vec3(11.021,   -5.600,    7.338));
+//    mCamera.setPerspective(60, getWindowAspectRatio(), .01, 1000);
+//    mCamera.lookAt(vec3( 11.021,   -5.600,    7.338), vec3(-31.018,   25.341,  -13.460));
+//    mCamera.setEyePoint(vec3(11.021,   -5.600,    7.338));
+    
+    mCamera.setPerspective(60.0f, getWindowAspectRatio(), .01, 1000);
+    mCamera.setEyePoint( vec3(113.553,   80.420, -303.449));
+    mCamera.setCenterOfInterestPoint( vec3(-22.514,   19.082,  252.038) );
     
     // create channels from which we can construct our textures
     mChannelLeft = Channel32f(kBands, kHistory);
@@ -212,7 +222,7 @@ void AudioVisualizerApp::setup()
             const float part = 0.5f;
             float s = w / float(kWidth-1);
             float t = h / float(kHeight-1);
-           mesh.appendTexCoord( vec2(part - part * s, t) );
+           //mesh.appendTexCoord( vec2(part - part * s, t) );
             
             // add vertex colors
             //colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
@@ -405,6 +415,11 @@ void AudioVisualizerApp::update()
         //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
+        if ( mVolumeMax < mMonitorSpectralNode->getVolume()){
+            mVolumeMax = mMonitorSpectralNode->getVolume();
+            cout<<"VOLUME "<< mVolumeMax << endl;
+        }
+    
         float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
 //        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
 //        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
@@ -463,9 +478,10 @@ void AudioVisualizerApp::draw()
 //        gl::draw( mTexture );
 //        gl::popMatrices();
 //    }
-    
+
     static float rotation = 0.0f;
 		gl::clear();
+    gl::setMatrices( mCamera );
     //gl::setMatrices(mCamera);
 	//gl::setMatricesWindow(getWindowSize());
     //gl::multViewMatrix(ci::rotate(rotation += 0.01, vec3(0,1,0)));
@@ -497,8 +513,8 @@ void AudioVisualizerApp::draw()
         mTextureLeft->bind(0);
         mTextureRight->bind(1);
         mTexture->bind(2);
-        
-        gl::draw(mBatch->getVboMesh());
+        mBatch->draw();
+
         mTextureRight->unbind();
         mTextureLeft->unbind();
         mTexture->unbind();
@@ -566,8 +582,8 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
     mCamera = mMayaCam.getCamera();
-    cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
-    cout<<"P "<<mMayaCam.getCamera().getCenterOfInterestPoint()<<endl;
+    //cout<<"EYEPOINT "<<mMayaCam.getCamera().getEyePoint()<<endl;
+    //cout<<"COI "<<mMayaCam.getCamera().getCenterOfInterestPoint()<<endl;
 }
 
 void AudioVisualizerApp::mouseUp( MouseEvent event )

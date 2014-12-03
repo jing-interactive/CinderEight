@@ -32,7 +32,7 @@ void main(void)
     vec4 vertex = ciPosition;//gl_Vertex;
 	vertex.y += 2.0 * decibels;
     
-    gl_Position = ciModelViewProjection * ciPosition;
+    gl_Position = ciModelViewProjection * vertex;//ciPosition
     vColor = ciColor;
 //
 //	// pass (unchanged) texture coordinates, bumped vertex and vertex color
