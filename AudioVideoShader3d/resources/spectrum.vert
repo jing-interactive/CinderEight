@@ -10,7 +10,7 @@ in vec3 ciColor;
 in vec2	ciTexCoord0;
 in vec3	ciNormal;
 
-uniform mat4 ciModelView;
+uniform mat4 ciModelViewProjection;
 out vec3 vColor;
 out highp vec2	TexCoord;
 
@@ -32,7 +32,7 @@ void main(void)
     vec4 vertex = ciPosition;//gl_Vertex;
 	vertex.y += 2.0 * decibels;
     
-    gl_Position = ciModelView * ciPosition;
+    gl_Position = ciModelViewProjection * ciPosition;
     vColor = ciColor;
 //
 //	// pass (unchanged) texture coordinates, bumped vertex and vertex color

@@ -183,13 +183,11 @@ void AudioVisualizerApp::setup()
     memset(	mChannelRight.getData(), 0, mChannelRight.getRowBytes() * kHistory );
     
     // create texture format (wrap the y-axis, clamp the x-axis)
-    //mTextureFormat.setWrapS( GL_CLAMP );
+    mTextureFormat.setWrapS( GL_CLAMP_TO_BORDER );
     mTextureFormat.setWrapT( GL_REPEAT );
     mTextureFormat.setMinFilter( GL_LINEAR );
     mTextureFormat.setMagFilter( GL_LINEAR );
 
-    Rectf boundingBox( - MAX_RADIUS, - MAX_RADIUS, MAX_RADIUS, MAX_RADIUS );
-    
     TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ).colors( 3 ) );
     for(size_t h=0;h<kHeight;++h)
     {
@@ -223,7 +221,26 @@ void AudioVisualizerApp::setup()
     }
     
     
-
+//    Rectf boundingBox( - MAX_RADIUS, - MAX_RADIUS, MAX_RADIUS, MAX_RADIUS );
+//    TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ).colors( 3 ) );
+//    mesh.appendVertex( vec3( 10, 10, 0 ) );
+//    mesh.appendColorRgb( Color( 1, 0, 0 ) );
+//    mesh.appendVertex( vec3( 10, 300, 0 ) );
+//    mesh.appendColorRgb( Color( 0, 1, 0 ) );
+//    mesh.appendVertex( vec3( 300, 300, 0 ) );
+//    mesh.appendColorRgb( Color( 0, 0, 1 ) );
+//    mesh.appendVertex( vec3( 300, 10, 0 ) );
+//    mesh.appendColorRgb( Color( 0, 0, 0 ) );
+//    
+//    // Indices for each of the four corners
+//    int vIdx0 = mesh.getNumVertices() - 4;
+//    int vIdx1 = mesh.getNumVertices() - 3;
+//    int vIdx2 = mesh.getNumVertices() - 2;
+//    int vIdx3 = mesh.getNumVertices() - 1;
+//    
+//    // Two triangles to create our square
+//    mesh.appendTriangle( vIdx0, vIdx1, vIdx2 );
+//    mesh.appendTriangle( vIdx0, vIdx2, vIdx3 );
 //    mesh.appendVertex( boundingBox.getUpperLeft() );
 //    mesh.appendTexCoord( vec2( -1, -1 ) );
 //    
@@ -448,9 +465,9 @@ void AudioVisualizerApp::draw()
 //    }
     
     static float rotation = 0.0f;
-	gl::clear( Color( 0, 0, 0 ) );
-    gl::setMatrices(mCamera);
-
+		gl::clear();
+    //gl::setMatrices(mCamera);
+	//gl::setMatricesWindow(getWindowSize());
     //gl::multViewMatrix(ci::rotate(rotation += 0.01, vec3(0,1,0)));
    // gl::multViewMatrix(ci::rotate(0.f, vec3(0,1,0)));
 
@@ -463,7 +480,7 @@ void AudioVisualizerApp::draw()
     
     {
         gl::ScopedModelMatrix scopeModel;
-        gl::multModelMatrix(ci::translate(vec3(1,0,0)));
+        //gl::multModelMatrix(ci::translate(vec3(1,0,0)));
         float offSt = mOffset / float(kHistory);
         mBatch->getGlslProg()->uniform("uTexOffset", offSt);
         mBatch->getGlslProg()->uniform("resolution", 0.5f*(float)kWidth);
