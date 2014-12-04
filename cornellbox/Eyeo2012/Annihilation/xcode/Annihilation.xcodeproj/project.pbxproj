@@ -86,7 +86,7 @@
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* Matter.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = Matter.app; path = Annihilation.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* Annihilation.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Annihilation.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		E105FC6D154DF34000AC6ED5 /* cubeNegX.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cubeNegX.jpg; path = ../resources/cubeNegX.jpg; sourceTree = "<group>"; };
 		E105FC6E154DF34000AC6ED5 /* cubeNegY.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cubeNegY.jpg; path = ../resources/cubeNegY.jpg; sourceTree = "<group>"; };
 		E105FC6F154DF34000AC6ED5 /* cubeNegZ.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = cubeNegZ.jpg; path = ../resources/cubeNegZ.jpg; sourceTree = "<group>"; };
@@ -220,7 +220,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* Matter.app */,
+				8D1107320486CEB800E47090 /* Annihilation.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -432,7 +432,7 @@
 			name = Annihilation;
 			productInstallPath = "$(HOME)/Applications";
 			productName = Matter;
-			productReference = 8D1107320486CEB800E47090 /* Matter.app */;
+			productReference = 8D1107320486CEB800E47090 /* Annihilation.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */

@@ -413,7 +413,10 @@ void AudioVisualizerApp::draw()
         mTextureLeft->enableAndBind();
         mTextureRight->bind(1);
         mTexture->bind(2);
-        
+        GLenum err;
+        while ((err = glGetError()) != GL_NO_ERROR) {
+            cerr << "OpenGL error: " << err << endl;
+        }
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
         
@@ -425,7 +428,7 @@ void AudioVisualizerApp::draw()
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
-        mTexture->unbind();
+        //mTexture->unbind();
         mShader[mShaderNum]->unbind();
     }
     
