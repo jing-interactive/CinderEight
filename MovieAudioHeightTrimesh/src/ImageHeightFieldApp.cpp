@@ -1,59 +1,67 @@
-#include "cinder/app/AppBasic.h"
-#include "cinder/ArcBall.h"
-#include "cinder/Camera.h"
-#include "cinder/Surface.h"
+/*
+ Copyright (c) 2014, Paul Houx - All rights reserved.
+ This code is intended for use with the Cinder C++ library: http://libcinder.org
+ 
+ Redistribution and use in source and binary forms, with or without modification, are permitted provided that
+ the following conditions are met:
+ 
+ * Redistributions of source code must retain the above copyright notice, this list of conditions and
+ the following disclaimer.
+ * Redistributions in binary form must reproduce the above copyright notice, this list of conditions and
+ the following disclaimer in the documentation and/or other materials provided with the distribution.
+ 
+ THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR IMPLIED
+ WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A
+ PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR CONTRIBUTORS BE LIABLE FOR
+ ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED
+ TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+ HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+ NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
+ POSSIBILITY OF SUCH DAMAGE.
+ */
+
+#include "cinder/app/AppNative.h"
+#include "cinder/gl/gl.h"
+#include "cinder/gl/GlslProg.h"
+#include "cinder/gl/Texture.h"
 #include "cinder/gl/Vbo.h"
+#include "cinder/Camera.h"
+#include "cinder/Channel.h"
 #include "cinder/ImageIo.h"
-#include "cinder/qtime/MovieWriter.h"
+#include "cinder/MayaCamUI.h"
+#include "cinder/Rand.h"
 #include "cinder/audio/MonitorNode.h"
 #include "cinder/audio/Device.h"
-#include "cinder/gl/Texture.h"
-#include "cinder/Capture.h"
-#include "cinder/params/Params.h"
-#include "cinder/gl/GlslProg.h"
+//#include "cinderSyphon.h"
+#include "cinder/gl/Light.h"
 #include "Resources.h"
-#include "cinder/MayaCamUI.h"
 #include "cinder/Perlin.h"
+#include "cinder/params/Params.h"
+#include "cinder/Capture.h"
+
+#define INPUT_DEVICE "Scarlett 2i2 USB"
 
 using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-#define INPUT_DEVICE "Scarlett 2i2 USB"
-
-class ImageHFApp : public AppBasic {
+class AudioVisualizerApp : public AppNative {
 public:
-    void    setup();
-    void    resize( );
-    void    mouseDown( MouseEvent event );
-    void    mouseDrag( MouseEvent event );
-    void    keyDown( KeyEvent event );
-    void 	prepareSettings( Settings* settings );
-    void    draw();
-    void	setVboMesh();
-    void    update();
-    void    setupAudio();
+    void prepareSettings( Settings* settings );
     
-    CaptureRef				mCapture;
-    gl::TextureRef			mTexture;
-    qtime::MovieWriter	mMovieWriter;
-    qtime::MovieGl		mMovie;
+    void setup();
+    void shutdown();
+    void update();
+    void draw();
+    
+    void mouseDown( MouseEvent event );
+    void mouseDrag( MouseEvent event );
+    void mouseUp( MouseEvent event );
+    void keyDown( KeyEvent event );
+    void mouseWheel( MouseEvent event );
+    void resize();
     
 private:
-    void setMovieWriter();
-    void setMoviePlayer();
-    
-    CameraPersp			mCamera;
-    MayaCamUI			mMayaCam;
-    uint32_t            mWidth, mHeight;
-
-    gl::VboMesh		mVboMesh;
-    audio::InputDeviceNodeRef		mInputDeviceNode;
-    audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
-    vector<float>					mMagSpectrum;
-    uint16_t bandCount;
-    Perlin				mPerlin;
-    
     // width and height of our mesh
     static const int kWidth = 256;
     static const int kHeight = 256;
@@ -61,316 +69,67 @@ private:
     // number of frequency bands of our spectrum
     static const int kBands = 1024;
     static const int kHistory = 128;
-    uint32_t			mOffset;
     
     Channel32f			mChannelLeft;
     Channel32f			mChannelRight;
-    gl::Texture::Format	mTextureFormat;
-    gl::TextureRef		mTextureLeft;
-    gl::TextureRef		mTextureRight;
+    CameraPersp			mCamera;
+    MayaCamUI			mMayaCam;
     vector<gl::GlslProgRef>		mShader;
     int mShaderNum;
+    gl::TextureRef			mTextureLeft;
+    gl::TextureRef		mTextureRight;
+    gl::Texture::Format	mTextureFormat;
+    gl::TextureRef			mTexture;
+    gl::VboMesh			mMesh;
+    
+    uint32_t			mOffset;
+    
+    bool				mIsMouseDown;
+    double				mMouseUpTime;
+    double				mMouseUpDelay;
+    
+    audio::InputDeviceNodeRef		mInputDeviceNode;
+    audio::MonitorSpectralNodeRef	mMonitorSpectralNode;
+    vector<float>					mMagSpectrum;
+    Perlin				mPerlin;
+    uint32              mPerlinMove;
+    std::vector<Vec3f>      mVertices;
+    
+//    syphonServer mTextureSyphon;
+    
     float mFrameRate;
     bool  mAutomaticSwitch;
     ci::params::InterfaceGl		mParams;
+    
+    CaptureRef mCapture;
+    
 };
 
-void ImageHFApp::setup()
+void AudioVisualizerApp::prepareSettings(Settings* settings)
+{
+    settings->setFullScreen(false);
+    settings->setWindowSize(1280, 720);
+}
+
+void AudioVisualizerApp::mouseWheel( MouseEvent event )
+{
+    // Zoom in/out with mouse wheel
+    Vec3f eye = mCamera.getEyePoint();
+    eye.z += event.getWheelIncrement();
+    mCamera.setEyePoint( eye );
+}
+
+void AudioVisualizerApp::setup()
 {
     
-    mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
-    mCapture->start();
-
     mPerlin = Perlin( 4, 0 );
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 300 ) );
-//    mParams.addParam( "Frame rate",	&mFrameRate,"", true);
-//    mParams.addParam( "Auto switch", &mAutomaticSwitch);
-    mOffset = 0.0f;
-    setupAudio();
-
-    mShaderNum = 0;
-    try {
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
-        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
-    }
-    catch( const std::exception& e ) {
-        console() << e.what() << std::endl;
-        quit();
-        return;
-    }
-
-    // create channels from which we can construct our textures
-    mChannelLeft = Channel32f(kBands, kHistory);
-    mChannelRight = Channel32f(kBands, kHistory);
-    memset(	mChannelLeft.getData(), 0, mChannelLeft.getRowBytes() * kHistory );
-    memset(	mChannelRight.getData(), 0, mChannelRight.getRowBytes() * kHistory );
+    mPerlinMove = 0;
+    mFrameRate	= 0.0f;
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
+    mParams.addParam( "Frame rate",	&mFrameRate,"", true);
+    mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
+    mParams.addParam( "Auto switch", &mAutomaticSwitch);
     
-    // create texture format (wrap the y-axis, clamp the x-axis)
-    mTextureFormat.setWrapS( GL_CLAMP );
-    mTextureFormat.setWrapT( GL_REPEAT );
-    mTextureFormat.setMinFilter( GL_LINEAR );
-    mTextureFormat.setMagFilter( GL_LINEAR );
-    
-    //setMoviePlayer();
-    try {
-        if (!mMovie){
-            mWidth = kWidth;
-            mHeight = kHeight;
-//            mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
-//            mCapture->start();
-        }
-    }
-    catch( ... ) {
-        console() << "Failed to initialize capture" << std::endl;
-    }
-    
-    mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
-    mCamera.setEyePoint( Vec3f(-mWidth/2, mHeight/2, -mHeight/8) );
-    //mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
-    mCamera.setCenterOfInterestPoint( Vec3f(mWidth*0.5f, -mHeight*0.5f, mWidth*0.5f) );
-
-    setVboMesh();
-    //setMovieWriter();
-}
-
-void ImageHFApp::setMoviePlayer() {
-    string moviePath = getOpenFilePath().string();
-    if( ! moviePath.empty() ){
-        try {
-            // load up the movie, set it to loop, and begin playing
-            mMovie = qtime::MovieGl( moviePath );
-            mWidth = mMovie.getWidth();
-            mHeight = mMovie.getHeight();
-            mMovie.setLoop();
-            mMovie.play();
-        }
-        catch( ... ) {
-            console() << "Unable to load the movie." << std::endl;
-            mMovie.reset();
-        }
-    }
-}
-void ImageHFApp::setMovieWriter(){
-    string path = getSaveFilePath().string();
-    if( path.empty() ) return; // user cancelled save
-    qtime::MovieWriter::Format format;
-    if( qtime::MovieWriter::getUserCompressionSettings( &format) ) {
-        mMovieWriter = qtime::MovieWriter( path, getWindowWidth(), getWindowHeight(), format );
-    }
-}
-
-void ImageHFApp::update() {
-    
-    mFrameRate = getAverageFps();
-    if( mCapture && mCapture->checkNewFrame() ) {
-        mTexture = gl::Texture::create( mCapture->getSurface() );
-    } else if ( mMovie ){
-        //mTexture = mMovie.getTexture();
-    }
-    
-    return;
-    
-    mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
-    
-    // get spectrum for left and right channels and copy it into our channels
-    float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
-    float* pDataRight = mChannelRight.getData() + kBands * mOffset;
-    
-    std::reverse_copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
-    std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
-    
-    // increment texture offset
-    mOffset = (mOffset+1) % kHistory;
-    {
-        float t = float( getElapsedSeconds() );
-        float x = 0.5f * math<float>::cos( t * 0.07f );
-        float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
-        float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
-        
-        Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
-        
-        x = 1.0f - x;
-        y = -0.5f;
-        z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
-        
-        Vec3f interest = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
-        //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
-        
-        // gradually move to eye position and center of interest
-        float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
-        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
-        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
-
-        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
-            mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
-        }
-    }
-}
-
-void ImageHFApp::setVboMesh()
-{
-    std::vector<Colorf>     colors;
-    std::vector<Vec2f>      coords;
-    std::vector<uint32_t>	indices;
-    std::vector<Vec3f>      mVertices;
-    
-    for(size_t h=0;h<kHeight;++h)
-    {
-        for(size_t w=0;w<kWidth;++w)
-        {
-            // add polygon indices
-            if(h < kHeight-1 && w < kWidth-1)
-            {
-                size_t offset = mVertices.size();
-                
-                indices.push_back(offset);
-                indices.push_back(offset+kWidth);
-                indices.push_back(offset+kWidth+1);
-                indices.push_back(offset);
-                indices.push_back(offset+kWidth+1);
-                indices.push_back(offset+1);
-            }
-            
-            // add vertex
-            float value = 80.0f;//* mPerlin.fBm(Vec3f(float(h), float(w), 0.f) * 0.005f);
-            mVertices.push_back( Vec3f(float(w), value, float(h)) );
-            
-            // add texture coordinates
-            // note: we only want to draw the lower part of the frequency bands,
-            //  so we scale the coordinates a bit
-            const float part = 0.5f;
-            float s = w / float(kWidth-1);
-            float t = h / float(kHeight-1);
-            coords.push_back( Vec2f(part - part * s, t) );
-            
-            // add vertex colors
-            colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
-        }
-    }
-    
-    gl::VboMesh::Layout layout;
-    layout.setStaticPositions();
-    //    layout.setDynamicPositions();
-    layout.setStaticColorsRGB();
-    layout.setStaticIndices();
-    layout.setStaticTexCoords2d();
-    
-    mVboMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
-    mVboMesh.bufferIndices(indices);
-    return;
-    mVboMesh.bufferTexCoords2d(0, coords);
-    mVboMesh.bufferPositions(mVertices);
-
-    mVboMesh.bufferColorsRGB(colors);
-}
-
-void ImageHFApp::resize( )
-{
-    mCamera.setAspectRatio( getWindowAspectRatio() );
-}
-
-void ImageHFApp::mouseDown( MouseEvent event )
-{
-    mMayaCam.setCurrentCam(mCamera);
-    mMayaCam.mouseDown( event.getPos() );
-}
-
-void ImageHFApp::mouseDrag( MouseEvent event )
-{
-    mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
-    mCamera = mMayaCam.getCamera();
-}
-
-void ImageHFApp::keyDown( KeyEvent event )
-{
-    switch( event.getChar() ) {
-        case '+':
-            break;
-        case '-':
-            break;
-    }
-
-    if( mMovie ) {
-        if( event.getCode() == KeyEvent::KEY_LEFT ) {
-            mMovie.stepBackward();
-        }
-        if( event.getCode() == KeyEvent::KEY_RIGHT ) {
-            mMovie.stepForward();
-        }
-        else if( event.getChar() == 'm' ) {
-            // jump to the middle frame
-            mMovie.seekToTime( mMovie.getDuration() / 2 );
-        }
-        else if( event.getChar() == ' ' ) {
-            if( mMovie.isPlaying() )
-                mMovie.stop();
-            else
-                mMovie.play();
-        }
-    }
-}
-
-void ImageHFApp::draw()
-{
-    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
-    gl::setMatricesWindow( getWindowWidth(), getWindowHeight() );
-    
-//    if( mTexture ) {
-//        glPushMatrix();
-//        gl::draw( mTexture );
-//        glPopMatrix();
-//    }
-//    
-//    return;
-    gl::enableDepthRead();
-    gl::enableDepthWrite();
-    
-    gl::pushMatrices();
-    gl::setMatrices(mCamera);
-    {
-        if( mVboMesh && mTexture){
-            // bind shader
-            mShader[mShaderNum]->bind();
-            float offSt = mOffset / float(kHistory);
-            mShader[mShaderNum]->uniform("uTexOffset", offSt);
-            mShader[mShaderNum]->uniform("uLeftTex", 0);
-            mShader[mShaderNum]->uniform("uRightTex", 1);
-            mShader[mShaderNum]->uniform("uVideoTex",2);
-            mShader[mShaderNum]->uniform("resolution", 0.5f*(float)kWidth);
-
-            // create textures from our channels and bind them
-            mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
-            mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
-            
-            mTextureLeft->enableAndBind();
-            mTextureRight->bind(1);
-            mTexture->bind(2);
-            
-            gl::enableAdditiveBlending();
-
-            gl::draw( mVboMesh );
-            
-            gl::disableAlphaBlending();
-
-            mTexture->unbind();
-            mTextureLeft->unbind();
-            mTextureRight->unbind();
-        }
-    }
-    gl::popMatrices();
-    
-    gl::disableDepthRead();
-    gl::disableDepthWrite();
-    // add this frame to our movie
-//    if( mMovieWriter )
-//        mMovieWriter.addFrame( copyWindowSurface() );
-    
-    //mParams.draw();
-}
-
-inline void ImageHFApp::setupAudio() {
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -399,11 +158,346 @@ inline void ImageHFApp::setupAudio() {
     ctx->enable();
     
     getWindow()->setTitle( mInputDeviceNode->getDevice()->getName() );
+    
+    // setup camera
+    mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
+    mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
+    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
+    
+    // create channels from which we can construct our textures
+    mChannelLeft = Channel32f(kBands, kHistory);
+    mChannelRight = Channel32f(kBands, kHistory);
+    memset(	mChannelLeft.getData(), 0, mChannelLeft.getRowBytes() * kHistory );
+    memset(	mChannelRight.getData(), 0, mChannelRight.getRowBytes() * kHistory );
+    
+    // create texture format (wrap the y-axis, clamp the x-axis)
+    mTextureFormat.setWrapS( GL_CLAMP );
+    mTextureFormat.setWrapT( GL_REPEAT );
+    mTextureFormat.setMinFilter( GL_LINEAR );
+    mTextureFormat.setMagFilter( GL_LINEAR );
+    
+    mShaderNum = 0;
+    try {
+        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
+        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
+        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
+        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
+    }
+    catch( const std::exception& e ) {
+        console() << e.what() << std::endl;
+        quit();
+        return;
+    }
+    
+    std::vector<Colorf>     colors;
+    std::vector<Vec2f>      coords;
+    std::vector<uint32_t>	indices;
+    
+    for(size_t h=0;h<kHeight;++h)
+    {
+        for(size_t w=0;w<kWidth;++w)
+        {
+            // add polygon indices
+            if(h < kHeight-1 && w < kWidth-1)
+            {
+                size_t offset = mVertices.size();
+                
+                indices.push_back(offset);
+                indices.push_back(offset+kWidth);
+                indices.push_back(offset+kWidth+1);
+                indices.push_back(offset);
+                indices.push_back(offset+kWidth+1);
+                indices.push_back(offset+1);
+            }
+            
+            // add vertex
+            float value = 80.0f * mPerlin.fBm(Vec3f(float(h), float(w), 0.f) * 0.005f);
+            mVertices.push_back( Vec3f(float(w), value, float(h)) );
+            
+            // add texture coordinates
+            // note: we only want to draw the lower part of the frequency bands,
+            //  so we scale the coordinates a bit
+            const float part = 0.5f;
+            float s = w / float(kWidth-1);
+            float t = h / float(kHeight-1);
+            coords.push_back( Vec2f(part - part * s, t) );
+            
+            // add vertex colors
+            colors.push_back( h % 2 == 0 || true ? Color(CM_HSV, s, 1.0f, 1.0f) : Color(CM_RGB, s, s, s) );
+        }
+    }
+    
+    gl::VboMesh::Layout layout;
+    layout.setStaticPositions();
+    //    layout.setDynamicPositions();
+    layout.setStaticColorsRGB();
+    layout.setStaticIndices();
+    layout.setStaticTexCoords2d();
+    
+    mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
+    
+    mMesh.bufferPositions(mVertices);
+    mMesh.bufferColorsRGB(colors);
+    mMesh.bufferIndices(indices);
+    mMesh.bufferTexCoords2d(0, coords);
+    
+    //    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
+    //    for( int idx = 0; idx < mMesh.getNumVertices(); ++idx ) {
+    //        iter.setPosition(mVertices [idx]);
+    //        ++iter;
+    //    }
+    
+    vector<Vec3f> normals;
+    
+    // Iterate through again to set normals
+    //    for ( int32_t y = 0; y < mResolution.y - 1; y++ ) {
+    //        for ( int32_t x = 0; x < mResolution.x - 1; x++ ) {
+    //            Vec3f vert0 = positions[ indices[ ( x + mResolution.x * y ) * 6 ] ];
+    //            Vec3f vert1 = positions[ indices[ ( ( x + 1 ) + mResolution.x * y ) * 6 ] ];
+    //            Vec3f vert2 = positions[ indices[ ( ( x + 1 ) + mResolution.x * ( y + 1 ) ) * 6 ] ];
+    //            normals[ x + mResolution.x * y ] = Vec3f( ( vert1 - vert0 ).cross( vert1 - vert2 ).normalized() );
+    //        }
+    //    }
+    
+    mIsMouseDown = false;
+    mMouseUpDelay = 5.0;
+    mMouseUpTime = getElapsedSeconds() - mMouseUpDelay;
+    
+    // the texture offset has two purposes:
+    //  1) it tells us where to upload the next spectrum data
+    //  2) we use it to offset the texture coordinates in the shader for the scrolling effect
+    mOffset = 0;
+    
+//    mTextureSyphon.setName("Mic3d");
+    
+    setFrameRate(30.0f);
+    
+    //fog
+    GLfloat density = 0.1;
+    GLfloat fogColor[4] = {0.5, 0.5, 0.5, 1.0};
+    glEnable (GL_DEPTH_TEST); //enable the depth testing
+    glEnable (GL_FOG);
+    glFogi (GL_FOG_MODE, GL_EXP2);
+    glFogfv (GL_FOG_COLOR, fogColor);
+    glFogf (GL_FOG_DENSITY, density);
+    glHint (GL_FOG_HINT, GL_NICEST);
+    
+    mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
+    mCapture->start();
+    
 }
 
-inline void ImageHFApp::prepareSettings(Settings* settings) {
-    settings->setWindowSize(1052, 760);
+void AudioVisualizerApp::shutdown()
+{
+    
 }
 
-CINDER_APP_BASIC( ImageHFApp, RendererGl );
+void AudioVisualizerApp::update()
+{
+    mFrameRate = getAverageFps();
+ 
+    if( mCapture && mCapture->checkNewFrame() ) {
+        mTexture = gl::Texture::create( mCapture->getSurface() );
+    }
+    
+    mMagSpectrum = mMonitorSpectralNode->getMagSpectrum();
+    
+    // get spectrum for left and right channels and copy it into our channels
+    float* pDataLeft = mChannelLeft.getData() + kBands * mOffset;
+    float* pDataRight = mChannelRight.getData() + kBands * mOffset;
+    
+    std::reverse_copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataLeft);
+    std::copy(mMagSpectrum.begin(), mMagSpectrum.end(), pDataRight);
+    
+    // increment texture offset
+    mOffset = (mOffset+1) % kHistory;
+    
+    // clear the spectrum for this row to avoid old data from showing up
+    ////NOT SURE THIS IS NEEDED -- the texture will be overwritten completely next time by data
+    //    pDataLeft = mChannelLeft.getData() + kBands * mOffset;
+    //    pDataRight = mChannelRight.getData() + kBands * mOffset;
+    //    memset( pDataLeft, 0, kBands * sizeof(float) );
+    //    memset( pDataRight, 0, kBands * sizeof(float) );
+    
+    // animate camera if mouse has not been down for more than 30 seconds
+    
+    if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
+    {
+        
+        float t = float( getElapsedSeconds() );
+        float x = 0.5f * math<float>::cos( t * 0.07f );
+        float y = 0.5f * math<float>::sin( t * 0.09f );//0.1f - 0.2f * math<float>::sin( t * 0.09f );
+        float z = 0.05f * math<float>::sin( t * 0.05f ) - 0.15f;
+        
+        Vec3f eye = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        
+        x = 1.0f - x;
+        y = -0.5f;
+        z = 0.6f + 0.2f *  math<float>::sin( t * 0.12f );
+        
+        Vec3f interest = Vec3f(kWidth * x, kHeight * y*0.1f, kHeight * z);
+        //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
+        
+        // gradually move to eye position and center of interest
+        float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
+        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
+        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
+        
+        
+        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
+            mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
+        }
+    }
+    
+    mPerlinMove++;
+    
+    for(size_t h = 0 ; h < kHeight; ++h) {
+        for(size_t w = 0 ; w < kWidth; ++w) {
+            size_t i = h * kWidth + w;
+            if (w < kWidth - 1) {
+                mVertices [i].y = mVertices [i+1].y;
+            } else {
+                float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+                mVertices[i].y = value;
+            }
+        }
+    }
+    
+    mMesh.bufferPositions(mVertices);
+    
+    //    gl::VboMesh::VertexIter iter = mMesh.mapVertexBuffer();
+    //    int w = 0;
+    //    int h = 0;
+    //    for( int idx = 0; idx < mMesh.getNumVertices(); ++idx ) {
+    //        if (w < kWidth -1) {
+    //            iter.setPosition(w,mVertices [idx+1].y, h);
+    //        } else {
+    //            float value = 80.0f*mPerlin.fBm(Vec3f(float(h+ mPerlinMove), float(w), 0.f)* 0.005f);
+    //            iter.setPosition( w,value, h);
+    //        }
+    //        ++iter;
+    //        ++w;
+    //        if ( w == kWidth){
+    //            w = 0;
+    //            h++;
+    //        }
+    //    }
+}
 
+
+void AudioVisualizerApp::draw()
+{
+    if (!mTexture) return;
+    gl::clear();
+    gl::enableDepthRead();
+    gl::enableDepthWrite();
+    // use camera
+    gl::pushMatrices();
+    gl::setMatrices(mCamera);
+    {
+        
+        // bind shader
+        mShader[mShaderNum]->bind();
+        float offSt = mOffset / float(kHistory);
+        mShader[mShaderNum]->uniform("uTexOffset", offSt);
+        mShader[mShaderNum]->uniform("uLeftTex", 0);
+        mShader[mShaderNum]->uniform("uRightTex", 1);
+        mShader[mShaderNum]->uniform("videoTex",2);
+        mShader[mShaderNum]->uniform("resolution", 0.5f*(float)kWidth);
+        
+        // create textures from our channels and bind them
+        mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
+        mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
+        
+        mTextureLeft->enableAndBind();
+        mTextureRight->bind(1);
+        mTexture->bind(2);
+        
+        // draw mesh using additive blending
+        gl::enableAdditiveBlending();
+        
+        gl::color( Color(1, 1, 1) );
+        gl::draw( mMesh );
+        
+        gl::disableAlphaBlending();
+        
+        // unbind textures and shader
+        mTextureRight->unbind();
+        mTextureLeft->unbind();
+        mTexture->unbind();
+        mShader[mShaderNum]->unbind();
+    }
+    
+    gl::popMatrices();
+    gl::disableDepthRead();
+    gl::disableDepthWrite();
+    
+//    mTextureSyphon.publishScreen();
+    
+    mParams.draw();
+    
+}
+
+void AudioVisualizerApp::mouseDown( MouseEvent event )
+{
+    // handle mouse down
+    mIsMouseDown = true;
+    
+    mMayaCam.setCurrentCam(mCamera);
+    mMayaCam.mouseDown( event.getPos() );
+    //cout<<mMayaCam.getCamera().getEyePoint()<<endl;
+}
+
+void AudioVisualizerApp::mouseDrag( MouseEvent event )
+{
+    // handle mouse drag
+    mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
+    mCamera = mMayaCam.getCamera();
+    //cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
+}
+
+void AudioVisualizerApp::mouseUp( MouseEvent event )
+{
+    // handle mouse up
+    mMouseUpTime = getElapsedSeconds();
+    mIsMouseDown = false;
+}
+
+void AudioVisualizerApp::keyDown( KeyEvent event )
+{
+    // handle key down
+    switch( event.getCode() )
+    {
+        case KeyEvent::KEY_ESCAPE:
+            quit();
+            break;
+        case KeyEvent::KEY_F4:
+            if( event.isAltDown() )
+                quit();
+            break;
+        case KeyEvent::KEY_LEFT:
+            
+            break;
+        case KeyEvent::KEY_RIGHT:
+            break;
+        case KeyEvent::KEY_f:
+            setFullScreen( !isFullScreen() );
+            break;
+        case KeyEvent::KEY_o:
+            break;
+        case KeyEvent::KEY_p:
+            break;
+        case KeyEvent::KEY_s:
+            
+            break;
+    }
+}
+
+void AudioVisualizerApp::resize()
+{
+    // handle resize
+    mCamera.setAspectRatio( getWindowAspectRatio() );
+}
+
+CINDER_APP_NATIVE( AudioVisualizerApp, RendererGl )

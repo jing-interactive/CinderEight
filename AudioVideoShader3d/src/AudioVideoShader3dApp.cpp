@@ -43,9 +43,6 @@
 
 #define INPUT_DEVICE "Scarlett 2i2 USB"
 
-
-const float MAX_RADIUS		= 300;
-
 using namespace ci;
 using namespace ci::app;
 using namespace std;
@@ -109,6 +106,8 @@ private:
     CaptureRef mCapture;
     gl::TextureRef mTexture;
     gl::BatchRef mBatch;
+    
+    gl::VboMeshRef vboMeshRef;
 
 };
 
@@ -229,42 +228,6 @@ void AudioVisualizerApp::setup()
             mesh.appendColorRgb(Color(CM_HSV, s, 1.0f, 1.0f));
         }
     }
-    
-    
-//    Rectf boundingBox( - MAX_RADIUS, - MAX_RADIUS, MAX_RADIUS, MAX_RADIUS );
-//    TriMesh mesh( TriMesh::Format().positions( 3 ).texCoords( 2 ).colors( 3 ) );
-//    mesh.appendVertex( vec3( 10, 10, 0 ) );
-//    mesh.appendColorRgb( Color( 1, 0, 0 ) );
-//    mesh.appendVertex( vec3( 10, 300, 0 ) );
-//    mesh.appendColorRgb( Color( 0, 1, 0 ) );
-//    mesh.appendVertex( vec3( 300, 300, 0 ) );
-//    mesh.appendColorRgb( Color( 0, 0, 1 ) );
-//    mesh.appendVertex( vec3( 300, 10, 0 ) );
-//    mesh.appendColorRgb( Color( 0, 0, 0 ) );
-//    
-//    // Indices for each of the four corners
-//    int vIdx0 = mesh.getNumVertices() - 4;
-//    int vIdx1 = mesh.getNumVertices() - 3;
-//    int vIdx2 = mesh.getNumVertices() - 2;
-//    int vIdx3 = mesh.getNumVertices() - 1;
-//    
-//    // Two triangles to create our square
-//    mesh.appendTriangle( vIdx0, vIdx1, vIdx2 );
-//    mesh.appendTriangle( vIdx0, vIdx2, vIdx3 );
-//    mesh.appendVertex( boundingBox.getUpperLeft() );
-//    mesh.appendTexCoord( vec2( -1, -1 ) );
-//    
-//    mesh.appendVertex( boundingBox.getLowerLeft() );
-//    mesh.appendTexCoord( vec2( -1, 1 ) );
-//    
-//    mesh.appendVertex( boundingBox.getUpperRight() );
-//    mesh.appendTexCoord( vec2( 1, -1 ) );
-//    
-//    mesh.appendVertex( boundingBox.getLowerRight() );
-//    mesh.appendTexCoord( vec2( 1, 1 ) );
-//    
-//    mesh.appendTriangle( 0, 1, 2 );
-//    mesh.appendTriangle( 2, 1, 3 );
 
     mShaderNum = 0;
     try {
@@ -279,7 +242,6 @@ void AudioVisualizerApp::setup()
         return;
     }
     mBatch = gl::Batch::create(mesh, mShader[0]);
-    //mBatch = gl::Batch::create(geom::Cylinder().height(10.0f).radius(5.0f).subdivisionsAxis(60), gl::getStockShader(gl::ShaderDef().color()));
     std::vector<Colorf>     colors;
     std::vector<vec2>      coords;
     std::vector<uint32_t>	indices;
@@ -325,7 +287,7 @@ void AudioVisualizerApp::setup()
 //    layout.setStaticIndices();
 //    layout.setStaticTexCoords2d();
 //    
-//    mMesh = gl::VboMesh(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
+//    vboMeshRef = gl::VboMesh::create(100, 1, <#const std::vector<Layout> &vertexArrayLayouts#>)(mVertices.size(), indices.size(), layout, GL_TRIANGLES);
 // 
 //    mMesh.bufferPositions(mVertices);
 //    mMesh.bufferColorsRGB(colors);
@@ -425,12 +387,13 @@ void AudioVisualizerApp::update()
 //        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
-        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
-            mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
-        }
+//        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
+//            mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
+//        }
     }
 
     mPerlinMove++;
+
 
 //    for(size_t h = 0 ; h < kHeight; ++h) {
 //        for(size_t w = 0 ; w < kWidth; ++w) {

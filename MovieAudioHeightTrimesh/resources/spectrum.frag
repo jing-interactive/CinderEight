@@ -14,6 +14,6 @@ void main(void)
 	float fade = gl_TexCoord[0].y;
 
 	// calculate output color
-    gl_FragColor = texture2D(uVideoTex,gl_TexCoord[0].xy);// * strips;// * fade;
-	//gl_FragColor.a = 1.0;
+    gl_FragColor.rgb = vec3(gl_Color.rg,texture2D(uVideoTex,gl_TexCoord[0].xy).b);// * strips;// * fade;
+	gl_FragColor.a = 1.0;
 }

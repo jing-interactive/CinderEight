@@ -392,7 +392,6 @@ void AudioVisualizerApp::draw()
         mShader[mShaderNum]->uniform("uLeftTex", 0);
         mShader[mShaderNum]->uniform("uRightTex", 1);
         mShader[mShaderNum]->uniform("resolution", 0.5f*(float)kWidth);
-        //mShader.uniform("elTime", (float) getElapsedFrames());
         
         // create textures from our channels and bind them
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);

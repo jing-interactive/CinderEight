@@ -3,7 +3,7 @@
 uniform float		uTexOffset;
 uniform sampler2D	uLeftTex;
 uniform sampler2D	uRightTex;
-uniform sampler2D	uVideoTex;
+
 const float tenLogBase10 = 3.0102999566398;
 void main(void)
 {	
