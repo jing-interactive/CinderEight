@@ -13,7 +13,7 @@
 		00B784B40FF439BC000DE1D7 /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */; };
 		00B784B50FF439BC000DE1D7 /* AudioUnit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B10FF439BC000DE1D7 /* AudioUnit.framework */; };
 		00B784B60FF439BC000DE1D7 /* CoreAudio.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 00B784B20FF439BC000DE1D7 /* CoreAudio.framework */; };
-		00BAE65A0E7ED9C10018A608 /* ImageHeightFieldApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BAE6590E7ED9C10018A608 /* ImageHeightFieldApp.cpp */; };
+		00BAE65A0E7ED9C10018A608 /* VideoAudioVisualizerApp.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 00BAE6590E7ED9C10018A608 /* VideoAudioVisualizerApp.cpp */; };
 		5323E6B20EAFCA74003A9687 /* CoreVideo.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B10EAFCA74003A9687 /* CoreVideo.framework */; };
 		5323E6B60EAFCA7E003A9687 /* QTKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 5323E6B50EAFCA7E003A9687 /* QTKit.framework */; };
 		53E3CDFC0E86099300238D2B /* Carbon.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 53E3CDFB0E86099300238D2B /* Carbon.framework */; };
@@ -23,6 +23,7 @@
 		AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25A1A27DA0900C896C6 /* spectrum.vert */; };
 		AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */; };
 		AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */; };
+		E6DEB3FC1A32193D00137B42 /* testPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = E6DEB3FB1A32193D00137B42 /* testPattern.png */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -32,23 +33,24 @@
 		00B784B00FF439BC000DE1D7 /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		00B784B10FF439BC000DE1D7 /* AudioUnit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioUnit.framework; path = System/Library/Frameworks/AudioUnit.framework; sourceTree = SDKROOT; };
 		00B784B20FF439BC000DE1D7 /* CoreAudio.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreAudio.framework; path = System/Library/Frameworks/CoreAudio.framework; sourceTree = SDKROOT; };
-		00BAE6590E7ED9C10018A608 /* ImageHeightFieldApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = ImageHeightFieldApp.cpp; path = ../src/ImageHeightFieldApp.cpp; sourceTree = SOURCE_ROOT; };
+		00BAE6590E7ED9C10018A608 /* VideoAudioVisualizerApp.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; name = VideoAudioVisualizerApp.cpp; path = ../src/VideoAudioVisualizerApp.cpp; sourceTree = SOURCE_ROOT; };
 		1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Cocoa.framework; path = /System/Library/Frameworks/Cocoa.framework; sourceTree = "<absolute>"; };
 		13E42FB307B3F0F600E4EEF1 /* CoreData.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreData.framework; path = /System/Library/Frameworks/CoreData.framework; sourceTree = "<absolute>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
-		32CA4F630368D1EE00C91783 /* MovieAudioTrimesh_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MovieAudioTrimesh_Prefix.pch; sourceTree = "<group>"; };
+		32CA4F630368D1EE00C91783 /* VideoAudioVisualizer_Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = VideoAudioVisualizer_Prefix.pch; sourceTree = "<group>"; };
 		5323E6B10EAFCA74003A9687 /* CoreVideo.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreVideo.framework; path = /System/Library/Frameworks/CoreVideo.framework; sourceTree = "<absolute>"; };
 		5323E6B50EAFCA7E003A9687 /* QTKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QTKit.framework; path = /System/Library/Frameworks/QTKit.framework; sourceTree = "<absolute>"; };
 		53E3CDFB0E86099300238D2B /* Carbon.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Carbon.framework; path = /System/Library/Frameworks/Carbon.framework; sourceTree = "<absolute>"; };
 		8D1107310486CEB800E47090 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MovieAudioTrimesh.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		8D1107320486CEB800E47090 /* VideoAudioVisualizer.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = VideoAudioVisualizer.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFB0F2571A27D9F200C896C6 /* Resources.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Resources.h; path = ../src/Resources.h; sourceTree = "<group>"; };
 		AFB0F2581A27DA0900C896C6 /* CinderApp.icns */ = {isa = PBXFileReference; lastKnownFileType = image.icns; name = CinderApp.icns; path = ../resources/CinderApp.icns; sourceTree = "<group>"; };
 		AFB0F2591A27DA0900C896C6 /* spectrum.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.frag; path = ../resources/spectrum.frag; sourceTree = "<group>"; };
 		AFB0F25A1A27DA0900C896C6 /* spectrum.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.vert; path = ../resources/spectrum.vert; sourceTree = "<group>"; };
 		AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.frag; path = ../resources/spectrum2.frag; sourceTree = "<group>"; };
 		AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.vert; path = ../resources/spectrum2.vert; sourceTree = "<group>"; };
+		E6DEB3FB1A32193D00137B42 /* testPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = testPattern.png; path = ../assets/testPattern.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -75,7 +77,7 @@
 		080E96DDFE201D6D7F000001 /* Source */ = {
 			isa = PBXGroup;
 			children = (
-				00BAE6590E7ED9C10018A608 /* ImageHeightFieldApp.cpp */,
+				00BAE6590E7ED9C10018A608 /* VideoAudioVisualizerApp.cpp */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -110,7 +112,7 @@
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */,
+				8D1107320486CEB800E47090 /* VideoAudioVisualizer.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -118,6 +120,7 @@
 		29B97314FDCFA39411CA2CEA /* ImageHeightField */ = {
 			isa = PBXGroup;
 			children = (
+				E6DEB3FA1A32193000137B42 /* Assets */,
 				080E96DDFE201D6D7F000001 /* Source */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -131,7 +134,7 @@
 			isa = PBXGroup;
 			children = (
 				AFB0F2571A27D9F200C896C6 /* Resources.h */,
-				32CA4F630368D1EE00C91783 /* MovieAudioTrimesh_Prefix.pch */,
+				32CA4F630368D1EE00C91783 /* VideoAudioVisualizer_Prefix.pch */,
 			);
 			name = "Other Sources";
 			sourceTree = "<group>";
@@ -158,12 +161,20 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		E6DEB3FA1A32193000137B42 /* Assets */ = {
+			isa = PBXGroup;
+			children = (
+				E6DEB3FB1A32193D00137B42 /* testPattern.png */,
+			);
+			name = Assets;
+			sourceTree = "<group>";
+		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		8D1107260486CEB800E47090 /* MovieAudioTrimesh */ = {
+		8D1107260486CEB800E47090 /* VideoAudioVisualizer */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieAudioTrimesh" */;
+			buildConfigurationList = C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "VideoAudioVisualizer" */;
 			buildPhases = (
 				8D1107290486CEB800E47090 /* Resources */,
 				8D11072C0486CEB800E47090 /* Sources */,
@@ -173,10 +184,10 @@
 			);
 			dependencies = (
 			);
-			name = MovieAudioTrimesh;
+			name = VideoAudioVisualizer;
 			productInstallPath = "$(HOME)/Applications";
 			productName = ImageHeightField;
-			productReference = 8D1107320486CEB800E47090 /* MovieAudioTrimesh.app */;
+			productReference = 8D1107320486CEB800E47090 /* VideoAudioVisualizer.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -186,7 +197,7 @@
 			isa = PBXProject;
 			attributes = {
 			};
-			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MovieAudioTrimesh" */;
+			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "VideoAudioVisualizer" */;
 			compatibilityVersion = "Xcode 3.0";
 			developmentRegion = English;
 			hasScannedForEncodings = 1;
@@ -197,7 +208,7 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8D1107260486CEB800E47090 /* MovieAudioTrimesh */,
+				8D1107260486CEB800E47090 /* VideoAudioVisualizer */,
 			);
 		};
 /* End PBXProject section */
@@ -209,6 +220,7 @@
 			files = (
 				AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */,
 				AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */,
+				E6DEB3FC1A32193D00137B42 /* testPattern.png in Resources */,
 				AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */,
 				AFB0F25E1A27DA0900C896C6 /* spectrum.frag in Resources */,
 				AFB0F25D1A27DA0900C896C6 /* CinderApp.icns in Resources */,
@@ -222,7 +234,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				00BAE65A0E7ED9C10018A608 /* ImageHeightFieldApp.cpp in Sources */,
+				00BAE65A0E7ED9C10018A608 /* VideoAudioVisualizerApp.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,12 +254,12 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = MovieAudioTrimesh_Prefix.pch;
+				GCC_PREFIX_HEADER = VideoAudioVisualizer_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder_d.a";
-				PRODUCT_NAME = MovieAudioTrimesh;
+				PRODUCT_NAME = VideoAudioVisualizer;
 				SDKROOT = macosx;
 				WRAPPER_EXTENSION = app;
 				ZERO_LINK = YES;
@@ -267,12 +279,12 @@
 				GCC_MODEL_TUNING = G5;
 				GCC_OPTIMIZATION_LEVEL = 3;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
-				GCC_PREFIX_HEADER = MovieAudioTrimesh_Prefix.pch;
+				GCC_PREFIX_HEADER = VideoAudioVisualizer_Prefix.pch;
 				GCC_SYMBOLS_PRIVATE_EXTERN = NO;
 				INFOPLIST_FILE = Info.plist;
 				INSTALL_PATH = "$(HOME)/Applications";
 				OTHER_LDFLAGS = "$(CINDER_PATH)/lib/libcinder.a";
-				PRODUCT_NAME = MovieAudioTrimesh;
+				PRODUCT_NAME = VideoAudioVisualizer;
 				SDKROOT = macosx;
 				STRIP_INSTALLED_PRODUCT = YES;
 				WRAPPER_EXTENSION = app;
@@ -314,7 +326,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "MovieAudioTrimesh" */ = {
+		C01FCF4A08A954540054247B /* Build configuration list for PBXNativeTarget "VideoAudioVisualizer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4B08A954540054247B /* Debug */,
@@ -323,7 +335,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "MovieAudioTrimesh" */ = {
+		C01FCF4E08A954540054247B /* Build configuration list for PBXProject "VideoAudioVisualizer" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				C01FCF4F08A954540054247B /* Debug */,

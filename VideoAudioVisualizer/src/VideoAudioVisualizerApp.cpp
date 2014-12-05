@@ -45,7 +45,7 @@ using namespace ci;
 using namespace ci::app;
 using namespace std;
 
-class AudioVisualizerApp : public AppNative {
+class VideoAudioVisualizerApp : public AppNative {
 public:
     void prepareSettings( Settings* settings );
     
@@ -105,13 +105,13 @@ private:
     
 };
 
-void AudioVisualizerApp::prepareSettings(Settings* settings)
+void VideoAudioVisualizerApp::prepareSettings(Settings* settings)
 {
     settings->setFullScreen(false);
     settings->setWindowSize(1280, 720);
 }
 
-void AudioVisualizerApp::mouseWheel( MouseEvent event )
+void VideoAudioVisualizerApp::mouseWheel( MouseEvent event )
 {
     // Zoom in/out with mouse wheel
     Vec3f eye = mCamera.getEyePoint();
@@ -119,7 +119,7 @@ void AudioVisualizerApp::mouseWheel( MouseEvent event )
     mCamera.setEyePoint( eye );
 }
 
-void AudioVisualizerApp::setup()
+void VideoAudioVisualizerApp::setup()
 {
     
     mPerlin = Perlin( 4, 0 );
@@ -286,16 +286,16 @@ void AudioVisualizerApp::setup()
     mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
     mCapture->start();
     
-    mTexture = gl::Texture::create( loadImage( loadAsset( "testPattern.png" ) ) );
+//    mTexture = gl::Texture::create( loadImage( loadAsset( "testPattern.png" ) ) );
     
 }
 
-void AudioVisualizerApp::shutdown()
+void VideoAudioVisualizerApp::shutdown()
 {
     
 }
 
-void AudioVisualizerApp::update()
+void VideoAudioVisualizerApp::update()
 {
     mFrameRate = getAverageFps();
  
@@ -388,7 +388,7 @@ void AudioVisualizerApp::update()
 }
 
 
-void AudioVisualizerApp::draw()
+void VideoAudioVisualizerApp::draw()
 {
     if (!mTexture) return;
     gl::clear();
@@ -446,7 +446,7 @@ void AudioVisualizerApp::draw()
     
 }
 
-void AudioVisualizerApp::mouseDown( MouseEvent event )
+void VideoAudioVisualizerApp::mouseDown( MouseEvent event )
 {
     // handle mouse down
     mIsMouseDown = true;
@@ -456,7 +456,7 @@ void AudioVisualizerApp::mouseDown( MouseEvent event )
     //cout<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
-void AudioVisualizerApp::mouseDrag( MouseEvent event )
+void VideoAudioVisualizerApp::mouseDrag( MouseEvent event )
 {
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
@@ -464,14 +464,14 @@ void AudioVisualizerApp::mouseDrag( MouseEvent event )
     //cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
-void AudioVisualizerApp::mouseUp( MouseEvent event )
+void VideoAudioVisualizerApp::mouseUp( MouseEvent event )
 {
     // handle mouse up
     mMouseUpTime = getElapsedSeconds();
     mIsMouseDown = false;
 }
 
-void AudioVisualizerApp::keyDown( KeyEvent event )
+void VideoAudioVisualizerApp::keyDown( KeyEvent event )
 {
     // handle key down
     switch( event.getCode() )
@@ -501,10 +501,10 @@ void AudioVisualizerApp::keyDown( KeyEvent event )
     }
 }
 
-void AudioVisualizerApp::resize()
+void VideoAudioVisualizerApp::resize()
 {
     // handle resize
     mCamera.setAspectRatio( getWindowAspectRatio() );
 }
 
-CINDER_APP_NATIVE( AudioVisualizerApp, RendererGl )
+CINDER_APP_NATIVE( VideoAudioVisualizerApp, RendererGl )

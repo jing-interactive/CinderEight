@@ -2,6 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "self:MovieAudioTrimesh.xcodeproj">
+      location = "self:VideoAudioVisualizer.xcodeproj">
    </FileRef>
 </Workspace>
