@@ -463,19 +463,19 @@ void AudioVisualizerApp::draw()
         float offSt = mOffset / float(kHistory);
         mBatch->getGlslProg()->uniform("uTexOffset", offSt);
         mBatch->getGlslProg()->uniform("resolution", 0.5f*(float)kWidth);
-        mBatch->getGlslProg()->uniform("uLeftTex", 0);
-        mBatch->getGlslProg()->uniform("uRightTex", 1);
-        mBatch->getGlslProg()->uniform("uVideoTex", 2);
+        mBatch->getGlslProg()->uniform("uVideoTex", 0);
+        mBatch->getGlslProg()->uniform("uLeftTex", 1);
+        mBatch->getGlslProg()->uniform("uRightTex", 2);
+
         
        // gl::ScopedModelMatrix scopeModel;
        // gl::multModelMatrix(ci::translate(vec3(1,0,0)));
         mShader[mShaderNum]->bind();
-        
+        mTexture->bind(0);
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
         mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
-        mTextureLeft->bind(0);
-        mTextureRight->bind(1);
-        mTexture->bind(2);
+        mTextureLeft->bind(1);
+        mTextureRight->bind(2);
         mBatch->draw();
 
         mTextureRight->unbind();
