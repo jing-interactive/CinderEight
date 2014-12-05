@@ -286,6 +286,8 @@ void AudioVisualizerApp::setup()
     mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
     mCapture->start();
     
+    mTexture = gl::Texture::create( loadImage( loadAsset( "testPattern.png" ) ) );
+    
 }
 
 void AudioVisualizerApp::shutdown()
@@ -401,18 +403,20 @@ void AudioVisualizerApp::draw()
         mShader[mShaderNum]->bind();
         float offSt = mOffset / float(kHistory);
         mShader[mShaderNum]->uniform("uTexOffset", offSt);
-        mShader[mShaderNum]->uniform("uLeftTex", 0);
-        mShader[mShaderNum]->uniform("uRightTex", 1);
-        mShader[mShaderNum]->uniform("videoTex",2);
+        mShader[mShaderNum]->uniform("videoTex",0);
+        mShader[mShaderNum]->uniform("uLeftTex", 1);
+        mShader[mShaderNum]->uniform("uRightTex", 2);
+
         mShader[mShaderNum]->uniform("resolution", 0.5f*(float)kWidth);
         
         // create textures from our channels and bind them
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
         mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
         
-        mTextureLeft->enableAndBind();
-        mTextureRight->bind(1);
-        mTexture->bind(2);
+        mTexture->enableAndBind();
+        mTextureLeft->bind(1);
+        mTextureRight->bind(2);
+
         GLenum err;
         while ((err = glGetError()) != GL_NO_ERROR) {
             cerr << "OpenGL error: " << err << endl;
@@ -428,7 +432,7 @@ void AudioVisualizerApp::draw()
         // unbind textures and shader
         mTextureRight->unbind();
         mTextureLeft->unbind();
-        //mTexture->unbind();
+        mTexture->unbind();
         mShader[mShaderNum]->unbind();
     }
     
