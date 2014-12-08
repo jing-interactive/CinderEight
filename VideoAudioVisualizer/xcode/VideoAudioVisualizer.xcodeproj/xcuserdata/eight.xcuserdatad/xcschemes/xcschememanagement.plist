@@ -4,12 +4,12 @@
 <dict>
 	<key>SchemeUserState</key>
 	<dict>
-		<key>ImageHeightFieldD.xcscheme</key>
+		<key>VideoAudioVisualizer.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>0</integer>
 		</dict>
-		<key>ImageHeightFieldR.xcscheme</key>
+		<key>VideoAudioVisualizerR.xcscheme</key>
 		<dict>
 			<key>orderHint</key>
 			<integer>1</integer>

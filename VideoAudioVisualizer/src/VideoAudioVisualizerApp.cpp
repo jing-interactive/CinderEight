@@ -98,6 +98,7 @@ private:
 //    syphonServer mTextureSyphon;
     
     float mFrameRate;
+    float mTimeParam;
     bool  mAutomaticSwitch;
     ci::params::InterfaceGl		mParams;
     
@@ -125,11 +126,13 @@ void VideoAudioVisualizerApp::setup()
     mPerlin = Perlin( 4, 0 );
     mPerlinMove = 0;
     mFrameRate	= 0.0f;
+
     mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
     mParams.addParam( "Frame rate",	&mFrameRate,"", true);
+    mParams.addParam("Time P", &mTimeParam);
     mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
     mParams.addParam( "Auto switch", &mAutomaticSwitch);
-    
+    mShaderNum = 2;
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -162,7 +165,7 @@ void VideoAudioVisualizerApp::setup()
     // setup camera
     mCamera.setPerspective(50.0f, 1.0f, 1.0f, 10000.0f);
     mCamera.setEyePoint( Vec3f(-kWidth/2, kHeight/2, -kWidth/8) );
-    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-7264.48));
+    mCamera.setEyePoint( Vec3f(10239.3,7218.58,-726.448));
     mCamera.setCenterOfInterestPoint( Vec3f(kWidth*0.5f, -kHeight*0.5f, kWidth*0.5f) );
     
     // create channels from which we can construct our textures
@@ -283,10 +286,10 @@ void VideoAudioVisualizerApp::setup()
     glFogf (GL_FOG_DENSITY, density);
     glHint (GL_FOG_HINT, GL_NICEST);
     
-    mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
-    mCapture->start();
+//    mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
+//    mCapture->start();
     
-//    mTexture = gl::Texture::create( loadImage( loadAsset( "testPattern.png" ) ) );
+    mTexture = gl::Texture::create( loadImage( loadAsset( "Realist-Seascape-Art-Painting-1367822151-0.jpg" ) ) );
     
 }
 
@@ -324,7 +327,7 @@ void VideoAudioVisualizerApp::update()
     
     // animate camera if mouse has not been down for more than 30 seconds
     
-    if(true || !mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
+    if(!mIsMouseDown && (getElapsedSeconds() - mMouseUpTime) > mMouseUpDelay)
     {
         
         float t = float( getElapsedSeconds() );
@@ -342,9 +345,9 @@ void VideoAudioVisualizerApp::update()
         //cout<<interest<< " "<< (eye.lerp(0.995f, mCamera.getEyePoint()))<<endl;
         
         // gradually move to eye position and center of interest
-        float correction = 1.0 - 0.1*mMonitorSpectralNode->getVolume();
-        mCamera.setEyePoint( eye.lerp(0.995f*correction, mCamera.getEyePoint()) );
-        mCamera.setCenterOfInterestPoint( interest.lerp(0.990f*correction, mCamera.getCenterOfInterestPoint()) );
+        float correction = 1.0 - 0.05*mMonitorSpectralNode->getVolume();
+        mCamera.setEyePoint( eye.lerp(0.999f*correction, mCamera.getEyePoint()) );
+        mCamera.setCenterOfInterestPoint( interest.lerp(0.999f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
         if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
@@ -385,6 +388,8 @@ void VideoAudioVisualizerApp::update()
     //            h++;
     //        }
     //    }
+    
+    mTimeParam = 20.0f - 20.0f * (1.0f - 1.0f/((float)getElapsedSeconds()*0.1f));
 }
 
 
@@ -406,6 +411,7 @@ void VideoAudioVisualizerApp::draw()
         mShader[mShaderNum]->uniform("videoTex",0);
         mShader[mShaderNum]->uniform("uLeftTex", 1);
         mShader[mShaderNum]->uniform("uRightTex", 2);
+        mShader[mShaderNum]->uniform("time", mTimeParam);
 
         mShader[mShaderNum]->uniform("resolution", 0.5f*(float)kWidth);
         
@@ -417,10 +423,6 @@ void VideoAudioVisualizerApp::draw()
         mTextureLeft->bind(1);
         mTextureRight->bind(2);
 
-        GLenum err;
-        while ((err = glGetError()) != GL_NO_ERROR) {
-            cerr << "OpenGL error: " << err << endl;
-        }
         // draw mesh using additive blending
         gl::enableAdditiveBlending();
         

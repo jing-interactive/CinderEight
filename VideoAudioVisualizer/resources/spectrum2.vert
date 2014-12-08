@@ -5,6 +5,7 @@ uniform sampler2D	uLeftTex;
 uniform sampler2D	uRightTex;
 const float two_pi = 6.2831853;
 const float tenLogBase10 = 3.0102999566398; // 10.0 / log(10.0);
+uniform float time;
 void main(void)
 {
     // retrieve texture coordinate and offset it to scroll the texture
@@ -20,8 +21,8 @@ void main(void)
     float fade = gl_MultiTexCoord0.t;
     float r = 100.0 + decibels;
     vec4 vertex = gl_Vertex;
-    vertex.y = r * cos(gl_MultiTexCoord0.t * two_pi) + 0.25*vertex.y;
-    vertex.z = r * sin(gl_MultiTexCoord0.t * two_pi);// + 0.25*vertex.z;
+    vertex.y = r * cos(gl_MultiTexCoord0.t * two_pi) - 0.25 * vertex.y;
+    vertex.z = r * sin(gl_MultiTexCoord0.t * two_pi) - time * vertex.z;
     
     // pass (unchanged) texture coordinates, bumped vertex and vertex color
     gl_TexCoord[0] = gl_MultiTexCoord0;

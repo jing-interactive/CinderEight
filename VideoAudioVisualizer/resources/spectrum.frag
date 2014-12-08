@@ -3,6 +3,7 @@ uniform float	resolution;
 const float center = 0.5;
 const float width = 0.02;
 uniform sampler2D	uVideoTex;
+uniform float time;
 void main(void)
 {
 	// calculate glowing line strips based on texture coordinate
@@ -14,6 +15,14 @@ void main(void)
 	float fade = gl_TexCoord[0].y;
 
 	// calculate output color
-    gl_FragColor.rgb = /*vec3(gl_Color.r,*/texture2D(uVideoTex,gl_TexCoord[0].xy).rgb;// * strips;// * fade;
-	gl_FragColor.a = 1.0;
+    vec3 rgb = texture2D(uVideoTex,gl_TexCoord[0].xy).rgb *fade;// * strips;// * fade;
+    
+    if (time < 1.0) {
+        vec3 gray = vec3(dot(rgb, vec3(0.299,0.587,0.114)));
+        vec3 ave = rgb * time + gray * (1.0 - time);
+        gl_FragColor.rgb = ave;
+    } else {
+        gl_FragColor.rgb = rgb;
+    }
+    gl_FragColor.a = 1.0;
 }
