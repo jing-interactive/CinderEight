@@ -289,7 +289,7 @@ void VideoAudioVisualizerApp::setup()
 //    mCapture = Capture::create( 640, 480 );// mWidth, mHeight );
 //    mCapture->start();
     
-    mTexture = gl::Texture::create( loadImage( loadAsset( "Realist-Seascape-Art-Painting-1367822151-0.jpg" ) ) );
+    mTexture = gl::Texture::create( loadImage( loadResource( RES_LANDSCAPE_IMAGE) ) );
     
 }
 

@@ -23,7 +23,7 @@
 		AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25A1A27DA0900C896C6 /* spectrum.vert */; };
 		AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */; };
 		AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */; };
-		E6DEB3FC1A32193D00137B42 /* testPattern.png in Resources */ = {isa = PBXBuildFile; fileRef = E6DEB3FB1A32193D00137B42 /* testPattern.png */; };
+		E69B38741A3622290019CD93 /* Realist-Seascape-Art-Painting-1367822151-0.jpg in Resources */ = {isa = PBXBuildFile; fileRef = E69B38721A3621480019CD93 /* Realist-Seascape-Art-Painting-1367822151-0.jpg */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -50,7 +50,8 @@
 		AFB0F25A1A27DA0900C896C6 /* spectrum.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.vert; path = ../resources/spectrum.vert; sourceTree = "<group>"; };
 		AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.frag; path = ../resources/spectrum2.frag; sourceTree = "<group>"; };
 		AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.vert; path = ../resources/spectrum2.vert; sourceTree = "<group>"; };
-		E6DEB3FB1A32193D00137B42 /* testPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = testPattern.png; path = ../assets/testPattern.png; sourceTree = "<group>"; };
+		E69B38721A3621480019CD93 /* Realist-Seascape-Art-Painting-1367822151-0.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; name = "Realist-Seascape-Art-Painting-1367822151-0.jpg"; path = "../assets/Realist-Seascape-Art-Painting-1367822151-0.jpg"; sourceTree = "<group>"; };
+		E69B38731A3621480019CD93 /* testPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testPattern.png; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -120,7 +121,7 @@
 		29B97314FDCFA39411CA2CEA /* ImageHeightField */ = {
 			isa = PBXGroup;
 			children = (
-				E6DEB3FA1A32193000137B42 /* Assets */,
+				E69B38711A3621470019CD93 /* assets */,
 				080E96DDFE201D6D7F000001 /* Source */,
 				29B97315FDCFA39411CA2CEA /* Other Sources */,
 				29B97317FDCFA39411CA2CEA /* Resources */,
@@ -142,6 +143,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E69B38721A3621480019CD93 /* Realist-Seascape-Art-Painting-1367822151-0.jpg */,
 				AFB0F2581A27DA0900C896C6 /* CinderApp.icns */,
 				AFB0F2591A27DA0900C896C6 /* spectrum.frag */,
 				AFB0F25A1A27DA0900C896C6 /* spectrum.vert */,
@@ -161,12 +163,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		E6DEB3FA1A32193000137B42 /* Assets */ = {
+		E69B38711A3621470019CD93 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				E6DEB3FB1A32193D00137B42 /* testPattern.png */,
+				E69B38731A3621480019CD93 /* testPattern.png */,
 			);
-			name = Assets;
+			name = assets;
+			path = ../assets;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -218,9 +221,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E69B38741A3622290019CD93 /* Realist-Seascape-Art-Painting-1367822151-0.jpg in Resources */,
 				AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */,
 				AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */,
-				E6DEB3FC1A32193D00137B42 /* testPattern.png in Resources */,
 				AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */,
 				AFB0F25E1A27DA0900C896C6 /* spectrum.frag in Resources */,
 				AFB0F25D1A27DA0900C896C6 /* CinderApp.icns in Resources */,

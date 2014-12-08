@@ -6,7 +6,7 @@
 #define GLSL_VERT2          CINDER_RESOURCE( ../resources/, spectrum2.vert, 130, GLSL )
 #define GLSL_FRAG2          CINDER_RESOURCE( ../resources/, spectrum2.frag, 131, GLSL )
 
-//#define RES_MY_RES			CINDER_RESOURCE( ../resources/, image_name.png, 128, IMAGE )
+#define RES_LANDSCAPE_IMAGE			CINDER_RESOURCE( ../resources/, Realist-Seascape-Art-Painting-1367822151-0.jpg, 132, IMAGE )
 
 
 
