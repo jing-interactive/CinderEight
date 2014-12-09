@@ -239,9 +239,10 @@ void SuperformulaGpuApp::update()
     
     float offSt = mOffset / float(kHistory);
     mBatch->getGlslProg()->uniform("uTexOffset", offSt);
-    mBatch->getGlslProg()->uniform("uLeftTex", 0);
-    mBatch->getGlslProg()->uniform("uRightTex", 1);
-    mBatch->getGlslProg()->uniform("uVideoTex", 2);
+    mBatch->getGlslProg()->uniform("uVideoTex", 0);
+    mBatch->getGlslProg()->uniform("uLeftTex", 1);
+    mBatch->getGlslProg()->uniform("uRightTex", 2);
+
     mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
     mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
     
@@ -257,8 +258,9 @@ void SuperformulaGpuApp::draw()
 	gl::pushMatrices();
 		gl::multModelMatrix( mRotation );
     
-        mTextureLeft->bind(0);
-        mTextureRight->bind(1);
+        mTexture->bind(0);
+        mTextureLeft->bind(1);
+        mTextureRight->bind(2);
 
 		mBatch->draw();
 		gl::color( 0.25f, 0.5f, 1.0f, 1 );
@@ -267,6 +269,7 @@ void SuperformulaGpuApp::draw()
     
         mTextureLeft->unbind();
         mTextureRight->unbind();
+    mTexture -> unbind();
 	gl::popMatrices();
 
 #if ! defined( CINDER_GL_ES )
