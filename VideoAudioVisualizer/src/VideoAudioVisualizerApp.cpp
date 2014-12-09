@@ -29,7 +29,6 @@
 #include "cinder/Channel.h"
 #include "cinder/ImageIo.h"
 #include "cinder/MayaCamUI.h"
-#include "cinder/Rand.h"
 #include "cinder/audio/MonitorNode.h"
 #include "cinder/audio/Device.h"
 //#include "cinderSyphon.h"
@@ -350,7 +349,7 @@ void VideoAudioVisualizerApp::update()
         mCamera.setCenterOfInterestPoint( interest.lerp(0.999f*correction, mCamera.getCenterOfInterestPoint()) );
         
         
-        if (mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
+        if (false && mAutomaticSwitch &&  (mMonitorSpectralNode->getVolume() < 0.001f || mMonitorSpectralNode->getVolume() > 0.5f)){
             mShaderNum = mShaderNum == mShader.size() - 1 ? 0 : mShaderNum + 1;
         }
     }
