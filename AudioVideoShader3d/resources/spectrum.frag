@@ -23,6 +23,6 @@ void main(void)
 	// calculate output color
     vec4 videoColor = texture(uVideoTex,TexCoord);
     
-    outColor.rgb = vColor.rgb;//*/ * fade;
+    outColor.rgb = mix(videoColor.rgb, vColor.rgb, 0.5);//*/ * fade;
 	outColor.a = 1.0;
 }

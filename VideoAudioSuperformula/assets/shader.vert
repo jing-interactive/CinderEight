@@ -70,16 +70,15 @@ void main( void )
     // convert to decibels
     float decibels = 0.1 * log( fft ) * tenLogBase10;
 
-
-	float theta = mix( -3.1415926535, 3.1415926535, ciTexCoord0.s ); // theta domain = [-pi,pi]
-	float phi = mix( -3.1415926535 / 2.0, 3.1415926535 / 2.0, ciTexCoord0.t ); // phi domain = [-pi/2,pi/2]
-	float rTheta = superformula( theta, uA1, uB1, uM1, uN11, uN21, uN31 );
-	float rPhi = superformula( phi, uA2, uB2, uM2, uN12, uN22, uN32 );
+	float theta = mix( -3.1415926535, 3.1415926535, ciTexCoord0.s )* decibels; // theta domain = [-pi,pi]
+	float phi = mix( -3.1415926535 / 2.0, 3.1415926535 / 2.0, ciTexCoord0.t )* decibels; // phi domain = [-pi/2,pi/2]
+	float rTheta = superformula( theta, uA1, uB1, uM1, uN11, uN21, uN31 )* decibels;
+	float rPhi = superformula( phi, uA2, uB2, uM2, uN12, uN22, uN32 )* decibels;
 	float x = cos(theta) * cos(phi) / rTheta / rPhi;
 	float y = sin(theta) * cos(phi) / rTheta / rPhi;
 	float z = sin(phi) / rPhi;
 
-	vec3 position = vec3( x, y , z ) * decibels;
+	vec3 position = vec3( x, y , z ) ;
 	vec3 normal = superformulaNormal( theta, phi, rTheta, rPhi );
 
 	gl_Position	= ciModelViewProjection * vec4( position, 1.0 );

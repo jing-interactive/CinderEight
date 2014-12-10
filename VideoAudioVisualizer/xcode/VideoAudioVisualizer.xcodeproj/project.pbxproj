@@ -24,6 +24,8 @@
 		AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25A1A27DA0900C896C6 /* spectrum.vert */; };
 		AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */; };
 		AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */ = {isa = PBXBuildFile; fileRef = AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */; };
+		E6982E261A38FAE50004F85E /* sphere.vert in Resources */ = {isa = PBXBuildFile; fileRef = E6982E241A38FAE50004F85E /* sphere.vert */; };
+		E6982E271A38FAE50004F85E /* sphere.frag in Resources */ = {isa = PBXBuildFile; fileRef = E6982E251A38FAE50004F85E /* sphere.frag */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -51,7 +53,8 @@
 		AFB0F25A1A27DA0900C896C6 /* spectrum.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum.vert; path = ../resources/spectrum.vert; sourceTree = "<group>"; };
 		AFB0F25B1A27DA0900C896C6 /* spectrum2.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.frag; path = ../resources/spectrum2.frag; sourceTree = "<group>"; };
 		AFB0F25C1A27DA0900C896C6 /* spectrum2.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = spectrum2.vert; path = ../resources/spectrum2.vert; sourceTree = "<group>"; };
-		E69B38731A3621480019CD93 /* testPattern.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = testPattern.png; sourceTree = "<group>"; };
+		E6982E241A38FAE50004F85E /* sphere.vert */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = sphere.vert; path = ../resources/sphere.vert; sourceTree = "<group>"; };
+		E6982E251A38FAE50004F85E /* sphere.frag */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; name = sphere.frag; path = ../resources/sphere.frag; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -143,6 +146,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				E6982E241A38FAE50004F85E /* sphere.vert */,
+				E6982E251A38FAE50004F85E /* sphere.frag */,
 				AF438BE41A36B651002F7EB3 /* Realist-Seascape-Art-Painting-1367822151-0.jpg */,
 				AFB0F2581A27DA0900C896C6 /* CinderApp.icns */,
 				AFB0F2591A27DA0900C896C6 /* spectrum.frag */,
@@ -166,7 +171,6 @@
 		E69B38711A3621470019CD93 /* assets */ = {
 			isa = PBXGroup;
 			children = (
-				E69B38731A3621480019CD93 /* testPattern.png */,
 			);
 			name = assets;
 			path = ../assets;
@@ -221,12 +225,14 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E6982E271A38FAE50004F85E /* sphere.frag in Resources */,
 				AFB0F2611A27DA0900C896C6 /* spectrum2.vert in Resources */,
 				AFB0F25F1A27DA0900C896C6 /* spectrum.vert in Resources */,
 				AFB0F2601A27DA0900C896C6 /* spectrum2.frag in Resources */,
 				AFB0F25E1A27DA0900C896C6 /* spectrum.frag in Resources */,
 				AF438BE51A36B651002F7EB3 /* Realist-Seascape-Art-Painting-1367822151-0.jpg in Resources */,
 				AFB0F25D1A27DA0900C896C6 /* CinderApp.icns in Resources */,
+				E6982E261A38FAE50004F85E /* sphere.vert in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,6 +8,9 @@
 
 #define RES_LANDSCAPE_IMAGE			CINDER_RESOURCE( ../resources/, Realist-Seascape-Art-Painting-1367822151-0.jpg, 132, IMAGE )
 
+#define SPHERE_VERT          CINDER_RESOURCE( ../resources/, sphere.vert, 133, GLSL )
+#define SPHERE_FRAG          CINDER_RESOURCE( ../resources/, sphere.frag, 134, GLSL )
+
 
 
 

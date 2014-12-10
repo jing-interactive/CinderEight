@@ -126,12 +126,6 @@ void VideoAudioVisualizerApp::setup()
     mPerlinMove = 0;
     mFrameRate	= 0.0f;
 
-    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
-    mParams.addParam( "Frame rate",	&mFrameRate,"", true);
-    mParams.addParam("Time P", &mTimeParam);
-    mParams.addParam( "Shader",	&mShaderNum,"min=0 max=3 step=1", false);
-    mParams.addParam( "Auto switch", &mAutomaticSwitch);
-    mShaderNum = 2;
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -185,6 +179,7 @@ void VideoAudioVisualizerApp::setup()
         mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
         mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
         mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
+        mShader.push_back(gl::GlslProg::create( loadResource( SPHERE_VERT ), loadResource( SPHERE_FRAG ) ));
     }
     catch( const std::exception& e ) {
         console() << e.what() << std::endl;
@@ -289,6 +284,15 @@ void VideoAudioVisualizerApp::setup()
 //    mCapture->start();
     
     mTexture = gl::Texture::create( loadImage( loadResource( RES_LANDSCAPE_IMAGE) ) );
+    
+    
+    
+    mParams = params::InterfaceGl( "Params", Vec2i( 200, 100 ) );
+    mParams.addParam( "Frame rate",	&mFrameRate,"", true);
+    mParams.addParam("Time P", &mTimeParam);
+    mParams.addParam( "Shader",	&mShaderNum,"min=0 max="+to_string(mShader.size())+" step=1", false);
+    mParams.addParam( "Auto switch", &mAutomaticSwitch);
+    mShaderNum = 2;
     
 }
 

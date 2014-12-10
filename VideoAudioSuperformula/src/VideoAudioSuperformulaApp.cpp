@@ -20,7 +20,7 @@ using namespace std;
 using namespace ci;
 using namespace ci::app;
 
-class SuperformulaGpuApp : public AppNative {
+class VideoAudioSuperformulaApp : public AppNative {
   public:
 	void	setup() override;
 	void	resize() override;
@@ -73,7 +73,7 @@ class SuperformulaGpuApp : public AppNative {
 	gl::UboRef				mFormulaParamsUbo;
 };
 
-void SuperformulaGpuApp::keyDown(cinder::app::KeyEvent event){
+void VideoAudioSuperformulaApp::keyDown(cinder::app::KeyEvent event){
     switch (event.getChar()) {
         case KeyEvent::KEY_f:
             setFullScreen(!isFullScreen());
@@ -84,14 +84,14 @@ void SuperformulaGpuApp::keyDown(cinder::app::KeyEvent event){
     }
 }
 
-void SuperformulaGpuApp::setupGeometry()
+void VideoAudioSuperformulaApp::setupGeometry()
 {
 	auto plane = geom::Plane().subdivisions( ivec2( mSubdivisions, mSubdivisions ) );
 	mBatch = gl::Batch::create( plane, mGlsl );
 	mNormalsBatch = gl::Batch::create( geom::VertexNormalLines( plane, 0.0f ), mNormalsGlsl );
 }
 
-void SuperformulaGpuApp::setup()
+void VideoAudioSuperformulaApp::setup()
 {
 	mFormulaParams.mA1 = mFormulaParams.mA2 = 1.0f;
 	mFormulaParams.mB1 = mFormulaParams.mB2 = 1.0f;
@@ -198,13 +198,13 @@ void SuperformulaGpuApp::setup()
 
 }
 
-void SuperformulaGpuApp::resize()
+void VideoAudioSuperformulaApp::resize()
 {
 	mCam.setPerspective( 60, getWindowAspectRatio(), 1, 1000 );
 	gl::setMatrices( mCam );
 }
 
-void SuperformulaGpuApp::mouseWheel( MouseEvent event )
+void VideoAudioSuperformulaApp::mouseWheel( MouseEvent event )
 {
     // Zoom in/out with mouse wheel
     vec3    eye = mCam.getEyePoint();
@@ -212,7 +212,7 @@ void SuperformulaGpuApp::mouseWheel( MouseEvent event )
     mCam.setEyePoint( eye );
 }
 
-void SuperformulaGpuApp::mouseDown( MouseEvent event )
+void VideoAudioSuperformulaApp::mouseDown( MouseEvent event )
 {
     
     mMayaCam.setCurrentCam(mCam);
@@ -220,7 +220,7 @@ void SuperformulaGpuApp::mouseDown( MouseEvent event )
     //cout<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
-void SuperformulaGpuApp::mouseDrag( MouseEvent event )
+void VideoAudioSuperformulaApp::mouseDrag( MouseEvent event )
 {
     // handle mouse drag
     mMayaCam.mouseDrag( event.getPos(), event.isLeftDown(), event.isMiddleDown(), event.isRightDown() );
@@ -228,7 +228,7 @@ void SuperformulaGpuApp::mouseDrag( MouseEvent event )
     //cout<<"D "<<mMayaCam.getCamera().getEyePoint()<<endl;
 }
 
-void SuperformulaGpuApp::update()
+void VideoAudioSuperformulaApp::update()
 {
 	// Rotate the by 2 degrees around an arbitrary axis
 	vec3 axis = vec3( cos( getElapsedSeconds() / 3 ), sin( getElapsedSeconds() / 2 ), sin( getElapsedSeconds() / 5 ) );
@@ -262,9 +262,9 @@ void SuperformulaGpuApp::update()
 
 }
 
-void SuperformulaGpuApp::draw()
+void VideoAudioSuperformulaApp::draw()
 {
-	gl::clear( Color( 0.2f, 0.2f, 0.2f ) );
+	gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
 
 	gl::setMatrices( mCam );
 	gl::pushMatrices();
@@ -275,7 +275,7 @@ void SuperformulaGpuApp::draw()
         mTextureRight->bind(2);
 
 		mBatch->draw();
-		gl::color( 0.25f, 0.5f, 1.0f, 1 );
+		gl::color( 1.0f, 1.0f, 1.0f, 1 );
 		if( mDrawNormals )
 			mNormalsBatch->draw();
     
@@ -289,4 +289,4 @@ void SuperformulaGpuApp::draw()
 #endif
 }
 
-CINDER_APP_NATIVE( SuperformulaGpuApp, RendererGl )
+CINDER_APP_NATIVE( VideoAudioSuperformulaApp, RendererGl )

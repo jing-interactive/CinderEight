@@ -104,7 +104,7 @@ private:
     ci::params::InterfaceGl		mParams;
     
     CaptureRef mCapture;
-    gl::TextureRef mTexture;
+    gl::TextureRef mTextureRef;
     gl::BatchRef mBatch;
     
     gl::VboMeshRef vboMeshRef;
@@ -231,7 +231,7 @@ void AudioVisualizerApp::setup()
 
     mShaderNum = 0;
     try {
-                mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG1 ) ));
+                mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT0 ), loadResource( GLSL_FRAG0 ) ));
         //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT1 ), loadResource( GLSL_FRAG2 ) ));
         //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG1 ) ));
         //        mShader.push_back(gl::GlslProg::create( loadResource( GLSL_VERT2 ), loadResource( GLSL_FRAG2 ) ));
@@ -333,7 +333,7 @@ void AudioVisualizerApp::shutdown()
 void AudioVisualizerApp::update()
 {
     if( mCapture && mCapture->checkNewFrame() ) {
-        mTexture = gl::Texture::create( mCapture->getSurface() );
+        mTextureRef = gl::Texture::create( *mCapture->getSurface() );
     }
     
     mFrameRate = getAverageFps();
@@ -432,20 +432,11 @@ void AudioVisualizerApp::update()
 
 void AudioVisualizerApp::draw()
 {
-    if (!mTexture) return;
-//    gl::clear( Color( 0.0f, 0.0f, 0.0f ) );
-//    gl::setMatrices( mCamera );
-    gl::enableAdditiveBlending();
-//    if( false && mTexture ) {
-//        gl::pushMatrices();
-//        gl::draw( mTexture );
-//        gl::popMatrices();
-//    }
-
+    if (!mTextureRef) return;
     static float rotation = 0.0f;
-		gl::clear();
+    gl::clear();
     gl::setMatrices( mCamera );
-    //gl::setMatrices(mCamera);
+    gl::pushMatrices();
 	//gl::setMatricesWindow(getWindowSize());
     //gl::multViewMatrix(ci::rotate(rotation += 0.01, vec3(0,1,0)));
    // gl::multViewMatrix(ci::rotate(0.f, vec3(0,1,0)));
@@ -458,7 +449,7 @@ void AudioVisualizerApp::draw()
 //    return;
     
     {
-        gl::ScopedModelMatrix scopeModel;
+       /// gl::ScopedModelMatrix scopeModel;
         //gl::multModelMatrix(ci::translate(vec3(1,0,0)));
         float offSt = mOffset / float(kHistory);
         mBatch->getGlslProg()->uniform("uTexOffset", offSt);
@@ -471,7 +462,7 @@ void AudioVisualizerApp::draw()
        // gl::ScopedModelMatrix scopeModel;
        // gl::multModelMatrix(ci::translate(vec3(1,0,0)));
         mShader[mShaderNum]->bind();
-        mTexture->bind(0);
+        mTextureRef->bind(0);
         mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
         mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
         mTextureLeft->bind(1);
@@ -480,9 +471,10 @@ void AudioVisualizerApp::draw()
 
         mTextureRight->unbind();
         mTextureLeft->unbind();
-        mTexture->unbind();
+        mTextureRef->unbind();
     }
     gl::disableAlphaBlending();
+    gl::popMatrices();
     mParams.draw();
     return;
     gl::enableDepthRead();
