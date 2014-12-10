@@ -25,7 +25,7 @@ float checkered( in vec2 uv, in int freq )
 
 void main( void )
 {
-    vec4 videoColor = texture(uVideoTex,gl_FragCoord.xy);
+    vec4 videoColor = texture(uVideoTex,TexCoord);
 	vec3 normal = normalize( -Normal );
 	float diffuse = max( dot( normal, vec3( 0, 0, -1 ) ), 0 );
     oColor = videoColor;//vec4( vec3( abs(diffuse) ) * vec3( checkered( TexCoord.xy, uCheckerFrequency ) ), 1.0 );

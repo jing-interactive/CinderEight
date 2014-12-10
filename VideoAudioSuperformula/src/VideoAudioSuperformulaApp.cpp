@@ -29,6 +29,7 @@ class SuperformulaGpuApp : public AppNative {
     void    mouseWheel( MouseEvent event ) override;
     void    mouseDown( MouseEvent event) override;
     void    mouseDrag( MouseEvent) override;
+    void    keyDown(KeyEvent) override;
 
 	void	setupGeometry();
 	
@@ -71,6 +72,17 @@ class SuperformulaGpuApp : public AppNative {
 	} mFormulaParams;
 	gl::UboRef				mFormulaParamsUbo;
 };
+
+void SuperformulaGpuApp::keyDown(cinder::app::KeyEvent event){
+    switch (event.getChar()) {
+        case KeyEvent::KEY_f:
+            setFullScreen(!isFullScreen());
+            break;
+            
+        default:
+            break;
+    }
+}
 
 void SuperformulaGpuApp::setupGeometry()
 {
