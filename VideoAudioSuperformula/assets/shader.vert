@@ -79,7 +79,7 @@ void main( void )
 	float y = sin(theta) * cos(phi) / rTheta / rPhi;
 	float z = sin(phi) / rPhi;
 
-	vec3 position = vec3( x, y * decibels, z );
+	vec3 position = vec3( x, y , z ) * decibels;
 	vec3 normal = superformulaNormal( theta, phi, rTheta, rPhi );
 
 	gl_Position	= ciModelViewProjection * vec4( position, 1.0 );
