@@ -292,7 +292,7 @@ void VideoAudioVisualizerApp::setup()
     mParams.addParam("Time P", &mTimeParam);
     mParams.addParam( "Shader",	&mShaderNum,"min=0 max="+to_string(mShader.size())+" step=1", false);
     mParams.addParam( "Auto switch", &mAutomaticSwitch);
-    mShaderNum = 2;
+    mShaderNum = 4;
     
 }
 
