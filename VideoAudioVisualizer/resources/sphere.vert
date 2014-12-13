@@ -16,10 +16,10 @@ const vec3 cYaxis = vec3(0.0, 1.0, 0.0);
 const vec3 cZaxis = vec3(0.0, 0.0, 1.0);
 const float cStrength = 0.5;
 
-const float sphere_radius = 10.0;
+const float sphere_radius = 1.0;
 
-const float flat_width = 100.0;
-const float flat_height = 100.0;
+const float flat_width = 200.0;
+const float flat_height = 200.0;
 const float flatness = 0.0;
 
 void main(void)
@@ -45,8 +45,7 @@ void main(void)
     
     
     vec3 sphere_position = gl_Vertex.xyz * sphere_radius;
-    vec3 flat_position;
-    flat_position.xyz = vec3 (vec2 (flat_width, flat_height) * (gl_MultiTexCoord0.xy - vec2 (0.5, 0.5)), 0.0);
+    vec3 flat_position = vec3 (vec2 (flat_width, flat_height) * (gl_MultiTexCoord0.xy - vec2 (0.5, 0.5)), 0.0);
     
     
     
@@ -73,6 +72,6 @@ void main(void)
     
     // pass (unchanged) texture coordinates, bumped vertex and vertex color
     gl_TexCoord[0] = gl_MultiTexCoord0;
-    gl_Position = gl_ModelViewProjectionMatrix * (lerp_position + vertex);
+    gl_Position = gl_ModelViewProjectionMatrix * vec4(sphere_position, 1.0);
     gl_FrontColor = gl_Color;
 }
