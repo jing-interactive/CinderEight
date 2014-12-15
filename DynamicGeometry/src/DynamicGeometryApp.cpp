@@ -62,6 +62,7 @@ class DynamicGeometryApp : public AppNative {
 	bool				mEnableFaceFulling;
     
     float               mCapsuleLength;
+    float               mCapsuleRadius;
 
 	CameraPersp			mCamera;
 	MayaCamUI			mMayaCam;
@@ -134,7 +135,7 @@ void DynamicGeometryApp::setup()
 	mSubdivision = 1;
     
     mCapsuleLength = 0.01f;
-	
+	mCapsuleRadius = 0.5f;
 	// Load the textures.
 	gl::Texture::Format fmt;
 	fmt.setAutoInternalFormat();
@@ -214,7 +215,7 @@ void DynamicGeometryApp::update()
 	}
 
 	// After creating a new primitive, gradually move the camera to get a good view.
-	if( mRecenterCamera ) {
+	if( false && mRecenterCamera ) {
 		float distance = glm::distance( mCamera.getEyePoint(), mCameraCOI );
 		mCamera.setEyePoint( mCameraCOI - lerp( distance, 5.0f, 0.1f ) * mCamera.getViewDirection() );
 		mCamera.setCenterOfInterestPoint( lerp( mCamera.getCenterOfInterestPoint(), mCameraCOI, 0.25f) );
@@ -262,7 +263,7 @@ void DynamicGeometryApp::draw()
 
 		// Rotate it slowly around the y-axis.
 		gl::pushModelView();
-		gl::rotate( float( getElapsedSeconds() / 10 ), 0.0f, 1.0f, 0.0f );
+		//gl::rotate( float( getElapsedSeconds() / 10 ), 0.0f, 1.0f, 0.0f );
 
 		// Draw the normals.
 		if( mShowNormals && mPrimitiveNormalLines ) {
@@ -298,6 +299,7 @@ void DynamicGeometryApp::draw()
 		else {
             float off = (mOffset / float(kHistory) - 0.5) * 2.0f;
             mShader->uniform("uTexOffset", off);
+            mShader->uniform("isSphere", mPrimitiveCurrent != PLANE);
             mShader->uniform("time", (float)getElapsedSeconds() * 0.001f);
             mShader->uniform("resolution", 0.25f*(float)kWidth);
             mShader->uniform("uTex0",0);
@@ -396,7 +398,7 @@ void DynamicGeometryApp::createParams()
 	vector<string> viewModes = { "Shaded", "Wireframe" };
 	vector<string> texturingModes = { "None", "Procedural", "Sampler" };
 
-	mParams = params::InterfaceGl::create( getWindow(), "Dynamic Geometry", toPixels( ivec2( 300, 200 ) ) );
+	mParams = params::InterfaceGl::create( getWindow(), "Dynamic Geometry", toPixels( ivec2( 300, 300 ) ) );
 	mParams->setOptions( "", "valueswidth=160 refresh=0.1" );
     
     mParams->addParam("FPS", &mFrameRate, true);
@@ -419,7 +421,9 @@ void DynamicGeometryApp::createParams()
     
     mParams->addSeparator();
     
-    mParams->addParam( "Capsule length", &mCapsuleLength).min( 0.0f ).max( 1.0f ).step( 0.01f ).updateFn( [this] { createGeometry(); } );
+    mParams->addParam( "Capsule length", &mCapsuleLength).min( 0.0f ).max( 5.0f ).step( 0.01f ).updateFn( [this] { createGeometry(); } );
+    mParams->addParam( "Capsule radius", &mCapsuleRadius).min( 0.0f ).max( 5.0f ).step( 0.01f ).updateFn( [this] { createGeometry(); } );
+    
 #endif
 }
 
@@ -453,9 +457,9 @@ void DynamicGeometryApp::createGeometry()
 			mPrimitiveSelected = PLANE;
 		case CAPSULE:
 			switch( mQualityCurrent ) {
-				case DEFAULT:	loadGeomSource( geom::Capsule( geom::Capsule() ).length(0.5) ); break;
-				case LOW:		loadGeomSource( geom::Capsule().subdivisionsAxis( 6 ).subdivisionsHeight( 1 ) ); break;
-				case HIGH:		loadGeomSource( geom::Capsule().subdivisionsAxis( 60 ).subdivisionsHeight( 20 ).length(mCapsuleLength) ); break;
+				case DEFAULT:	loadGeomSource( geom::Capsule( geom::Capsule() ).length(mCapsuleLength).direction( vec3(1, 0, 0) )); break;
+				case LOW:		loadGeomSource( geom::Capsule().subdivisionsAxis( 6 ).subdivisionsHeight( 1 ).length(mCapsuleLength).radius(mCapsuleRadius).direction( vec3(1, 0, 0) ) ); break;
+				case HIGH:		loadGeomSource( geom::Capsule().subdivisionsAxis( 60 ).subdivisionsHeight( 20 ).length(mCapsuleLength).radius(mCapsuleRadius).direction( vec3(1, 0, 0) ) ); break;
 			}
 			break;
 		case PLANE:

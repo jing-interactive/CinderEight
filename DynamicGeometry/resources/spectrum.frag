@@ -4,6 +4,7 @@ const float center = 0.5;
 const float width = 0.02;
 uniform sampler2D	uTex0;
 uniform float time;
+uniform bool isSphere;
 
 out vec4 oFragColor;
 in VertexData	{
@@ -34,5 +35,10 @@ void main(void)
     } else {
         oFragColor.rgb = rgb;
     }
-    oFragColor.a = 1.0;
+    
+    if (isSphere && vVertexIn.texCoord.y > 0.75 || vVertexIn.texCoord.y < 0.25){
+        oFragColor = vec4(0.0);
+    } else {
+        oFragColor.a = 1.0;
+    }
 }

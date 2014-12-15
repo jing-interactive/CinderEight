@@ -6,6 +6,7 @@ uniform sampler2D	uRightTex;
 const float two_pi = 6.2831853;
 const float tenLogBase10 = 3.0102999566398; // 10.0 / log(10.0);
 uniform float time;
+uniform bool isSphere;
 
 in vec2	ciTexCoord0;
 in vec4 ciPosition;
@@ -13,6 +14,7 @@ in vec3 ciColor;
 in vec3		ciNormal;
 uniform mat4 ciModelViewProjection;
 uniform mat3	ciNormalMatrix;
+
 
 out vec3 vColor;
 
@@ -38,8 +40,11 @@ void main(void)
 
     float r = decibels;
     vec4 vertex = ciPosition;
-    vertex.y -= time*r * cos(ciTexCoord0.t * two_pi);
-    vertex.z += time * r * sin(ciTexCoord0.t * two_pi);
+    
+    if (!isSphere) {
+        vertex.y -= time*r * cos(ciTexCoord0.t * two_pi);
+        vertex.z += time * r * sin(ciTexCoord0.t * two_pi);
+    }
     //vertex  = vertex * (1 + 0.05 * decibels);
     vec3 normal = ciNormalMatrix * ciNormal;
     
