@@ -10,7 +10,9 @@ uniform float time;
 in vec2	ciTexCoord0;
 in vec4 ciPosition;
 in vec3 ciColor;
+in vec3		ciNormal;
 uniform mat4 ciModelViewProjection;
+uniform mat3	ciNormalMatrix;
 
 out vec3 vColor;
 
@@ -24,7 +26,7 @@ out VertexData {
 void main(void)
 {
     // retrieve texture coordinate and offset it to scroll the texture
-    vec2 coord = ciTexCoord0.st;// + vec2(0.0, uTexOffset);
+    vec2 coord = ciTexCoord0.st + vec2(-0.25, uTexOffset);
     
     // retrieve the FFT from left and right texture and average it
     float fft = max(0.0001, mix( texture( uLeftTex, coord ).r, texture( uRightTex, coord ).r, 0.5));
@@ -34,13 +36,16 @@ void main(void)
     
     // offset the vertex based on the decibels and create a cylinder
 
-    float r = 100.0 + decibels;
+    float r = decibels;
     vec4 vertex = ciPosition;
-    vertex.y = r * cos(ciTexCoord0.t * two_pi) - 0.25 * vertex.y;
-    vertex.z = r * sin(ciTexCoord0.t * two_pi) - time * vertex.z;
+    vertex.y -= time*r * cos(ciTexCoord0.t * two_pi);
+    vertex.z += time * r * sin(ciTexCoord0.t * two_pi);
+    //vertex  = vertex * (1 + 0.05 * decibels);
+    vec3 normal = ciNormalMatrix * ciNormal;
     
+    vertex.xyz += 0.01*normal*decibels;
     vVertexOut.texCoord = ciTexCoord0;
     vVertexOut.color.rgb = ciColor;
     
-    gl_Position = ciModelViewProjection * ciPosition;
+    gl_Position = ciModelViewProjection * vertex;
 }

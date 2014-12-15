@@ -81,6 +81,8 @@ class DynamicGeometryApp : public AppNative {
 
 	gl::TextureRef		mTexture;
     AxisAlignedBox3f    mBbox;
+    
+    float               mFrameRate;
 	
 #if ! defined( CINDER_GL_ES )
 	params::InterfaceGlRef	mParams;
@@ -118,7 +120,8 @@ void DynamicGeometryApp::setup()
 {
 	// Initialize variables.
     mOffset = 0;
-	mPrimitiveSelected = mPrimitiveCurrent = CAPSULE;
+    mFrameRate = 0.f;
+	mPrimitiveSelected = mPrimitiveCurrent = PLANE;
 	mQualitySelected = mQualityCurrent = HIGH;
 	mTexturingMode = PROCEDURAL;
 	mViewMode = SHADED;
@@ -156,8 +159,7 @@ void DynamicGeometryApp::setup()
 
 	// Create a parameter window, so we can toggle stuff.
 	createParams();
-    
-    
+
     auto ctx = audio::Context::master();
     std::cout << "Devices available: " << endl;
     for( const auto &dev : audio::Device::getInputDevices() ) {
@@ -173,6 +175,8 @@ void DynamicGeometryApp::setup()
     } else {
         mInputDeviceNode = ctx->createInputDeviceNode(dev);
     }
+    
+    cout<< "Using " << mInputDeviceNode->getDevice() -> getName() << endl;
     
     // By providing an FFT size double that of the window size, we 'zero-pad' the analysis data, which gives
     // an increase in resolution of the resulting spectrum data.
@@ -199,6 +203,8 @@ void DynamicGeometryApp::setup()
 
 void DynamicGeometryApp::update()
 {
+    
+    mFrameRate = getAverageFps();
 	// If another primitive or quality was selected, reset the subdivision and recreate the primitive.
 	if( mPrimitiveCurrent != mPrimitiveSelected || mQualitySelected != mQualityCurrent ) {
 		mSubdivision = 1;
@@ -226,6 +232,9 @@ void DynamicGeometryApp::update()
     
     // increment texture offset
     mOffset = (mOffset+1) % kHistory;
+    
+    mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
+    mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
 
 }
 
@@ -246,12 +255,14 @@ void DynamicGeometryApp::draw()
 	}
 
 	if( mPrimitive ) {
+        gl::setDefaultShaderVars();
 		gl::ScopedTextureBind scopedTextureBind( mTexture );
+        //gl::ScopedGlslProg sh(mShader);
 		mPhongShader->uniform( "uTexturingMode", mTexturingMode );
 
 		// Rotate it slowly around the y-axis.
 		gl::pushModelView();
-		gl::rotate( float( getElapsedSeconds() / 5 ), 0.0f, 1.0f, 0.0f );
+		gl::rotate( float( getElapsedSeconds() / 10 ), 0.0f, 1.0f, 0.0f );
 
 		// Draw the normals.
 		if( mShowNormals && mPrimitiveNormalLines ) {
@@ -285,18 +296,19 @@ void DynamicGeometryApp::draw()
 			gl::disableAlphaBlending();
 		}
 		else {
-            
-            //mShader->uniform("uTexOffset", mOffset / float(kHistory));
-            mShader->uniform("resolution", 0.5f*(float)kWidth);
-            //mShader->uniform("uLeftTex", 1);
-            //mShader->uniform("uRightTex", 2);
-//            mTextureLeft = gl::Texture::create(mChannelLeft, mTextureFormat);
-//            mTextureRight = gl::Texture::create(mChannelRight, mTextureFormat);
-            //mTextureLeft->bind(1);
-            //mTextureRight->bind(2);
+            float off = (mOffset / float(kHistory) - 0.5) * 2.0f;
+            mShader->uniform("uTexOffset", off);
+            mShader->uniform("time", (float)getElapsedSeconds() * 0.001f);
+            mShader->uniform("resolution", 0.25f*(float)kWidth);
+            mShader->uniform("uTex0",0);
+            mShader->uniform("uLeftTex", 1);
+            mShader->uniform("uRightTex", 2);
+
+            gl::ScopedTextureBind texLeft( mTextureLeft, 1 );
+            gl::ScopedTextureBind texRight( mTextureRight, 2 );
+
+            gl::ScopedAdditiveBlend blend;
 			mPrimitive->draw();
-            //mTextureLeft->unbind();
-            //mTextureRight->unbind();
         }
 		
 		// Done.
@@ -386,6 +398,8 @@ void DynamicGeometryApp::createParams()
 
 	mParams = params::InterfaceGl::create( getWindow(), "Dynamic Geometry", toPixels( ivec2( 300, 200 ) ) );
 	mParams->setOptions( "", "valueswidth=160 refresh=0.1" );
+    
+    mParams->addParam("FPS", &mFrameRate, true);
 
 	mParams->addParam( "Primitive", primitives, (int*) &mPrimitiveSelected );
 	mParams->addParam( "Quality", qualities, (int*) &mQualitySelected );
@@ -436,7 +450,7 @@ void DynamicGeometryApp::createGeometry()
 
 	switch( mPrimitiveCurrent ) {
 		default:
-			mPrimitiveSelected = CAPSULE;
+			mPrimitiveSelected = PLANE;
 		case CAPSULE:
 			switch( mQualityCurrent ) {
 				case DEFAULT:	loadGeomSource( geom::Capsule( geom::Capsule() ).length(0.5) ); break;
