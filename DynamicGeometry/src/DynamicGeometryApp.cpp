@@ -134,8 +134,8 @@ void DynamicGeometryApp::setup()
 
 	mSubdivision = 1;
     
-    mCapsuleLength = 0.01f;
-	mCapsuleRadius = 0.5f;
+    mCapsuleLength = 4.0f;
+	mCapsuleRadius = 5.0f;
 	// Load the textures.
 	gl::Texture::Format fmt;
 	fmt.setAutoInternalFormat();
@@ -243,6 +243,7 @@ void DynamicGeometryApp::draw()
 {
 	// Prepare for drawing.
 	gl::clear( Color::black() );
+    gl::enableAlphaBlending();
 	gl::setMatrices( mCamera );
 	
 	// Draw the grid.
@@ -297,10 +298,13 @@ void DynamicGeometryApp::draw()
 			gl::disableAlphaBlending();
 		}
 		else {
+
             float off = (mOffset / float(kHistory) - 0.5) * 2.0f;
             mShader->uniform("uTexOffset", off);
             mShader->uniform("isSphere", mPrimitiveCurrent != PLANE);
-            mShader->uniform("time", (float)getElapsedSeconds() * 0.001f);
+            float time = (float)getElapsedSeconds() * 0.001f;
+
+            mShader->uniform("time", time);
             mShader->uniform("resolution", 0.25f*(float)kWidth);
             mShader->uniform("uTex0",0);
             mShader->uniform("uLeftTex", 1);
@@ -311,6 +315,7 @@ void DynamicGeometryApp::draw()
 
             gl::ScopedAdditiveBlend blend;
 			mPrimitive->draw();
+
         }
 		
 		// Done.

@@ -42,8 +42,11 @@ void main(void)
     vec4 vertex = ciPosition;
     
     if (!isSphere) {
-        vertex.y -= time*r * cos(ciTexCoord0.t * two_pi);
-        vertex.z += time * r * sin(ciTexCoord0.t * two_pi);
+        float hop = time * r * cos(ciTexCoord0.t * two_pi);
+        vertex.y = (1.0 - hop) * vertex.y - hop;
+        hop = time * r * sin(ciTexCoord0.t * two_pi);
+        vertex.z = (1.0 - hop) * vertex.z - hop;
+        //vertex.x -= time * r * sin(ciTexCoord0.t * two_pi);
     }
     //vertex  = vertex * (1 + 0.05 * decibels);
     vec3 normal = ciNormalMatrix * ciNormal;

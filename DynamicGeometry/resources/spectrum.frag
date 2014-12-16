@@ -27,18 +27,25 @@ void main(void)
 
 	// calculate output color
     vec3 rgb = texture( uTex0, vVertexIn.texCoord.st ).rgb;
-    
+    vec4 color;
     if (false && time < 1.0) {
         vec3 gray = vec3(dot(rgb, vec3(0.299,0.587,0.114)));
         vec3 ave = rgb * time + gray * (1.0 - time);
-        oFragColor.rgb = ave;
+        color.rgb = ave;
     } else {
-        oFragColor.rgb = rgb;
+        color.rgb = rgb;
     }
     
-    if (isSphere && vVertexIn.texCoord.y > 0.75 || vVertexIn.texCoord.y < 0.25){
-        oFragColor = vec4(0.0);
+    if ( vVertexIn.texCoord.y < 0.9){
+        color = vec4(1.0,0.0,0.0,1.0);
     } else {
-        oFragColor.a = 1.0;
+        color.a = 1.;
     }
+    
+    if ( vVertexIn.texCoord.y < 0.1){
+        color = vec4(1.0);
+    }
+    
+    oFragColor = color;
+    
 }
