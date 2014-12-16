@@ -28,7 +28,7 @@ out VertexData {
 void main(void)
 {
     // retrieve texture coordinate and offset it to scroll the texture
-    vec2 coord = ciTexCoord0.st + vec2(-0.25, uTexOffset);
+    vec2 coord = isSphere ? ciTexCoord0.ts : ciTexCoord0.st + vec2(-0.25, uTexOffset);
     
     // retrieve the FFT from left and right texture and average it
     float fft = max(0.0001, mix( texture( uLeftTex, coord ).r, texture( uRightTex, coord ).r, 0.5));

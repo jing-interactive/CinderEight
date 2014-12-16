@@ -36,14 +36,10 @@ void main(void)
         color.rgb = rgb;
     }
     
-    if ( vVertexIn.texCoord.y < 0.9){
-        color = vec4(1.0,0.0,0.0,1.0);
+    if ( vVertexIn.texCoord.y < 0.1 || vVertexIn.texCoord.y > 0.9){
+        color = vec4(0.0);
     } else {
         color.a = 1.;
-    }
-    
-    if ( vVertexIn.texCoord.y < 0.1){
-        color = vec4(1.0);
     }
     
     oFragColor = color;
