@@ -264,7 +264,7 @@ void DynamicGeometryApp::draw()
 
 		// Rotate it slowly around the y-axis.
 		gl::pushModelView();
-		//gl::rotate( float( getElapsedSeconds() / 10 ), 0.0f, 1.0f, 0.0f );
+		gl::rotate( float( getElapsedSeconds() / 10 ), 0.0f, 1.0f, 0.0f );
 
 		// Draw the normals.
 		if( mShowNormals && mPrimitiveNormalLines ) {
@@ -302,7 +302,7 @@ void DynamicGeometryApp::draw()
             float off = (mOffset / float(kHistory) - 0.5) * 2.0f;
             mShader->uniform("uTexOffset", off);
             mShader->uniform("isSphere", mPrimitiveCurrent != PLANE);
-            float time = (float)getElapsedSeconds() * 0.001f;
+            float time = (float)getElapsedSeconds() * 0.05f;
 
             mShader->uniform("time", time);
             mShader->uniform("resolution", 0.25f*(float)kWidth);

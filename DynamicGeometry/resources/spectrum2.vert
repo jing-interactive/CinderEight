@@ -4,6 +4,7 @@ uniform float		uTexOffset;
 uniform sampler2D	uLeftTex;
 uniform sampler2D	uRightTex;
 const float two_pi = 6.2831853;
+const float pi = 3.1415927;
 const float tenLogBase10 = 3.0102999566398; // 10.0 / log(10.0);
 uniform float time;
 uniform bool isSphere;
@@ -38,20 +39,25 @@ void main(void)
     
     // offset the vertex based on the decibels and create a cylinder
 
-    float r = decibels;
-    vec4 vertex = ciPosition;
+    float r = 1.0 + 0.01 * decibels;
+    vec4 vertexCyl = ciPosition;
+    vec4 vertexSphere = ciPosition;
     
     if (!isSphere) {
-        float hop = time * r * cos(ciTexCoord0.t * two_pi);
-        vertex.y = (1.0 - hop) * vertex.y - hop;
-        hop = time * r * sin(ciTexCoord0.t * two_pi);
-        vertex.z = (1.0 - hop) * vertex.z - hop;
-        //vertex.x -= time * r * sin(ciTexCoord0.t * two_pi);
+        float cosTwoPi = cos(ciTexCoord0.t * two_pi);
+        vertexCyl.y = r * cosTwoPi;
+        
+        float sinTwoPi = sin(ciTexCoord0.t * two_pi);
+        vertexCyl.z = r * sinTwoPi;
+        
+        //sphere http://mathworld.wolfram.com/Sphere.html
+        float sinPi = sin(ciTexCoord0.s * pi);
+        vertexSphere.x = r * cosTwoPi * sinPi;
+        vertexSphere.y = r * sinTwoPi * sinPi;
+        vertexSphere.z = r * cos(ciTexCoord0.s * pi);
     }
-    //vertex  = vertex * (1 + 0.05 * decibels);
-    vec3 normal = ciNormalMatrix * ciNormal;
     
-    vertex.xyz += 0.01*normal*decibels;
+    vec4 vertex = mix(vertexSphere, vertexCyl, clamp(1.0 - time, 0.0, 1.0));
     vVertexOut.texCoord = ciTexCoord0;
     vVertexOut.color.rgb = ciColor;
     
